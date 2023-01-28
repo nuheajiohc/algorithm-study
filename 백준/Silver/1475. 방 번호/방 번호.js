@@ -1,13 +1,10 @@
-const input =require("fs").readFileSync(0).toString().trim()
+const input = require("fs").readFileSync(0).toString().trim().split("").map(Number);
 const number = new Array(10).fill(0);
-let sixNineCount = 0;
-for (let i = 0; i < input.length; i += 1) {
-  if (input[i] === "9" || input[i] === "6") {
-    sixNineCount += 1;
-    continue;
-  }
-  number[input[i]] += 1;
-}
-const maxNumber = Math.max(...number);
-
-console.log(Math.max(Math.ceil(sixNineCount / 2), maxNumber));
+input.forEach(el => (number[el] += 1));
+const sumSixNine = Math.ceil((number[6] + number[9]) / 2);
+const maxNumber = Math.max(
+  ...number.slice(0, 6),
+  sumSixNine,
+  ...number.slice(7, 9),
+);
+console.log(maxNumber);
