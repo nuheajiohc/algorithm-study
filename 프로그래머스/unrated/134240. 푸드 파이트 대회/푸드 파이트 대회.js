@@ -1,9 +1,9 @@
 function solution(food) {
-    var answer = '';
+    const resultArr = [];
     food.forEach((el,i)=>{
-        if(i===0) return;
-        answer+=String(i).repeat(Math.floor(el/2));
+        if(Math.floor(el/2)===0)return;
+        resultArr.push(i.toString().repeat(Math.floor(el/2)));
     })
-    answer = answer+"0"+answer.split("").reverse().join("")
+    const answer=resultArr.join("")+"0"+resultArr.reverse().join("");
     return answer;
 }
