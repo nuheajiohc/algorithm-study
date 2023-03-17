@@ -1,15 +1,12 @@
 function solution(a, b, n) {
-    let serviceBottle=(Math.floor(n/a))*b;
-    let remainingBottle =n%a;
-    let fullBottle=serviceBottle+remainingBottle;
-    let totalServiceBottle=serviceBottle;
-    
-    while(fullBottle>=a){
-        serviceBottle=Math.floor(fullBottle/a)*b;
-        remainingBottle=fullBottle%a;
-        fullBottle=serviceBottle+remainingBottle;
-        totalServiceBottle+=serviceBottle;
+    let answer = 0;
+    function cola(bottle){
+        if(a>bottle) return answer;
+        const emptyBottle=Math.floor(bottle/a) * b;
+        const leftCola = bottle%a;
+        answer+=emptyBottle;
+        cola(emptyBottle+leftCola);
     }
-    answer= totalServiceBottle;
+    cola(n);
     return answer;
 }
