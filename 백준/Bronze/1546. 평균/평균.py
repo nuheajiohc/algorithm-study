@@ -1,0 +1,5 @@
+N = int(input())
+subject = list(map(int,input().split()))
+M = max(subject)
+new_subject=list(map(lambda score:score*100/M,subject))
+print(sum(new_subject)/len(subject))
