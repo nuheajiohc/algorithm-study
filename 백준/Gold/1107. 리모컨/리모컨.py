@@ -6,7 +6,7 @@ if M:
 
 min_click=abs(100-N)
 
-for k in range(1000000):
+for k in range(999901):
     num =str(k)
     for i in range(len(num)):
         if num[i] in broken_btn:
