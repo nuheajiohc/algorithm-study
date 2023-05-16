@@ -1,10 +1,19 @@
-x=int(input())
-dp=[0]*(x+1)
+from collections import deque
 
-for i in range(2,x+1):
-    dp[i]=dp[i-1]+1
-    if i%3==0:
-        dp[i] = min(dp[i],dp[i//3]+1)
-    if i%2==0:
-        dp[i] = min(dp[i],dp[i//2]+1)
-print(dp[x])
+x= int(input())
+vis=[0]*(x+1)
+
+q = deque([x])
+while q:
+    cur_x=q.popleft()
+    for i in range(2,4):
+        if not cur_x%i and not vis[cur_x//i]:
+            vis[cur_x//i]=vis[cur_x]+1
+            q.append(cur_x//i)
+    if not vis[cur_x-1]:
+        vis[cur_x-1]=vis[cur_x]+1
+        q.append(cur_x-1)
+    if cur_x<=3:
+        break
+
+print(vis[1])
