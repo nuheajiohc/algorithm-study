@@ -1,5 +1,3 @@
-import sys
-sys.setrecursionlimit(10**6)
 n= int(input())
 d={0:1,1:1,2:3}
 
