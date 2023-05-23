@@ -1,10 +1,7 @@
-n= int(input())
-d={0:1,1:1,2:3}
+n = int(input())
+d=[1,1,3]
 
-def fibo(n):
-    if n in d:
-        return d[n]
-    d[n]=fibo(n-1)+fibo(n-2)+1
-    return d[n]
+for i in range(3,n+1):
+    d.append(d[i-1]+d[i-2]+1)
 
-print(fibo(n)%1000000007)
+print(d[n]%1000000007)
