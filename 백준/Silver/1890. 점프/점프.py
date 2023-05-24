@@ -1,17 +1,15 @@
-N= int(input())
-board=[list(map(int,input().split())) for _ in range(N)]
-vis=[[0]*N for _ in range(N)]
-dx=[1,0]
-dy=[0,1]
-vis[0][0]=1
-for i in range(N):
-    for j in range(N):
-        if i==N-1 and j==N-1:
+n = int(input())
+board = [list(map(int,input().split())) for _ in range(n)]
+d = [[0]*n for _ in range(n)]
+d[0][0]=1
+for i in range(n):
+    for j in range(n):
+        if not d[i][j]:
+            continue
+        if i==n-1 and j==n-1:
             break
-        for dir in range(2):
-            nx=i+(dx[dir]*board[i][j])
-            ny=j+(dy[dir]*board[i][j])
-            if nx>=N or ny>=N:
-                continue
-            vis[nx][ny]+=vis[i][j]
-print(vis[N-1][N-1])
+        if i+board[i][j]<n:
+            d[i+board[i][j]][j]+=d[i][j]
+        if j+board[i][j]<n:
+            d[i][j+board[i][j]]+=d[i][j]
+print(d[-1][-1])
