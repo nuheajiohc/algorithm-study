@@ -9,12 +9,9 @@ while st<=en:
     if problem[st]==temp_color:
         st+=1
     else:
-        if problem[en]==temp_color:
-            en-=1
-            pass
-        else:
+        if problem[en]!=temp_color:
             cnt+=1
-            en-=1
             temp_color=problem[st]
             st+=1
+        en-=1
 print(cnt)
