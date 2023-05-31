@@ -1,19 +1,5 @@
 input()
 ball = input()
-ball_l = ball[0]
-ball_r = ball[-1]
-l_i=0
-for i in range(len(ball)):
-    if ball[i]!=ball_l:
-        l_i=i
-        break
-
-l_list=ball[l_i:]
-r_i=0
-for i in range(len(ball)-1,-1,-1):
-    if ball[i]!=ball_r:
-        r_i=i
-        break
-
-r_list=ball[0:r_i+1]
-print(min(l_list.count("R"),l_list.count("B"),r_list.count("R"),r_list.count("B")))
+rexplore=ball.rstrip(ball[-1])
+lexplore=ball.lstrip(ball[0])
+print(min(rexplore.count("R"),rexplore.count("B"),lexplore.count("B"),lexplore.count("R")))
