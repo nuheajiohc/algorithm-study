@@ -1,0 +1,7 @@
+n = int(input())
+k = int(input())
+arr = list(map(int,input().split()))
+arr.sort()
+diff=list(map(lambda x,y:y-x, arr[:-1],arr[1:]))
+diff.sort()
+print(sum(diff[:n-k]))
