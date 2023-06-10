@@ -1,21 +1,11 @@
 n = int(input())
 city = [list(map(int,input().split())) for _ in range(n)]
-vis = [[0]*n for _ in range(n)]
-dx=[1,0]
-dy=[0,1]
+dp=[[0]*(n+1) for _ in range(n+1)]
 
-for i in range(n):
-    for j in range(n):
-        if city[i][j]==0:
-            vis[i][j]=max(vis[i][j],1)
-        for dir in range(2):
-            nx = i+dx[dir]
-            ny = j+dy[dir]
-            if nx>=n or ny>=n:
-                continue
-            if city[nx][ny]==vis[i][j]%3:
-                vis[nx][ny]=max(vis[nx][ny],vis[i][j]+1)
-            else:
-                vis[nx][ny]=max(vis[nx][ny],vis[i][j])
+for i in range(1,n+1):
+    for j in range(1,n+1):
+        dp[i][j]=max(dp[i][j-1],dp[i-1][j])
+        if dp[i][j]%3==city[i-1][j-1]:
+            dp[i][j]=dp[i][j]+1
 
-print(vis[-1][-1])
+print(dp[-1][-1])
