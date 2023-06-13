@@ -1,26 +1,16 @@
 from collections import Counter
 
 def solution(k, tangerine):
-    
-    sums =Counter(tangerine)
-    nums=[sums[t] for t in sums]
-    nums.sort(reverse=True)
-    answer = len(nums)
-    st=0
-    en=0
-    s=nums[0]
-    temp=0
-    while st<len(nums) and en<len(nums):
-        if s>=k:
-            temp+=1
-            answer=min(answer,temp)
-            s-=nums[st]
-            st+=1
-            temp-=1
+    answer = 0
+    counter=Counter(tangerine)
+    arr=[]
+    for i in counter:
+        arr.append([i,counter[i]])
+    arr.sort(key=lambda x:-x[1])
+    for key,value in arr:
+        if k>0:
+            k-=value
+            answer+=1
         else:
-            temp+=1
-            en+=1
-            if en>=len(nums):
-                break
-            s+=nums[en]
+            break
     return answer
