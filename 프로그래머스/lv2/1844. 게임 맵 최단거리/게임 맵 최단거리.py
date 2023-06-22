@@ -1,25 +1,30 @@
 from collections import deque
 
 def solution(maps):
-    answer = -1
-    width = len(maps[0])
-    height = len(maps)
-    dx= [0,0,1,-1]
-    dy= [1,-1,0,0]
-    vis=[[False]*width for _ in range(height)]
-    queue =deque([[0,0]])
+    answer = 0
+    w = len(maps[0])
+    h = len(maps)
+    
+    vis = [[0]*w for _ in range(h)]
+    
+    dx = [1,-1,0,0]
+    dy = [0,0,1,-1]
+    
+    q = deque()
+    q.append([0,0])
     vis[0][0]=1
-    while queue:
-        cur_x,cur_y=queue.popleft()
+    while q:
+        x,y=q.popleft()
         for dir in range(4):
-            nx= cur_x+dx[dir]
-            ny= cur_y+dy[dir]
-            if nx<0 or ny<0 or nx>=height or ny>=width:
+            nx = x+dx[dir]
+            ny = y+dy[dir]
+            if nx<0 or ny<0 or nx>= h or ny >= w:
                 continue
-            if vis[nx][ny] or not maps[nx][ny]:
+            if maps[nx][ny]==0 or vis[nx][ny]:
                 continue
-            vis[nx][ny]=vis[cur_x][cur_y]+1
-            queue.append([nx,ny])
-    if vis[height-1][width-1]:
-        answer= vis[height-1][width-1]
-    return answer
+            vis[nx][ny]=vis[x][y]+1
+            q.append([nx,ny])
+            if nx==h-1 and ny==w-1:
+                return vis[nx][ny]
+    if vis[-1][-1]==0:
+        return -1
