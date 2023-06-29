@@ -15,7 +15,7 @@ def func():
         if cnt>1:
             print("I'm Sorry Hansoo")
             return
-
+    
     sorted_alphabet=sorted(alphabet.items())
     new_s = ""
     
@@ -27,9 +27,6 @@ def func():
         new_s+=temp
 
     new_s+=reverse_new_s
-    if sorted(new_s) != sorted(s):
-        print("I'm Sorry Hansoo")
-    else:
-        print(new_s)
+    print(new_s)
 
 func()
