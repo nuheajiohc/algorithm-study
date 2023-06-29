@@ -13,19 +13,12 @@ x2,y2 = keys_dict[right]
 
 cnt=0
 for v in s:
-    if v in cons:
-        next_x,next_y=keys_dict[v]
-        if (next_x,next_y)==(x1,y1):
-            cnt+=1
-        else:
-            cnt+=abs(next_x-x1)+abs(next_y-y1)+1
-            x1,y1= next_x,next_y
+    next_x,next_y=keys_dict[v]
+    if v in cons:  
+        cnt+=abs(next_x-x1)+abs(next_y-y1)+1
+        x1,y1= next_x,next_y
     else:
-        next_x,next_y=keys_dict[v]
-        if (next_x,next_y)==(x2,y2):
-            cnt+=1
-        else:
-            cnt+=abs(next_x-x2)+abs(next_y-y2)+1
-            x2,y2= next_x,next_y
+        cnt+=abs(next_x-x2)+abs(next_y-y2)+1
+        x2,y2= next_x,next_y
 
 print(cnt)
