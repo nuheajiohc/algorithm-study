@@ -1,6 +1,8 @@
+import sys
+input = sys.stdin.readline
 t = int(input())
 for _ in range(t):
-    s=input()
+    s=input().strip()
     st=0
     en=len(s)-1
     while st<=en:
