@@ -1,6 +1,5 @@
 n,m = map(int,input().split())
 arr = [False] * m
-visited = [False] * (n+1)
 
 def func(k):
     if k==m:
