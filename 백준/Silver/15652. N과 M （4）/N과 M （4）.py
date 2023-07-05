@@ -1,7 +1,5 @@
 n,m = map(int,input().split())
-
 arr = [False] * m
-vis = [False] * (n+1)
 
 def func(k):
     if k==m:
