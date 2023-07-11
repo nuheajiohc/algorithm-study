@@ -7,10 +7,10 @@ vis[0]=1
 def func(depth,st,cost):
     global min_cost
     if depth == n and network[st][0]:
-        min_cost = min(min_cost,cost+network[st][0])
+        min_cost = min(min_cost,cost+network[st][0]) 
         return
     
-    for en in range(n):
+    for en in range(1,n):
         if not vis[en] and network[st][en]:
             vis[en]=1
             func(depth+1,en,cost+network[st][en])
