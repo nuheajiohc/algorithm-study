@@ -12,10 +12,8 @@ def func(depth,st,cost):
     
     for en in range(n):
         if not vis[en] and network[st][en]:
-            cost+=network[st][en]
             vis[en]=1
-            func(depth+1,en,cost)
-            cost-=network[st][en]
+            func(depth+1,en,cost+network[st][en])
             vis[en]=0
 
 func(1,0,0)
