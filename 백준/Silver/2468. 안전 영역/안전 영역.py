@@ -5,9 +5,8 @@ board = [list(map(int,input().split())) for _ in range(n)]
 
 dx = [0,0,1,-1]
 dy = [1,-1,0,0]
-max_count=0
 
-def check_land():
+def check_land(): # 물 수위를 높여가면서 board새로 갱신
     cnt=0
     for i in range(n):
         for j in range(n): 
@@ -15,7 +14,7 @@ def check_land():
                 cnt+=1
                 continue
             board[i][j]-=1
-    if cnt==n*n:
+    if cnt==n*n: # 모두 잠겼을 때
         return False
     else:
         return True
@@ -42,10 +41,10 @@ def bfs():
                         q.append((nx,ny))
     return count
 
+max_count=bfs()
 for i in range(1,101):
     if check_land():
         max_count= max(max_count,bfs())
     else:
-        max_count= max(max_count,1)
         break
 print(max_count)
