@@ -1,20 +1,20 @@
 l,c = map(int,input().split())
 alpha = sorted(input().split())
 moeum = {"a","e","i","o","u"}
-arr=[]
+vis = [0]*c
 
-def func(k,moeum_num,jaeum_num):
-    if len(arr)==l and moeum_num>0 and jaeum_num>1:
-        print("".join(arr))
+def func(depth,k,moeum_num,jaeum_num,result):
+    if depth==l and moeum_num>0 and jaeum_num>1:
+        print(result)
         return
     
     for i in range(k,c):
-        if alpha[i] not in arr:
-            arr.append(alpha[i])
+        if not vis[i]:
+            vis[i]=1
             if alpha[i] in moeum:
-                func(i+1,moeum_num+1,jaeum_num)
+                func(depth+1,i+1,moeum_num+1,jaeum_num,result+alpha[i])
             else:
-                func(i+1,moeum_num,jaeum_num+1)
-            arr.pop()
+                func(depth+1,i+1,moeum_num,jaeum_num+1,result+alpha[i])
+            vis[i]=0
 
-func(0,0,0)
+func(0,0,0,0,"")
