@@ -1,7 +1,8 @@
+import sys
 from collections import deque
 
 m,n,h = map(int,input().split())
-board = [[list(map(int,input().split())) for a in range(n)] for b in range(h)]
+board = [[list(map(int,sys.stdin.readline().split())) for a in range(n)] for b in range(h)]
 
 dx = [0,0,1,-1,0,0]
 dy = [0,0,0,0,1,-1]
@@ -15,7 +16,7 @@ for i in range(h):
         for k in range(m):
             if board[i][j][k]==0:
                 zero_count+=1
-            if board[i][j][k]==1:
+            elif board[i][j][k]==1:
                 q.append((i,j,k))
 
 def bfs(zero_count,max_day):
@@ -37,8 +38,8 @@ def bfs(zero_count,max_day):
             q.append((nz,nx,ny))
 
     if zero_count:
-        return -1
+        print(-1)
     else:
-        return max_day-1
+        print(max_day-1)
 
-print(bfs(zero_count,1))
+bfs(zero_count,1)
