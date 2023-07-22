@@ -29,7 +29,6 @@ def backtracking(k):
             col[y][i]=True
             rec[(x//3)*3+(y//3)][i]=True
             backtracking(k+1)
-            board[x][y]=0
             row[x][i]=False
             col[y][i]=False
             rec[(x//3)*3+(y//3)][i]=False
