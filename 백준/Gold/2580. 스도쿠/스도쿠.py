@@ -1,5 +1,5 @@
 import sys
-
+input = sys.stdin.readline
 board = [list(map(int,input().split())) for _ in range(9)]
 blank_arr=[]
 row = [[False]*10 for _ in range(9)]
