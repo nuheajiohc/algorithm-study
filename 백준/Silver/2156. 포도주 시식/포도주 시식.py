@@ -1,3 +1,6 @@
+import sys
+input = sys.stdin.readline;
+
 n = int(input())
 nums = [0] + [int(input()) for _ in range(n)]
 d = [0]*(n+1)
