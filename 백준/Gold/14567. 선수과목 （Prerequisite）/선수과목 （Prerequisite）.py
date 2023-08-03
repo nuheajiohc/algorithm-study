@@ -3,10 +3,7 @@ input = sys.stdin.readline
 
 n,m = map(int,input().split())
 d = [1]*(n+1)
-nums = []
-for i in range(m):
-    a,b = map(int,input().split())
-    nums.append((a,b))
+nums = [tuple(map(int,input().split())) for _ in range(m)]
 nums.sort()
 for a,b in nums:
     if d[b]<=1+d[a]:
