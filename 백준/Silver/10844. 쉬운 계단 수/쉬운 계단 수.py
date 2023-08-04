@@ -1,14 +1,21 @@
 n = int(input())
-d = [[0]*10 for _ in range(n+1)]
-d[1]=[0]+[1]*9
+dp = [[0] * 10 for _ in range(n+1)]
+dp[1][1:] = [1] * 9
 
-for i in range(2,n+1):
-    for j in range(10):
-        if j==0:
-            d[i][j] = d[i-1][1]
-        elif j==9:
-            d[i][j] = d[i-1][8]
-        else:
-            d[i][j] = d[i-1][j-1] + d[i-1][j+1]
+def solve(i, j):
+    if j < 0 or j > 9:
+        return 0
+
+    if dp[i][j]:
+        return dp[i][j]
     
-print(sum(d[n])%1000000000)
+    if i<1:
+        return dp[i][j]
+
+    dp[i][j] = solve(i-1, j-1) + solve(i-1, j+1)
+
+    return dp[i][j]
+
+for j in range(10):
+    solve(n, j)
+print(sum(dp[n]) % 1_000_000_000)
