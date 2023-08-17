@@ -3,16 +3,13 @@ lectures = list(map(int,input().split()))
 
 def check_size(mid):
     s=0
-    cnt=0
+    cnt=1
     for i in range(n):
       if s+lectures[i]>mid:
         cnt+=1
         s=0
       s+=lectures[i]
 
-    if s:
-      cnt+=1
-      
     if cnt>m:
       return False
     else:
