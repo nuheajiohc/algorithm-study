@@ -1,3 +1,6 @@
+import sys
+input = sys.stdin.readline
+
 n,m,k = map(int,input().split())
 space = [[0]*(m+1) for _ in range(n+1)]
 for _ in range(k):
@@ -5,7 +8,6 @@ for _ in range(k):
     space[x][y]=1
 
 max_trash =0
-
 dx=[0,0,1,-1]
 dy=[1,-1,0,0]
 
