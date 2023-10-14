@@ -5,7 +5,7 @@ public class Main {
 
     public static int H, W;
     public static int N;
-    
+
     public static int[][] sticker;
 
     public static int[] use;
@@ -27,10 +27,8 @@ public class Main {
             sticker[i][1] = Integer.parseInt(st.nextToken());
         }
 
-        ans = Integer.MIN_VALUE;
+        ans = 0;
         choose(0, 0);
-        if (ans == Integer.MIN_VALUE)
-            ans = 0;
         System.out.println(ans);
     }
 
