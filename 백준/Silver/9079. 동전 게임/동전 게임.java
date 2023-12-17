@@ -1,9 +1,5 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
@@ -51,8 +47,8 @@ public class Main {
     }
 
     private static int convertToInt() throws IOException {
-        String str = (br.readLine() + br.readLine() + br.readLine()).replaceAll(" ", "").replaceAll("H", "0")
-                .replaceAll("T", "1");
+        String str = (br.readLine() + br.readLine() + br.readLine()).replace(" ", "").replace("H", "0")
+                .replace("T", "1");
         return Integer.parseInt(str, 2);
     }
 }
