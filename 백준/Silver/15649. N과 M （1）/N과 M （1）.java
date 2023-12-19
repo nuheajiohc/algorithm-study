@@ -5,40 +5,38 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    private static int N, M;
-    private static boolean[] isUsed;
+    private static int N;
+    private static int M;
     private static int[] nums;
-    private static StringBuilder sb;
+    private static boolean[] vis;
+    private static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        sb = new StringBuilder();
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-
         nums = new int[M];
-        isUsed = new boolean[N];
-
-        permutations(0);
-        System.out.println(sb);
+        vis = new boolean[N+1];
+        dfs(0);
+        System.out.println(sb.toString());
     }
 
-    public static void permutations(int k) {
-        if (k == M) {
-            for (int num : nums) {
-                sb.append(num).append(" ");
+    public static void dfs(int depth){
+        if(depth==M){
+            for(int i=0; i<depth;i++){
+                sb.append(nums[i]).append(" ");
             }
             sb.append("\n");
             return;
         }
 
-        for (int i = 0; i < N; i++) {
-            if (!isUsed[i]) {
-                nums[k] = i+1;
-                isUsed[i] = true;
-                permutations(k + 1);
-                isUsed[i] = false;
+        for(int i=1; i<=N;i++){
+            if(!vis[i]){
+                vis[i]=true;
+                nums[depth]=i;
+                dfs(depth+1);
+                vis[i]=false;
             }
         }
     }
