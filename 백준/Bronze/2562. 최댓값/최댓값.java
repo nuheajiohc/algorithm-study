@@ -12,6 +12,7 @@ public class Main {
                 index = i;
             }
         }
-        System.out.printf("%d%n%d", max, index);
+        System.out.println(max);
+        System.out.println(index);
     }
 }
