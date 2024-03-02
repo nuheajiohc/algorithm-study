@@ -5,14 +5,14 @@ public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        int N = Integer.parseInt(br.readLine());
+        br.readLine();
         int Y = 0;
         int M = 0;
         StringTokenizer st = new StringTokenizer(br.readLine());
         while (st.hasMoreTokens()) {
-            double temp = Double.parseDouble(st.nextToken());
-            Y += count(temp, 30) * 10;
-            M += count(temp, 60) * 15;
+            int temp = Integer.parseInt(st.nextToken());
+            Y += (temp / 30 + 1) * 10;
+            M += (temp / 60 + 1) * 15;
         }
 
         if (Y > M) {
@@ -23,9 +23,5 @@ public class Main {
             sb.append("Y M ").append(M);
         }
         System.out.println(sb);
-    }
-
-    public static int count(double temp, int standard) {
-        return (int) Math.floor((temp / standard) + 1);
     }
 }
