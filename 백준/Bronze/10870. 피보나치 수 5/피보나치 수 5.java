@@ -17,7 +17,7 @@ public class Main {
             return 0;
         }
         if (nums[n] == 0) {
-            return fibo(n - 1) + fibo(n - 2);
+            nums[n] = fibo(n - 1) + fibo(n - 2);
         }
         return nums[n];
     }
