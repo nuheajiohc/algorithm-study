@@ -12,6 +12,10 @@ public class Main {
             minguk_sum += Integer.parseInt(minguk[i]);
             manse_sum += Integer.parseInt(manse[i]);
         }
-        System.out.println(minguk_sum >= manse_sum ? minguk_sum : manse_sum);
+        if(minguk_sum>manse_sum){
+            System.out.println(minguk_sum);
+        }else{
+            System.out.println(manse_sum);
+        }
     }
 }
