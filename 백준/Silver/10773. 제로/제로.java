@@ -6,7 +6,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int K = Integer.parseInt(br.readLine());
         Deque<Integer> stack = new ArrayDeque<>();
-        Long count=0L;
+        int count=0;
         for(int i=0; i<K;i++){
             stack.offerLast(Integer.parseInt(br.readLine()));
             if(stack.peekLast()==0){
