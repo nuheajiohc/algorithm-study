@@ -1,19 +1,21 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
     public static void main(String[]args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int K = Integer.parseInt(br.readLine());
-        Deque<Integer> stack = new ArrayDeque<>();
         int count=0;
+        int cursor=0;
+        int[] stack= new int[K];
         for(int i=0; i<K;i++){
-            stack.offerLast(Integer.parseInt(br.readLine()));
-            if(stack.peekLast()==0){
-                stack.pollLast();
-                stack.pollLast();
+            int n=Integer.parseInt(br.readLine());
+            if(n==0 && cursor>0){
+                stack[--cursor]=0;
+            }else{
+                stack[cursor++]=n;
             }
         }
+
         for(int n:stack){
             count+=n;
         }
