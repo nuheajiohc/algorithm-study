@@ -26,9 +26,7 @@ public class Main {
 
     public static void backtracking(int depth,String str){
         if(depth==N){
-            if(isPrime(Integer.parseInt(str))){
-                sb.append(str).append("\n");
-            }
+            sb.append(str).append("\n");
             return;
         }
 
