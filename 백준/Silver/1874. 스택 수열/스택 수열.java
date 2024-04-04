@@ -19,13 +19,11 @@ public class Main {
             if(stack.peekLast()==k){
                 stack.pollLast();
                 sb.append("-").append("\n");
+            }else if(stack.peekLast()>k){
+                System.out.println("NO");
+                return;
             }
         }
-
-        if(stack.isEmpty()){
-            System.out.println(sb.toString());
-        }else{
-            System.out.println("NO");
-        }
+        System.out.println(sb.toString());
     }
 }
