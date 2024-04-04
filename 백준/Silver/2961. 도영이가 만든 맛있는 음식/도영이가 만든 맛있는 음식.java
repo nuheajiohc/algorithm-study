@@ -20,10 +20,6 @@ public class Main {
     }
 
     public static void backtracking(int k, int depth,int a, int b){
-        if(depth == N){
-            return;
-        }
-
         for(int i=k; i<N; i++){
             a*=arr[i][0];
             b+=arr[i][1];
