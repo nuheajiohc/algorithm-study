@@ -25,11 +25,7 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             int start = Integer.parseInt(st.nextToken());
             int end = Integer.parseInt(st.nextToken());
-            if(start<end){
-                sb.append(mistake[end-1]-mistake[start-1]).append("\n");
-            }else{
-                sb.append(0).append("\n");
-            }
+            sb.append(mistake[end-1]-mistake[start-1]).append("\n");
         }
         System.out.println(sb.toString());
     }
