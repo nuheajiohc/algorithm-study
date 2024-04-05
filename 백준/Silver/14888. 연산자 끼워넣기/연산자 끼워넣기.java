@@ -35,29 +35,22 @@ public class Main {
 
         if(op[0]>0){
             op[0]--;
-            int temp = value+arr[depth+1];
-            backtracking(depth+1,temp);
+            backtracking(depth+1,value+arr[depth+1]);
             op[0]++;
         }
         if(op[1]>0){
             op[1]--;
-            int temp = value-arr[depth+1];
-            backtracking(depth+1,temp);
+            backtracking(depth+1,value-arr[depth+1]);
             op[1]++;  
         }
         if(op[2]>0){
             op[2]--;
-            int temp = value*arr[depth+1];
-            backtracking(depth+1,temp);
+            backtracking(depth+1,value*arr[depth+1]);
             op[2]++;  
         }
         if(op[3]>0){
             op[3]--;
-            int temp = value/arr[depth+1];
-            if(value<0){
-                temp = -(Math.abs(value)/arr[depth+1]);
-            }
-            backtracking(depth+1,temp);
+            backtracking(depth+1,value/arr[depth+1]);
             op[3]++;  
         }
     }
