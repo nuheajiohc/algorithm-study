@@ -13,16 +13,17 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             int command = Integer.parseInt(st.nextToken());
             int th = Integer.parseInt(st.nextToken());
+            int sit;
             if(command == 1){
-                int sit = Integer.parseInt(st.nextToken());
-                arr[th-1] = arr[th-1] | (1 << (sit-1));
+                sit = Integer.parseInt(st.nextToken());
+                arr[th-1] |= (1 << (sit-1));
             }else if(command == 2){
-                int sit = Integer.parseInt(st.nextToken());
-                arr[th-1] = arr[th-1] & ~(1 << (sit-1));
+                sit = Integer.parseInt(st.nextToken());
+                arr[th-1] &= ~(1 << (sit-1));
             }else if(command ==3){
                 arr[th-1] = (arr[th-1] << 1) & ~(1<<20);
             }else{
-                arr[th-1] = arr[th-1] >> 1;
+                arr[th-1] >>= 1;
             }
         }
         Set<Integer> set = new HashSet<>();
