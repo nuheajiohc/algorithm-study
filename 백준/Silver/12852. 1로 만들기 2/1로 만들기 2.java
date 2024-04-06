@@ -22,9 +22,8 @@ public class Main {
 
         System.out.println(dp[N]);
         StringBuilder sb = new StringBuilder();
-        sb.append(N).append(" ");
-        while(N>1){
-            sb.append(trace[N]).append(" ");
+        while(N>0){
+            sb.append(N).append(" ");
             N = trace[N];
         }
         System.out.println(sb.toString());
