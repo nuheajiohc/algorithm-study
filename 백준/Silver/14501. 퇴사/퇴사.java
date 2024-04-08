@@ -15,12 +15,11 @@ public class Main {
         }
 
         for(int i=1; i<=N; i++){
+            dp[i+1] = Math.max(dp[i+1],dp[i]);
             if(i+T[i]>N+1){
                 continue;
             }
-            for(int j=1; j<=i; j++){
-                dp[i+T[i]] = Math.max(dp[i+T[i]], dp[j]+P[i]); 
-            }
+            dp[i+T[i]] = Math.max(dp[i+T[i]], dp[i]+P[i]); 
         }
         Arrays.sort(dp);
         System.out.println(dp[N+1]);
