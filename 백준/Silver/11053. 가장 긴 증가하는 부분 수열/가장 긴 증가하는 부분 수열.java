@@ -10,9 +10,9 @@ public class Main {
         int[] dp = new int[N];
         for(int i=0; i<N; i++){
             nums[i] = Integer.parseInt(st.nextToken());
-            dp[i]=1;
         }
 
+        Arrays.fill(dp,1);
         for(int i=0; i<N; i++){
             for(int j=0; j<=i; j++){
                 if(nums[i]>nums[j]){
