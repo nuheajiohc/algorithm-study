@@ -3,32 +3,31 @@ import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        StringTokenizer st = new StringTokenizer(br.readLine());
         int[] nums = new int[N];
+        StringTokenizer st = new StringTokenizer(br.readLine());
         for(int i=0; i<N; i++){
             nums[i] = Integer.parseInt(st.nextToken());
         }
-        int minValue = Integer.MAX_VALUE;
-        int min=0;
-        int max=0;
-        for(int i=0; i<N-1; i++){
-            int s = i;
-            int e = N;
-            while(s+1<e){
-                int mid = (s+e)/2;
-                if((nums[i]+nums[mid])<0) s= mid;
-                else e= mid;
-                if(minValue>Math.abs(nums[i]+nums[mid])){
-                    minValue = Math.abs(nums[i]+nums[mid]);
-                    min=nums[i];
-                    max=nums[mid];
-                }
+
+        int minSum=Math.abs(nums[0]+nums[N-1]);
+        int min=nums[0];
+        int max=nums[N-1];
+        int s =0;
+        int e =N-1;
+        while(s<e){
+            if(minSum>Math.abs(nums[s]+nums[e])){
+                minSum = Math.abs(nums[s]+nums[e]);
+                min= nums[s];
+                max= nums[e];
+            }
+            if(nums[s]+nums[e]<0){
+                s++;
+            }else{
+                e--;
             }
         }
-        StringBuilder sb = new StringBuilder();
-        sb.append(min).append(" ").append(max);
-        System.out.println(sb.toString());
+        System.out.println(min+" "+max);
     }
 }
