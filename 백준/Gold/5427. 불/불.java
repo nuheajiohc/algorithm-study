@@ -20,10 +20,10 @@ public class Main {
                 for(int k=0; k<w; k++){
                     board[j][k] = s.charAt(k);
                     if(board[j][k]=='*'){
-                        q.offerLast(new Position(j,k,1,'*'));
+                        q.offerLast(new Position(j,k,1));
                     }
                     if(board[j][k]=='@'){
-                        q.offerFirst(new Position(j,k,1,'@'));
+                        q.offerFirst(new Position(j,k,1));
                     }
                 }
             }
@@ -32,7 +32,7 @@ public class Main {
         System.out.println(sb.toString());
     }
 
-    public static void bfs(char[][] board, int w , int h, Deque<Position> q){
+    public static void bfs(char[][] board, int w, int h, Deque<Position> q){
         while(!q.isEmpty()){
             Position cur=q.poll();
             if((cur.i==0 || cur.i==h-1 || cur.j==0 || cur.j==w-1) && board[cur.i][cur.j]=='@'){
@@ -44,9 +44,9 @@ public class Main {
                 int ny = cur.j + dir[1];
     
                 if(nx<0 || nx>=h || ny<0 || ny>=w) continue;
-                if(board[nx][ny]=='.' || (board[nx][ny]=='@' && cur.who=='*')){
+                if(board[nx][ny]=='.' || (board[nx][ny]=='@' && board[cur.i][cur.j]=='*')){
                     board[nx][ny]=board[cur.i][cur.j];
-                    q.offer(new Position(nx,ny,cur.count+1,board[nx][ny]));
+                    q.offer(new Position(nx,ny,cur.count+1));
                 }
             }
         }
@@ -54,17 +54,14 @@ public class Main {
     }
 
     static class Position{
+        int i;
+        int j;
+        int count;
 
-        private int i;
-        private int j;
-        private int count;
-        private char who;
-
-        public Position(int i, int j, int count, char who){
+        public Position(int i, int j, int count){
             this.i = i;
             this.j=j;
             this.count=count;
-            this.who=who;
         }
     }
 }
