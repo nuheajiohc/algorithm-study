@@ -5,7 +5,7 @@ public class Main {
 
     private static int N, M, count;
     private static List<Integer>[] friends;
-    private static int[] vis;
+    private static boolean[] vis;
 
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,7 +24,7 @@ public class Main {
             friends[b].add(a);
         }
 
-        vis = new int[N+1];
+        vis = new boolean[N+1];
         count=0;
         bfs();
         System.out.println(count);
@@ -33,19 +33,14 @@ public class Main {
     public static void bfs(){
         Queue<Integer> queue = new ArrayDeque<>();
         queue.offer(1);
-        vis[1] = 1;
+        vis[1] = true;
         while(!queue.isEmpty()){
             int cur = queue.poll();
             for(int next: friends[cur]){
-                if(vis[next]>0) continue;
-                vis[next] = vis[cur]+1;
-                queue.offer(next);
-            }
-        }
-
-        for(int i=1; i<=N; i++){
-            if(vis[i]>1 && vis[i]<=3){
+                if(vis[next]) continue;
+                vis[next] = true;
                 count++;
+                if(cur==1) queue.offer(next);
             }
         }
     }
