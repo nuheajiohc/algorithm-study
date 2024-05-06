@@ -23,13 +23,15 @@ public class Main {
             computers[u].add(v);
             computers[v].add(u);
         }
-
-        bfs();
+        vis = new boolean[N+1];
+        // bfs();
+        vis[1] = true;
+        dfs(1);
         System.out.println(count);
     }
 
     public static void bfs(){
-        vis = new boolean[N+1];
+
         Queue<Integer> queue = new ArrayDeque<>();
         queue.offer(1);
         vis[1]= true;
@@ -41,6 +43,16 @@ public class Main {
                 count+=1;
                 queue.offer(next);
             }
+        }
+    }
+
+    public static void dfs(int cur){
+        // vis[cur] = true;
+        for(int next: computers[cur]){
+            if(vis[next]) continue;
+            vis[next] = true;
+            count++;
+            dfs(next);
         }
     }
 }
