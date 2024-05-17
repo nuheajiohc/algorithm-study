@@ -7,6 +7,7 @@ public class Main {
     private static int[] dy = {1,0,0,-1};
     private static int[][] country;
     private static int N;
+    private static boolean[][] globalVis;
 
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -22,10 +23,11 @@ public class Main {
 
         separateIslands();
 
+        globalVis = new boolean[N][N];
         int minBridgeLength=10000;
         for(int i=0; i<N; i++){
             for(int j=0; j<N; j++){
-                if(country[i][j]==0) continue;
+                if(country[i][j]==0 || globalVis[i][j]) continue;
                 if(isInnerArea(i,j)) continue;
 
                 minBridgeLength = Math.min(minBridgeLength, bfs(i,j));
@@ -60,6 +62,7 @@ public class Main {
                 if(vis[nx][ny]>0) continue;
                 vis[nx][ny] = vis[cur[0]][cur[1]]+1;
                 if(country[nx][ny]!=0 && country[nx][ny]!=curIsland){
+                    globalVis[nx][ny]=true;
                     return vis[nx][ny]-1;
                 }
                 queue.offer(new int[]{nx,ny});
