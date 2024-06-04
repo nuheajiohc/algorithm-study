@@ -38,12 +38,12 @@ public class Main {
 
         Queue<Integer> queue = new ArrayDeque<>();
         int ancestorCount = 0;
-        List<Integer> ancestorList = new ArrayList<>();
+        List<String> ancestorList = new ArrayList<>();
         for(int i=1; i<=N; i++){
             if(deg[i]==0){
                 queue.offer(i);
                 ancestorCount++;
-                ancestorList.add(i);
+                ancestorList.add(names[i]);
             }
         }
 
@@ -60,8 +60,9 @@ public class Main {
 
         StringBuilder sb = new StringBuilder();
         sb.append(ancestorCount).append("\n");
-        for(int ancestor: ancestorList){
-            sb.append(names[ancestor]).append(" ");
+        Collections.sort(ancestorList);
+        for(String ancestor: ancestorList){
+            sb.append(ancestor).append(" ");
         }
         sb.append("\n");
 
@@ -76,11 +77,5 @@ public class Main {
             sb.append("\n");
         }
         System.out.println(sb.toString());
-    }
-
-    public static class Relation{
-        String ancestor;
-        List<String> descendants = new ArrayList<>();
-        int deg;
     }
 }
