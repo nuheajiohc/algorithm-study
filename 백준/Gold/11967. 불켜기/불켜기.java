@@ -32,17 +32,16 @@ public class Main {
             adj[x][y].add(new Point(a,b));
         }
 
-        Queue<Point> light = new ArrayDeque<>();
+        int count=1;
         Queue<Point> move = new ArrayDeque<>();
         move.offer(new Point(1,1));
-        light.offer(new Point(1,1));
         board[1][1]=2;
         while(!move.isEmpty()){
             Point cur = move.poll();
             for(Point next: adj[cur.x][cur.y]){
                 if(board[next.x][next.y]==0){
                     board[next.x][next.y]=1;
-                    light.offer(new Point(next.x, next.y));
+                    count++;
                 }
             }
 
@@ -75,12 +74,6 @@ public class Main {
             }
         }
 
-        int count=0;
-        for(int i=1; i<=N; i++){
-            for(int j=1; j<=N; j++){
-                if(board[i][j]!=0) count++;
-            }
-        }
         System.out.println(count);
     }
 
