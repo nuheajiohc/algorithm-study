@@ -12,11 +12,9 @@ public class Main {
         for(int i=1; i<=N; i++){
             st = new StringTokenizer(br.readLine());
             for(int j=1; j<=M; j++){
-                maze[i][j] = Math.max(maze[i-1][j], Math.max(maze[i][j-1], maze[i-1][j-1]));
-                maze[i][j] += Integer.parseInt(st.nextToken());
+                maze[i][j] = Math.max(maze[i-1][j], Math.max(maze[i][j-1], maze[i-1][j-1]))+Integer.parseInt(st.nextToken());
             }
         }
-
         System.out.println(maze[N][M]);
     }
 }
