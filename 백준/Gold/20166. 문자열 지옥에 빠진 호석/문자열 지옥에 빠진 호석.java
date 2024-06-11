@@ -44,7 +44,6 @@ public class Main {
     public static void dfs(int x, int y, String s){
             if(map.containsKey(s)){
                 map.put(s,map.get(s)+1);
-                return;
             }
 
             if(s.length()>5) return;
