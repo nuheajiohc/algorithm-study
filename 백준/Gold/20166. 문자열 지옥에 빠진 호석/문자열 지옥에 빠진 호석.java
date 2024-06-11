@@ -7,7 +7,7 @@ public class Main {
     private static int[] dy = {0,1,-1,0,1,-1,1,-1};
     private static int N,M,K;
     private static char[][] board;
-    private static Map<String,Integer> map = new LinkedHashMap<>();
+    private static Map<String,Integer> map = new HashMap<>();
 
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,8 +21,11 @@ public class Main {
             board[i] = br.readLine().toCharArray();
         }
 
-        while(K-->0){
-            map.put(br.readLine(),0);
+        String[] godString = new String[K];
+        for(int i=0; i<K; i++){
+            String line = br.readLine();
+            map.put(line,0);
+            godString[i] = line;
         }
 
         StringBuilder sb = new StringBuilder();
@@ -32,7 +35,7 @@ public class Main {
             }
         }
 
-        for(String str : map.keySet()){
+        for(String str : godString){
             sb.append(map.get(str)).append("\n");
         }   
         System.out.println(sb.toString());
