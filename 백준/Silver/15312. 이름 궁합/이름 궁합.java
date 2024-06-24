@@ -21,8 +21,6 @@ public class Main {
             }
             queue.poll();
         }
-
-        int result = queue.poll()*10 + queue.poll();
-        System.out.println(result<10 ?"0"+result: result);
+        System.out.println(""+queue.poll()+queue.poll());
     }
 }
