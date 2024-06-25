@@ -19,7 +19,7 @@ public class Main {
         String tail = word.substring(len-len/2);
         
         if(isPalindrome(whole) && isPalindrome(head) && isPalindrome(tail)){
-            return isAkarakaPalindrome(head) && isAkarakaPalindrome(tail);
+            return isAkarakaPalindrome(head);
         }
         return false;
     }
