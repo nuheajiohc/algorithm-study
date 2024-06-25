@@ -16,9 +16,8 @@ public class Main {
         String whole = word;
         int len = word.length();
         String head = word.substring(0,len/2);
-        String tail = word.substring(len-len/2);
         
-        if(isPalindrome(whole) && isPalindrome(head) && isPalindrome(tail)){
+        if(isPalindrome(whole) && isPalindrome(head)){
             return isAkarakaPalindrome(head);
         }
         return false;
