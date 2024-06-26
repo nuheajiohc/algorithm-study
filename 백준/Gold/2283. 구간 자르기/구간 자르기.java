@@ -30,12 +30,10 @@ public class Main {
                 eCount-=ePoint.getOrDefault(e-1,0);
                 sum+=eCount;
             }else if(sum>K){
-                while(sum>K){
-                    s++;
-                    sCount+=sPoint.getOrDefault(s-1,0);
-                    sCount-=ePoint.getOrDefault(s-1,0);
-                    sum-=sCount;
-                }
+                s++;
+                sCount+=sPoint.getOrDefault(s-1,0);
+                sCount-=ePoint.getOrDefault(s-1,0);
+                sum-=sCount;
             }else{
                 System.out.println(s+" "+e);
                 return;
