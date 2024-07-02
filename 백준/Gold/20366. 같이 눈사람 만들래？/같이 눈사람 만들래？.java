@@ -13,25 +13,12 @@ public class Main {
         Arrays.sort(radius);
 
         int minDiff=Integer.MAX_VALUE;
-        boolean[] vis = new boolean[N];
         for(int i=0; i<N-1; i++){
-            vis[i]=true;
             for(int j=i+3; j<N; j++){
-                vis[j]=true;
                 int snowman1=radius[i]+radius[j];
-
                 int e=j-1;
                 int s=i+1;
                 while(s<e && s<j && e>i){
-                    if(vis[s]){
-                        s++;
-                        continue;
-                    }
-                    if(vis[e]){
-                        e--;
-                        continue;
-                    }
-                
                     int snowman2 = radius[s]+radius[e];
                     int diff = Math.abs(snowman1-snowman2);
                     if(minDiff>diff){
@@ -45,10 +32,7 @@ public class Main {
                         break;
                     }
                 }
-                vis[j]=false;
             }
-            
-            vis[i]=false;
         }
         System.out.println(minDiff);
     }
