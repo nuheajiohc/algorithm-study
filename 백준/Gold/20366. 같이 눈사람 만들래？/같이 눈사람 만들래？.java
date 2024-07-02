@@ -20,8 +20,8 @@ public class Main {
                 vis[j]=true;
                 int snowman1=radius[i]+radius[j];
 
-                int e=N-1;
-                int s=0;
+                int e=j-1;
+                int s=i+1;
                 while(s<e && s<j && e>i){
                     if(vis[s]){
                         s++;
