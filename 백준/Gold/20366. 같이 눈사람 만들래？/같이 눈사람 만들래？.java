@@ -29,7 +29,8 @@ public class Main {
                     }else if(snowman1>snowman2){
                         s++;
                     }else{
-                        break;
+                        System.out.println(0);
+                        return;
                     }
                 }
             }
