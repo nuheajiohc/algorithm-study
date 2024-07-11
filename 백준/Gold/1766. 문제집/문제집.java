@@ -29,7 +29,6 @@ public class Main {
         StringBuilder sb = new StringBuilder();
         Queue<Integer> queue = new PriorityQueue<>();
         for(int i=1; i<=N; i++){
-            Collections.sort(adj[i]);
             if(deg[i]==0) queue.offer(i);
         }
 
