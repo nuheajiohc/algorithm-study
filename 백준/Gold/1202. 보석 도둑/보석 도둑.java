@@ -8,10 +8,7 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        Queue<int[]> pq1 = new PriorityQueue<>((a,b)->{
-            if(a[0]==b[0]) return b[1]-a[1];
-            return a[0]-b[0];
-        });
+        Queue<int[]> pq1 = new PriorityQueue<>((a,b)-> a[0]-b[0]);
         Queue<Integer> pq2 = new PriorityQueue<>((a,b)->b-a);
 
         while(N-->0){
@@ -21,15 +18,15 @@ public class Main {
             pq1.offer(new int[]{M,V});
         }
 
-        List<Integer> list = new ArrayList<>();
+        List<Integer> bags = new ArrayList<>();
         while(K-->0){
-            list.add(Integer.parseInt(br.readLine()));
+            bags.add(Integer.parseInt(br.readLine()));
         }
-        Collections.sort(list);
+        Collections.sort(bags);
 
         long sum=0;
-        for(int i=0; i<list.size();i++){
-            int target = list.get(i);
+        for(int i=0; i<bags.size();i++){
+            int target = bags.get(i);
             while(!pq1.isEmpty() && target>=pq1.peek()[0]){
                 pq2.offer(pq1.poll()[1]);
             }
