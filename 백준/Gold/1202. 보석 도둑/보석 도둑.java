@@ -12,7 +12,7 @@ public class Main {
             if(a[0]==b[0]) return b[1]-a[1];
             return a[0]-b[0];
         });
-        Queue<int[]> pq2 = new PriorityQueue<>((a,b)->b[1]-a[1]);
+        Queue<Integer> pq2 = new PriorityQueue<>((a,b)->b-a);
 
         while(N-->0){
             st = new StringTokenizer(br.readLine());
@@ -31,10 +31,10 @@ public class Main {
         for(int i=0; i<list.size();i++){
             int target = list.get(i);
             while(!pq1.isEmpty() && target>=pq1.peek()[0]){
-                pq2.offer(pq1.poll());
+                pq2.offer(pq1.poll()[1]);
             }
             if(pq2.isEmpty()) continue;
-            sum+= pq2.poll()[1];
+            sum+= pq2.poll();
             
         }
         System.out.println(sum);
