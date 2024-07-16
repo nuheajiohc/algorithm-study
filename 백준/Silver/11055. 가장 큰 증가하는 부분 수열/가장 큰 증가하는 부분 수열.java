@@ -4,22 +4,24 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         int N = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] nums = new int[N];
+
+        int[] seq = new int[N];
+        for(int i=0; i<N; i++){
+            seq[i] = Integer.parseInt(st.nextToken());
+        }
+
         int[] dp = new int[N];
+        int maxVal=0;
         for(int i=0; i<N; i++){
-            nums[i] = Integer.parseInt(st.nextToken());
-        }
-        for(int i=0; i<N; i++){
-            dp[i] = nums[i];
-            for(int j=i-1; j>=0; j--){
-                if(nums[j]<nums[i]){
-                    dp[i] = Math.max(dp[j]+nums[i],dp[i]);
-                }
+            dp[i] = seq[i];
+            for(int j=0; j<i; j++){
+                if(seq[j]<seq[i]) dp[i] = Math.max(dp[j]+seq[i],dp[i]);
             }
+            maxVal = Math.max(maxVal,dp[i]);
         }
-        Arrays.sort(dp);
-        System.out.println(dp[N-1]);
+        System.out.println(maxVal);
     }
 }
