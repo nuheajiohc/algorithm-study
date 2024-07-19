@@ -5,23 +5,23 @@ public class Main {
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
-        Set<Integer> coins = new HashSet<>();
-        for(int i=0; i<n; i++){
-            coins.add(Integer.parseInt(br.readLine()));
+        int N = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
+        int[] seq = new int[N+1];
+        for(int i=1; i<=N; i++){
+            seq[i] = Integer.parseInt(br.readLine());
         }
-        List<Integer> uniCoins = new ArrayList<>(coins);
-        Collections.sort(uniCoins);
 
-        int[] dp = new int[k+1];
-        Arrays.fill(dp,Integer.MAX_VALUE-1);
-        dp[0]=0;
-        for(int i=0; i<uniCoins.size(); i++){
-            for(int j=uniCoins.get(i); j<=k; j++){
-                dp[j] = Math.min(dp[j],dp[j-uniCoins.get(i)]+1);
+        int[] dp = new int[K+1];
+        for(int i=1; i<=K; i++){
+            dp[i] = 10001;
+        }
+
+        for(int i=1; i<=N; i++){
+            for(int j=seq[i]; j<=K; j++){
+                dp[j] = Math.min(dp[j], dp[j-seq[i]]+1);
             }
         }
-        System.out.println(dp[k]==Integer.MAX_VALUE-1?-1:dp[k]);
+        System.out.println(dp[K]==10001?-1: dp[K]);
     }
 }
