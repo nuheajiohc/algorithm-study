@@ -20,7 +20,7 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
-            double avg =Math.ceil((prefixSum[b]-prefixSum[a-1])*100/(double)((b-a+1)))/(double)100;
+            double avg =(prefixSum[b]-prefixSum[a-1])/(double)(b-a+1);
             
             sb.append(String.format("%.2f",avg)).append("\n");
         }
