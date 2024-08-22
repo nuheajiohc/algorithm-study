@@ -7,12 +7,10 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] s = new int[N];
+        int maxValue=0;
         for(int i=0; i<N; i++){
-            s[i] = Integer.parseInt(st.nextToken());
+            maxValue = Math.max(maxValue,Integer.parseInt(st.nextToken()));
         }
-
-        Arrays.sort(s);
-        System.out.println(s[N-1]+N-1);
+        System.out.println(maxValue+N-1);
     }
 }
