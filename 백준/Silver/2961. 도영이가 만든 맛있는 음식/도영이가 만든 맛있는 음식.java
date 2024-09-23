@@ -1,47 +1,45 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
+    
+    private static int N;
+    private static Food[] foods;
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
 
-   private static int N;
-   private static Food[] foods;
-   private static int minDiff = Integer.MAX_VALUE;
-   public static void main(String[] args) throws Exception{
-      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        foods = new Food[N];
+        for(int i=0; i<N; i++){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int sour = Integer.parseInt(st.nextToken());
+            int bitter = Integer.parseInt(st.nextToken());
+            foods[i] = new Food(sour, bitter);
+        }
 
-      N = Integer.parseInt(br.readLine());
+        int minDiff = getMinDiff(0,1,0);
+        System.out.println(minDiff);
+    }
 
-      foods = new Food[N];
-      for(int i=0; i<N; i++){
-         StringTokenizer st = new StringTokenizer(br.readLine());
-         int sour = Integer.parseInt(st.nextToken());
-         int bitter = Integer.parseInt(st.nextToken());
-         foods[i] = new Food(sour, bitter);
-      }
+    public static int getMinDiff(int k, int curSour, int curBitter){
+        if(k==N){
+            if(curBitter==0) return Integer.MAX_VALUE;
+            return Math.abs(curSour-curBitter);
+        }
+        
+        int nonInclude = getMinDiff(k+1, curSour, curBitter);
+        int include = getMinDiff(k+1, curSour*foods[k].sour,curBitter+foods[k].bitter);
+        int minDiff = Math.min(nonInclude, include);
+        return minDiff;
+    }
 
-      getMinDiff(0,1,0);
-      System.out.println(minDiff);
-   }
+    public static class Food{
+        int sour;
+        int bitter;
 
-   public static void getMinDiff(int k, int curSour, int curBitter){
-      if(k>=N){
-         if(curBitter==0) return;
-         minDiff = Math.min(minDiff, Math.abs(curSour-curBitter));
-         return;
-      }
-
-      getMinDiff(k+1,curSour,curBitter);
-      getMinDiff(k+1,curSour*foods[k].sour, curBitter+foods[k].bitter);
-   }
-
-   public static class Food{
-
-      int sour;
-      int bitter;
-
-      Food(int sour, int bitter){
-         this.sour = sour;
-         this.bitter = bitter;
-      }
-   }
+        Food(int sour, int bitter){
+            this.sour = sour;
+            this.bitter = bitter;
+        }
+    }
 }
