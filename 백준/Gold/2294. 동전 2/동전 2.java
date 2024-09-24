@@ -7,21 +7,17 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
-        int[] seq = new int[N+1];
-        for(int i=1; i<=N; i++){
-            seq[i] = Integer.parseInt(br.readLine());
-        }
 
         int[] dp = new int[K+1];
-        for(int i=1; i<=K; i++){
-            dp[i] = 10001;
-        }
-
-        for(int i=1; i<=N; i++){
-            for(int j=seq[i]; j<=K; j++){
-                dp[j] = Math.min(dp[j], dp[j-seq[i]]+1);
+        Arrays.fill(dp, 10001);
+        dp[0]=0;
+        for(int i=0; i<N; i++){
+            int value = Integer.parseInt(br.readLine());
+            for(int j=value; j<=K; j+=1){
+                dp[j] = Math.min(dp[j],dp[j-value]+1);
             }
         }
-        System.out.println(dp[K]==10001?-1: dp[K]);
+
+        System.out.println(dp[K]==10001?-1:dp[K]);
     }
 }
