@@ -19,8 +19,8 @@ public class Main {
 
         Arrays.sort(arr);
 
-        int s=0;
-        int e=1000000001;
+        int s=1;
+        int e=arr[N-1]+1;
         while(s+1<e){
             int mid = (s+e)/2;
             if(check(mid)) s=mid;
