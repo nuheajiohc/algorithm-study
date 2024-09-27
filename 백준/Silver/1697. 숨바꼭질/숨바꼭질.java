@@ -2,44 +2,35 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-
-    private static int[] arr;
-    private static Deque<Integer> q;
-    private static int s, b;
-
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        s = Integer.parseInt(st.nextToken());
-        b = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
 
-        arr = new int[100001];
-        arr[s] = 1;
+        int[] vis = new int[100001];
+        Deque<Integer> q = new ArrayDeque<>();
+        q.offer(N);
+        vis[N]=1;
 
-        q = new ArrayDeque<>();
-        q.offer(s);
-        while (true) {
+        while(!q.isEmpty()){
             int cur = q.poll();
-            if (check(cur, cur + 1) || check(cur, cur - 1) || check(cur, cur * 2)) {
-                System.out.println(arr[b] - 1);
-                break;
+
+            if(cur*2<100001 &&vis[cur*2]==0){
+                vis[cur*2]= vis[cur]+1;
+                q.offer(cur*2);
+            }
+
+            if(cur+1<100001 && vis[cur+1]==0){
+                vis[cur+1] = vis[cur]+1;
+                q.offer(cur+1);
+            }
+
+            if(cur-1>=0 && vis[cur-1]==0){
+                vis[cur-1] =vis[cur]+1;
+                q.offer(cur-1);
             }
         }
-
-    }
-
-    public static boolean check(int cur, int nx) {
-        if (nx < 0 || nx > 100000) {
-            return false;
-        }
-        if (arr[nx] == 0) {
-            arr[nx] = arr[cur] + 1;
-            q.offer(nx);
-            return false;
-        }
-        if (nx == b) {
-            return true;
-        }
-        return false;
-    }
+        System.out.println(vis[K]-1);
+    }   
 }
