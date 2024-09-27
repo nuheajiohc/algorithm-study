@@ -1,29 +1,36 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Main {
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(br.readLine());
-        Deque<Integer> stack = new ArrayDeque<>();
-        StringBuilder sb = new StringBuilder();
-        int count=1;
 
-        for(int i=0; i<n; i++){
-            int k = Integer.parseInt(br.readLine());
-            while(stack.isEmpty() || stack.peekLast()<k){
-                stack.offerLast(count);
-                sb.append("+").append("\n");
-                count++;
-            }
-            if(stack.peekLast()==k){
-                stack.pollLast();
-                sb.append("-").append("\n");
-            }else if(stack.peekLast()>k){
-                System.out.println("NO");
-                return;
-            }
-        }
-        System.out.println(sb.toString());
+  public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    int N = Integer.parseInt(br.readLine());
+
+    StringBuilder sb = new StringBuilder();
+    Deque<Integer> stack = new ArrayDeque<>();
+
+    int count=1;
+    for(int i = 0; i < N; i++) {
+      int number = Integer.parseInt(br.readLine());
+      while(stack.isEmpty() || number > stack.peekLast()){
+        stack.offerLast(count);
+        count++;
+        sb.append("+\n");
+      }
+
+      if(stack.peekLast()==number){
+        sb.append("-\n");
+        stack.pollLast();
+      }
     }
+    if(stack.isEmpty()){
+      System.out.println(sb);
+    }else{
+      System.out.println("NO");
+    }
+  }
 }
