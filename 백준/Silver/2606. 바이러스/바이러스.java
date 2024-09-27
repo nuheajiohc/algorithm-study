@@ -1,58 +1,46 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class Main {
 
-    private static int N,M,count;
-    private static List<Integer>[] computers;
-    private static boolean[] vis;
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine());
-        M = Integer.parseInt(br.readLine());
+  public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    int N = Integer.parseInt(br.readLine());
+    int M = Integer.parseInt(br.readLine());
 
-        computers = new ArrayList[N+1];
-        for(int i=1; i<=N; i++){
-            computers[i] = new ArrayList<>();
-        }
-
-        while(M-->0){
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            int u = Integer.parseInt(st.nextToken());
-            int v = Integer.parseInt(st.nextToken());
-            computers[u].add(v);
-            computers[v].add(u);
-        }
-        vis = new boolean[N+1];
-        // bfs();
-        vis[1] = true;
-        dfs(1);
-        System.out.println(count);
+    List<Integer>[] adj = new ArrayList[N+1];
+    for(int i=0; i<=N; i++){
+      adj[i] = new ArrayList<>();
     }
 
-    public static void bfs(){
-
-        Queue<Integer> queue = new ArrayDeque<>();
-        queue.offer(1);
-        vis[1]= true;
-        while(!queue.isEmpty()){
-            int cur = queue.poll();
-            for(int next: computers[cur]){
-                if(vis[next]) continue;
-                vis[next] = true;
-                count+=1;
-                queue.offer(next);
-            }
-        }
+    for(int i=0; i<M; i++){
+      StringTokenizer st = new StringTokenizer(br.readLine());
+      int a = Integer.parseInt(st.nextToken());
+      int b = Integer.parseInt(st.nextToken());
+      adj[a].add(b);
+      adj[b].add(a);
     }
 
-    public static void dfs(int cur){
-        // vis[cur] = true;
-        for(int next: computers[cur]){
-            if(vis[next]) continue;
-            vis[next] = true;
-            count++;
-            dfs(next);
-        }
+    int count=0;
+    boolean[] vis = new boolean[N+1];
+    vis[1] = true;
+    Deque<Integer> queue = new ArrayDeque<>();
+    queue.offer(1);
+    while(!queue.isEmpty()){
+      int cur = queue.poll();
+      for(int next : adj[cur]){
+        if(vis[next]) continue;
+        vis[next] =true;
+        queue.offer(next);
+        count++;
+      }
     }
+    System.out.println(count);
+  }
 }
