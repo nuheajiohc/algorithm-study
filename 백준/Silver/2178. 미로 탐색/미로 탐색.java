@@ -3,46 +3,55 @@ import java.util.*;
 
 public class Main {
 
-    private static int[] dx = { 1, -1, 0, 0 };
-    private static int[] dy = { 0, 0, 1, -1 };
-    private static int[][] vis;
-    private static int[][] board;
-    private static int h, w;
-
-    public static void main(String[] args) throws Exception {
+    private static int N,M;
+    private static int[] dx = {0,0,1,-1};
+    private static int[] dy = {1,-1,0,0};
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] temp = br.readLine().split(" ");
-        h = Integer.parseInt(temp[0]);
-        w = Integer.parseInt(temp[1]);
-        vis = new int[h][w];
-        board = new int[h][w];
-        for (int i = 0; i < h; i++) {
-            String s = br.readLine();
-            for (int j = 0; j < w; j++) {
-                board[i][j] = s.charAt(j) - '0';
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        int[][] maze = new int[N][M];
+        for(int i=0; i<N; i++){
+            String line = br.readLine();
+            for(int j=0; j<M; j++){
+                if(line.charAt(j)=='1'){
+                    maze[i][j] = 1;
+                }else{
+                    maze[i][j] = 0;
+                }
             }
         }
-        bfs(0, 0);
-        System.out.println(vis[h - 1][w - 1]);
+
+        int[][] vis = new int[N][M];
+        vis[0][0]=1;
+        Deque<Point> queue = new ArrayDeque<>();
+        queue.offer(new Point(0,0));
+        while(!queue.isEmpty()){
+            Point p = queue.poll();
+            for(int dir=0; dir<4; dir++){
+                int nx = p.x+dx[dir];
+                int ny = p.y+dy[dir];
+                if(isOutOfRange(nx,ny)) continue;
+                if(vis[nx][ny]>0 || maze[nx][ny]==0) continue;
+                vis[nx][ny]= vis[p.x][p.y]+1;
+                queue.offer(new Point(nx,ny));
+            }
+        }
+        System.out.println(vis[N-1][M-1]);
     }
 
-    public static void bfs(int i, int j) {
-        vis[i][j] = 1;
-        Deque<int[]> q = new ArrayDeque<>();
-        q.offer(new int[] { i, j });
-        while (!q.isEmpty()) {
-            int[] cur = q.poll();
-            for (int dir = 0; dir < 4; dir++) {
-                int nx = cur[0] + dx[dir];
-                int ny = cur[1] + dy[dir];
-                if (nx < 0 || ny < 0 || nx >= h || ny >= w) {
-                    continue;
-                }
-                if (vis[nx][ny] == 0 && board[nx][ny] == 1) {
-                    q.offer(new int[] { nx, ny });
-                    vis[nx][ny] = vis[cur[0]][cur[1]] + 1;
-                }
-            }
+    public static boolean isOutOfRange(int x, int y){
+        return x<0 || y<0 || x>=N || y>=M;
+    }
+
+    public static class Point{
+        int x;
+        int y;
+        Point(int x, int y){
+            this.x =x;
+            this.y =y;
         }
     }
 }
