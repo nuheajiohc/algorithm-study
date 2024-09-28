@@ -24,7 +24,7 @@ public class Main {
 
     vis = new boolean[N];
     vis[0] = true;
-    btk(0,0);
+    btk(1,1);
     System.out.println(minDiff);
   }
 
