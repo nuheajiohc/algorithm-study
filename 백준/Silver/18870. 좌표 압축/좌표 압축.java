@@ -1,43 +1,45 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 public class Main {
-    private static List<Integer> temp,uni;
-    private static int N;
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N=Integer.parseInt(br.readLine());
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int[] X = new  int[N];
-        temp = new ArrayList<>();
-        for(int i=0; i<N; i++){
-            X[i] = Integer.parseInt(st.nextToken());
-            temp.add(X[i]);
-        }
 
-        uni = new ArrayList<>();
-        Collections.sort(temp);
-        for(int i=0; i<N; i++){
-            if(i==0 || !temp.get(i).equals(temp.get(i-1))){
-                uni.add(temp.get(i));
-            }
-        }
-        
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i<N; i++){
-            sb.append(binarySearch(X[i])).append(" ");
-        }
-        System.out.println(sb.toString());
+  public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    int N = Integer.parseInt(br.readLine());
+    int[] arr = new int[N];
+    StringTokenizer st = new StringTokenizer(br.readLine());
+    for (int i = 0; i < N; i++) {
+      arr[i] = Integer.parseInt(st.nextToken());
     }
 
-    public static int binarySearch(int target){
-        int st =0;
-        int en = uni.size();
-        while(st<en){
-            int mid = (st+en)/2;
-            if(uni.get(mid)<target) st=mid+1;
-            else en = mid;
-        }
-        return st;
+    int[] compress = getCompress(arr);
+    StringBuilder sb= new StringBuilder();
+    for(int i : compress){
+      sb.append(i).append(" ");
     }
+    System.out.println(sb);
+  }
+
+  private static int[] getCompress(int[] arr) {
+    int[] newArr = arr.clone();
+    Arrays.sort(newArr);
+
+    Map<Integer,Integer> map = new HashMap<>();
+    int rank=0;
+    for (int j : newArr) {
+      if (map.containsKey(j)) continue;
+      map.put(j, rank++);
+    }
+
+    int[] compress = new int[newArr.length];
+    for(int i=0; i<newArr.length; i++) {
+      compress[i] = map.get(arr[i]);
+    }
+    return compress;
+  }
 }
