@@ -1,46 +1,48 @@
-import java.util.*;
-import java.io.*;
+import com.sun.jdi.Value;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class Main {
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        Queue<NumberCheck> heap = new PriorityQueue<>();
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i<N; i++){
-            int num = Integer.parseInt(br.readLine());   
-            if(num==0){
-                if(heap.isEmpty()){
-                    sb.append(0).append("\n");
-                }else{
-                    sb.append(heap.poll().original).append("\n");
-                }
-                continue;
-            }
-            heap.offer(new NumberCheck(num));
+
+  public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    int N = Integer.parseInt(br.readLine());
+
+    StringBuilder sb = new StringBuilder();
+    Queue<Value> pq = new PriorityQueue<>();
+    while(N-->0){
+      int x = Integer.parseInt(br.readLine());
+      if(x==0){
+        if(pq.isEmpty()){
+          sb.append(0).append("\n");
+        }else {
+          sb.append(pq.poll().realValue).append("\n");
         }
-        System.out.println(sb.toString());
+      }else{
+        pq.offer(new Value(x));
+      }
+    }
+    System.out.println(sb);
+  }
+
+  public static class Value implements Comparable<Value>{
+    int realValue;
+    int absValue;
+
+    public Value(int value) {
+      this.realValue = value;
+      this.absValue = Math.abs(value);
     }
 
-    static class NumberCheck implements Comparable<NumberCheck>{
-
-        int original;
-        int abs;
-
-        public NumberCheck(int original){
-            this.original = original;
-            this.abs = Math.abs(original);
-        }
-
-        @Override
-        public int compareTo(NumberCheck o){
-            if(abs>o.abs) return 1;
-            else if(abs<o.abs) return -1;
-            else{
-                if(original>o.original) return 1;
-                else if(original<o.original) return -1;
-                else return 0;
-            }
-        }
+    @Override
+    public int compareTo(Value v){
+      if(this.absValue == v.absValue){
+        return this.realValue-v.realValue;
+      }
+      return this.absValue-v.absValue;
     }
+  }
 }
