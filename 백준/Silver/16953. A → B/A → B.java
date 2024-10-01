@@ -21,13 +21,13 @@ public class Main {
     map.put(A,1);
     while(!q.isEmpty()){
       long cur = q.poll();
-      if(cur*2<=B && !map.containsKey(cur*2)){
+      if(cur*2<=B){
         map.put(cur*2, map.get(cur)+1);
         if(cur*2 ==B) break;
         q.offer(cur*2);
       }
 
-      if(cur*10+1<=B && !map.containsKey(cur*10 +1)){
+      if(cur*10+1<=B){
         map.put(cur*10+1, map.get(cur)+1);
         if(cur*10+1 ==B) break;
         q.offer(cur*10+1);
