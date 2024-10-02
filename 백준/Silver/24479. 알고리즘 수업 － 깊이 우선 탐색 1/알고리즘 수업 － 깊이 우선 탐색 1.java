@@ -46,11 +46,9 @@ public class Main {
   }
 
   public static void dfs(int cur){
-    vis[cur] =count;
+    vis[cur] =count++;
     for(int next : adj[cur]){
-      if(vis[next]!=0) continue;
-      count++;
-      dfs(next);
+      if(vis[next]==0) dfs(next);
     }
   }
 }
