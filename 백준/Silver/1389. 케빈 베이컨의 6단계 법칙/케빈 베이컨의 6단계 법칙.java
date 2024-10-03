@@ -1,56 +1,54 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
 
-    private static int N,M;
-    private static List<Integer>[] relationship;
-    private static int[] vis;
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+  public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st = new StringTokenizer(br.readLine());
 
-        relationship = new ArrayList[N+1];
-        for(int i=1; i<=N; i++) relationship[i] = new ArrayList<>();
+    int N = Integer.parseInt(st.nextToken());
+    int M = Integer.parseInt(st.nextToken());
 
-        while(M-->0){
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            relationship[a].add(b);
-            relationship[b].add(a);
-        }
-
-        int kb=5000;
-        int idx=0;
-        for(int i=1; i<=N; i++){
-            int temp = bfs(i);
-            if(kb>temp){
-                kb=temp;
-                idx=i;
-            }
-        }
-        System.out.println(idx);
+    int[][] d = new int[N + 1][N + 1];
+    for(int i = 1; i <= N; i++) {
+      Arrays.fill(d[i], 100);
+      d[i][i]=0;
     }
 
-    public static int bfs(int i){
-        vis = new int[N+1];
-        Arrays.fill(vis,-1);
-        Queue<Integer> queue = new ArrayDeque<>();
-        queue.add(i);
-        vis[i]=0;
-        int tempKb=0;
-        while(!queue.isEmpty()){
-            int cur = queue.poll();
-            for(int next: relationship[cur]){
-                if(vis[next]>-1) continue;
-                vis[next] = vis[cur]+1;
-                tempKb+=vis[next];
-                queue.add(next);
-            }
-        }
-        return tempKb;
+    while(M-->0) {
+      st = new StringTokenizer(br.readLine());
+      int a = Integer.parseInt(st.nextToken());
+      int b = Integer.parseInt(st.nextToken());
+      d[a][b] = 1;
+      d[b][a] = 1;
     }
+
+    for (int k = 1; k <= N; k++) {
+      for (int i = 1; i <= N; i++) {
+        for (int j = 1; j <= N; j++) {
+          if (d[i][j] > d[i][k] + d[k][j]) {
+            d[i][j] = d[i][k] + d[k][j];
+          }
+        }
+      }
+    }
+
+    int idx = 0;
+    int min = Integer.MAX_VALUE;
+    for (int i = 1; i <= N; i++) {
+      int sum = 0;
+      for (int j = 1; j <= N; j++) {
+        sum += d[i][j];
+      }
+      if (sum < min) {
+        min = sum;
+        idx = i;
+      }
+    }
+    System.out.println(idx);
+  }
 }
