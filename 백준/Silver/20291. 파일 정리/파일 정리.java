@@ -21,9 +21,7 @@ public class Main {
     }
 
     StringBuilder sb=  new StringBuilder();
-    for(String name : map.keySet()){
-      sb.append(name).append(" ").append(map.get(name)).append("\n");
-    }
+    map.forEach((k,v)-> sb.append(k).append(" ").append(v).append("\n"));
     System.out.println(sb);
   }
 }
