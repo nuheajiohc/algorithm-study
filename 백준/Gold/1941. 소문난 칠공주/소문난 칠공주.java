@@ -48,33 +48,30 @@ public class Main {
     }
 
     public static boolean check(){
+        Queue<Point> q = new ArrayDeque<>();
         boolean[][] vis =new boolean[5][5];
-        int temp=1;
-        for(int i=0; i<5; i++){
-            for(int j=0; j<5; j++){
-                if(!used[i][j]) continue;
-                Queue<Point> q = new ArrayDeque<>();
-                q.offer(new Point(i,j));
-                vis[i][j]=true;
-
-                while(!q.isEmpty()){
-                    Point p =q.poll();
-                    for(int dir=0; dir<4; dir++){
-                        int nx = p.x + dx[dir];
-                        int ny = p.y + dy[dir];
-                        if(nx<0 || ny<0 || nx>=5 || ny>=5) continue;
-                        if(vis[nx][ny])continue;
-                        if(!used[nx][ny]) continue;
-                        vis[nx][ny]=true;
-                        temp++;
-                        q.offer(new Point(nx,ny));
-                    }
-                }
-
-                if(temp==7) return true;
-                return false;
+        for(int i=0; i<25; i++){
+            if(used[i/5][i%5]){
+                q.offer(new Point(i/5,i%5));
+                vis[i/5][i%5]=true;
+                break;
             }
         }
+        int temp=1;
+        while(!q.isEmpty()){
+            Point p =q.poll();
+            for(int dir=0; dir<4; dir++){
+                int nx = p.x + dx[dir];
+                int ny = p.y + dy[dir];
+                if(nx<0 || ny<0 || nx>=5 || ny>=5) continue;
+                if(vis[nx][ny])continue;
+                if(!used[nx][ny]) continue;
+                vis[nx][ny]=true;
+                temp++;
+                q.offer(new Point(nx,ny));
+            }
+        }
+        if(temp==7) return true;
         return false;
     }
 
