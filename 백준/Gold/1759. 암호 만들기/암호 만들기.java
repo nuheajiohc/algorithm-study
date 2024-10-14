@@ -4,46 +4,50 @@ import java.util.*;
 public class Main {
 
     private static int L,C;
-    private static char[] alphabet,check;
-    private static Set<Character> vowel = new HashSet<>(List.of('a','e','i','o','u'));
+    private static String[] alpha;
     private static StringBuilder sb = new StringBuilder();
-
+    private static String[] arr;
+    private static String[] mos = {"a","e","i","o","u"};
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         L = Integer.parseInt(st.nextToken());
         C = Integer.parseInt(st.nextToken());
 
-        check = new char[L];
-        st= new StringTokenizer(br.readLine());
-        alphabet = new char[C];
+        alpha = new String[C];
+        arr = new String[L];
+        st = new StringTokenizer(br.readLine());
         for(int i=0; i<C; i++){
-            alphabet[i] = st.nextToken().charAt(0);
+            alpha[i] = st.nextToken();
         }
-        Arrays.sort(alphabet);
+        Arrays.sort(alpha);
 
-        backtracking(0,0,0,0);
-        System.out.println(sb.toString());
+        btk(0,0,0,0);
+        System.out.println(sb);
     }
 
-    public static void backtracking(int k, int depth,int vowelCount, int consCount){
-        if(depth == L){
-            if(vowelCount>0 && consCount>1){
-                for(char c: check){
-                    sb.append(c);
+    public static void btk(int depth, int k, int ja, int mo){
+        if(depth==L){
+            if(ja>=2 && mo>=1){
+                for(String letter: arr){
+                    sb.append(letter);
                 }
-                sb.append('\n');
+                sb.append("\n");
             }
             return;
         }
 
         for(int i=k; i<C; i++){
-            check[depth] = alphabet[i];
-            if(vowel.contains(alphabet[i])){
-                backtracking(i+1,depth+1,vowelCount+1,consCount);
-            }else{
-                backtracking(i+1,depth+1,vowelCount,consCount+1);
-            }
+            arr[depth] = alpha[i];
+            if(isMo(alpha[i])) btk(depth+1, i+1, ja, mo+1);
+            else btk(depth+1, i+1, ja+1, mo);
         }
+    }
+
+    public static boolean isMo(String letter){
+        for(String mo : mos){
+            if(mo.equals(letter)) return true;
+        }
+        return false;
     }
 }
