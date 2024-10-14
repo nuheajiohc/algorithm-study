@@ -20,6 +20,7 @@ public class Main {
     }
 
     public static void combination(int s, int y, int depth, int k){
+        if(y>3) return;
         if(depth==7){
             if(s>y && check()){
                 count++;
