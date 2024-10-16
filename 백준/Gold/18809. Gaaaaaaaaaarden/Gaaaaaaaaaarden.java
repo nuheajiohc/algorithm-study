@@ -4,17 +4,13 @@ import java.util.*;
 public class Main {
 
     private static int N,M,G,R;
-    private static int FLOWER =3;
-    private static int RED = 2;
-    private static int GREEN = 1;
-    private static int NO =0;
-    private static int[][] land;
+    private static final int WATER=0, IMPOSSIBLE=1, POSSIBLE=2, GREEN=3, RED=4, FLOWER=10000;
+    private static int[][] board;
+    private static List<Point> possibleArea = new ArrayList<>();
+    private static int[] used;
     private static int[] dx = {0,0,1,-1};
     private static int[] dy = {1,-1,0,0};
-    private static List<int[]> possibleSpace= new ArrayList<>();
-    private static int[] isUsed;
-    private static int maxFlower=0;
-
+    private static int count=0;
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -23,98 +19,108 @@ public class Main {
         G = Integer.parseInt(st.nextToken());
         R = Integer.parseInt(st.nextToken());
 
-        land = new int[N][M];
+        board = new int[N][M];
         for(int i=0; i<N; i++){
             st = new StringTokenizer(br.readLine());
             for(int j=0; j<M; j++){
-                land[i][j] = Integer.parseInt(st.nextToken());
-                if(land[i][j]==2) possibleSpace.add(new int[]{i,j});
+                board[i][j] = Integer.parseInt(st.nextToken());
+                if(board[i][j] == POSSIBLE){
+                    possibleArea.add(new Point(i,j));
+                }
             }
         }
-        isUsed = new int[possibleSpace.size()];
-        selectG(0,0);
-        System.out.println(maxFlower);
+        
+        used = new int[possibleArea.size()];
+
+        btk(0,0,0);
+        System.out.println(count);
     }
 
-    public static void selectG(int GDepth, int k){
-        if(GDepth == G){
-            selectR(0,0);
+    public static void btk(int k, int g, int r){
+        if(g>G || r>R) return; 
+        if(g==G && r==R){
+            bfs();
             return;
         }
-        for(int i=k; i<possibleSpace.size(); i++){
-            isUsed[i] = GREEN;
-            selectG(GDepth+1, i+1);
-            isUsed[i] = NO;
+
+        for(int i=k; i<possibleArea.size(); i++){
+            used[i] = GREEN;
+            btk(i+1,g+1,r);
+            used[i] = 0;
+            
+            used[i] = RED;
+            btk(i+1,g,r+1);
+            used[i] = 0;
         }
     }
 
-    public static void selectR(int RDepth, int k){
-        if(RDepth == R){
-            maxFlower = Math.max(maxFlower,bfs());
-            return;
+    public static void bfs(){
+        int[][] vis = new int[N][M]; 
+        Deque<Point> greenQueue = new ArrayDeque<>();
+        Deque<Point> redQueue = new ArrayDeque<>();
+        for(int i=0; i<possibleArea.size(); i++){
+            int x = possibleArea.get(i).x;
+            int y = possibleArea.get(i).y;
+            if(used[i]==GREEN){
+                vis[x][y] = 1;
+                greenQueue.offer(new Point(x,y));
+            }else if(used[i] == RED){
+                vis[x][y] = -1;
+                redQueue.offer(new Point(x,y));
+            }
         }
-        for(int i=k; i<possibleSpace.size(); i++){
-            if(isUsed[i]==GREEN) continue;
-            isUsed[i] = RED;
-            selectR(RDepth+1, i+1);
-            isUsed[i] = NO;
-        }
-    }
 
-    public static int bfs(){
-        int[][] vis = new int[N][M];
-        int[][] state = new int[N][M];
-        Queue<Seed> queue = new ArrayDeque<>();
-        for(int i=0; i<isUsed.length; i++){
-            if(isUsed[i]==NO) continue;
-            int[] cur = possibleSpace.get(i);
-            queue.offer(new Seed(isUsed[i],cur[0],cur[1]));
-            state[cur[0]][cur[1]] = isUsed[i];
-            vis[cur[0]][cur[1]] = 1;
-        }
-        int flowerCount=0;
-        while(!queue.isEmpty()){
-            int curSize = queue.size();
-            while(curSize-->0){
-                Seed cur = queue.poll();
+        int temp=0;
+        while(!(greenQueue.isEmpty()&& redQueue.isEmpty())){
+            int gqLength = greenQueue.size();
+            while(gqLength-->0){
+                Point gp = greenQueue.poll();
+                if(vis[gp.x][gp.y]==FLOWER) continue;
                 for(int dir=0; dir<4; dir++){
-                    int nx = cur.x+dx[dir];
-                    int ny = cur.y+dy[dir];
+                    int nx = gp.x + dx[dir];
+                    int ny = gp.y + dy[dir];
                     if(isOutOfRange(nx,ny)) continue;
-                    if(land[nx][ny]==0) continue;
-                    if(vis[nx][ny]==0){
-                        vis[nx][ny] = vis[cur.x][cur.y]+1;
-                        state[nx][ny] = cur.color;
-                        queue.offer(new Seed(cur.color,nx,ny));
-                    } else if((vis[nx][ny]==vis[cur.x][cur.y]+1) && (cur.color!= state[nx][ny]) && (state[nx][ny]!=FLOWER)){
-                        state[nx][ny]=FLOWER;
-                        vis[nx][ny] = vis[cur.x][cur.y]+1;
-                        flowerCount++;
+                    if(vis[nx][ny]>0 || vis[nx][ny]==FLOWER) continue;
+                    if(board[nx][ny]==WATER) continue;
+                    if(vis[nx][ny]==0) {
+                        vis[nx][ny] = vis[gp.x][gp.y]+1;
+                        greenQueue.offer(new Point(nx,ny));
                     }
                 }
             }
-            curSize = queue.size();
-            while(curSize-->0){
-                Seed seed = queue.poll();
-                if(state[seed.x][seed.y]==FLOWER) continue;
-                queue.offer(seed);
+        
+            int rqLength = redQueue.size();
+            while(rqLength-->0){
+                Point rp = redQueue.poll();
+                for(int dir=0; dir<4; dir++){
+                    int nx = rp.x + dx[dir];
+                    int ny = rp.y + dy[dir];
+                    if(isOutOfRange(nx,ny)) continue;
+                    if(vis[nx][ny]<0 || vis[nx][ny]==FLOWER) continue;
+                    if(board[nx][ny]==WATER) continue;
+                    if(vis[nx][ny]+vis[rp.x][rp.y]-1==0){
+                        vis[nx][ny] = FLOWER;
+                        temp++;
+                    }
+                    if(vis[nx][ny]==0){
+                        vis[nx][ny] = vis[rp.x][rp.y]-1;
+                        redQueue.offer(new Point(nx,ny));
+                    }
+                }
             }
         }
-        return flowerCount;
-
+        count = Math.max(count, temp);
     }
 
     public static boolean isOutOfRange(int x, int y){
-        return x<0 || x>=N || y<0 || y>=M;
+        return x<0 || y<0 || x>=N || y>=M;
     }
 
-    public static class Seed{
-        int color;
+    public static class Point{
         int x;
         int y;
 
-        Seed(int color, int x, int y){
-            this.color = color;
+        Point(int x, int y){
             this.x = x;
             this.y = y;
         }
