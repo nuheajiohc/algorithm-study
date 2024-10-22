@@ -1,14 +1,24 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int[] nums = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
-        int a = nums[0] % (nums[2] + 1) == 0 ? nums[0] / (nums[2] + 1) : (nums[0] / (nums[2] + 1)) + 1;
-        int b = nums[1] % (nums[3] + 1) == 0 ? nums[1] / (nums[3] + 1) : (nums[1] / (nums[3] + 1)) + 1;
-        System.out.println(a * b);
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int H = Integer.parseInt(st.nextToken());
+        int W = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        int a = H/(N+1);
+        if(H%(N+1)>0){
+            a+=1;
+        }
+
+        int b = W/(M+1);
+        if(W%(M+1)>0){
+            b+=1;
+        }
+        System.out.println(a*b);
     }
 }
