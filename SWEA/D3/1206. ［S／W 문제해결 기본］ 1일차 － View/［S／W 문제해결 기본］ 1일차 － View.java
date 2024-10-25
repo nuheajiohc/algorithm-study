@@ -25,7 +25,7 @@ public class Solution {
         if(max>arr[i]) continue;
         sum += arr[i]-max;
       }
-      sb.append(String.format("#%d %d\n", tc, sum));
+      sb.append(String.format("#%d %d%n", tc, sum));
     }
     System.out.println(sb);
   }
