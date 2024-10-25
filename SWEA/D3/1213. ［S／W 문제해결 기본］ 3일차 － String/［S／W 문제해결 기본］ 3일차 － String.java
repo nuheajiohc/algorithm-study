@@ -12,13 +12,7 @@ public class Solution {
       int n= Integer.parseInt(br.readLine());
       String target = br.readLine();
       String sentence = br.readLine();
-      int size = sentence.split(target).length-1;
-      if(sentence.startsWith(target)){
-        size++;
-      }
-      if(sentence.endsWith(target)){
-        size++;
-      }
+      int size = sentence.split(target,-1).length-1;
       sb.append(String.format("#%d %d%n", n, size));
     }
     System.out.println(sb);
