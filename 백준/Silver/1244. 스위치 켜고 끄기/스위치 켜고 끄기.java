@@ -32,14 +32,9 @@ public class Main {
             }
         }
         StringBuilder sb = new StringBuilder();
-        int count=1;
         for(int i=1; i<=N; i++){
-            if(count>20){
-                sb.append("\n");
-                count=1;
-            } 
             sb.append(arr[i]).append(" ");
-            count++;
+            if(i%20==0) sb.append("\n");
         }
         System.out.println(sb);
     }
