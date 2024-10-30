@@ -1,86 +1,58 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         int T = Integer.parseInt(br.readLine());
         StringBuilder sb = new StringBuilder();
         while(T-->0){
             int N = Integer.parseInt(br.readLine());
-            Person[] person = new Person[N];
+            Map<Integer,List<Integer>> memberCount = new HashMap<>();
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int[] members = new int[N];
             for(int i=0; i<N; i++){
-                person[i] = new Person();
+                int team = Integer.parseInt(st.nextToken());
+                members[i] = team;
+                if(!memberCount.containsKey(team)){
+                    memberCount.put(team, new ArrayList<>());
+                }
+                memberCount.get(team).add(i);
             }
-            int[] num = new int[201];
-            StringTokenizer st  = new StringTokenizer(br.readLine());
-            for(int i=0; i<N; i++){
-                int k = Integer.parseInt(st.nextToken());
-                person[i].team = k;
-                num[k]++;
-            }
-            
-            Team[] team = new Team[201];
-            for(int i=0; i<201; i++){
-                team[i] = new Team(i);
-            }
+
+            int[] scores = new int[N];
             int count=1;
             for(int i=0; i<N; i++){
-                if(num[person[i].team]>=6){
-                    person[i].score = count;
-                    count++;
-                    team[person[i].team].add(person[i].score);
-                }        
+                if(memberCount.get(members[i]).size()<6) continue;
+                scores[i] = count;
+                count++;
             }
-            
-            Arrays.sort(team);
-            sb.append(team[0].num).append("\n");
+
+            int winner=0;
+            int score=Integer.MAX_VALUE;
+            int fifth=0;
+            for(int team : memberCount.keySet()){
+                if(memberCount.get(team).size()<6) continue;
+                int sum=0;
+                for(int i=0; i<4; i++){
+                    sum += scores[memberCount.get(team).get(i)];
+                }
+                int curFifth = scores[memberCount.get(team).get(4)];
+                if(score>sum){
+                    score = sum;
+                    winner = team;
+                    fifth = curFifth;
+                }else if(score==sum){
+                    if(fifth>curFifth){
+                        winner = team;
+                        fifth = curFifth;
+                    }
+                }
+            }
+            sb.append(winner).append("\n");
         }
         System.out.println(sb);
-    }
-
-    public static class Person{
-        int team;
-        int score;
-
-    }
-
-    public static class Team implements Comparable<Team>{
-        int num;
-        List<Integer> members = new ArrayList<>();
-
-        Team(int num){
-            this.num = num;
-        }
-
-        public void add(int member){
-            members.add(member);
-        }
-
-        public int getTop4Score(){
-            int sum=0;
-            if(members.size()<6){
-                return 10000;
-            }
-            for(int i=0; i<4; i++){
-                sum+=members.get(i);
-            }
-            return sum;
-        }
-
-        public int get5thScore(){
-            if(members.size()<6){
-                return 10000;
-            }
-            return members.get(4);
-        }
-
-        public int compareTo(Team t){
-            if(getTop4Score()==t.getTop4Score()){
-                return get5thScore()-t.get5thScore();
-            }
-            return getTop4Score()-t.getTop4Score();
-        }
     }
 }
