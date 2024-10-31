@@ -16,7 +16,10 @@ public class Main {
 
         int minHeight = Math.max(arr[0]-0, N-arr[M-1]);
         for(int i=1; i<M; i++){
-            minHeight = Math.max((int)Math.ceil((arr[i]-arr[i-1])/(double)2),minHeight);
+            int value = (int)Math.ceil((arr[i]-arr[i-1])/2.0);
+            if(value>minHeight){
+                minHeight = value;
+            }
         }
         System.out.println(minHeight);
     }
