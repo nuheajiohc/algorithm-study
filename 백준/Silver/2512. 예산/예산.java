@@ -1,47 +1,50 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-  private static int N,M;
-  private static int[] arr;
+    private static int N;
+    private static int[] arr;
+    private static int total;
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    N = Integer.parseInt(br.readLine());
-    arr = new int[N];
+        N = Integer.parseInt(br.readLine());
+        arr = new int[N];
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int s = -1;
+        int e =0;
 
-    StringTokenizer st = new StringTokenizer(br.readLine());
-    int max =0;
-    for(int i=0; i<N; i++){
-      arr[i] = Integer.parseInt(st.nextToken());
-      max = Math.max(max, arr[i]);
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(st.nextToken());
+            if(arr[i]>e){
+                e=arr[i];
+            }
+        }
+
+        total = Integer.parseInt(br.readLine());
+
+        e+=1;
+
+        while(s+1<e){
+            int mid = (s+e)/2;
+            if(check(mid)) s=mid;
+            else e=mid;
+        }
+        System.out.println(s);
+
     }
-    M = Integer.parseInt(br.readLine());
 
-    int s = 1;
-    int e = max+1;
-    while(s+1<e){
-      int mid = (s+e)/2;
-      if(check(mid)) s=mid;
-      else e=mid;
+    public static boolean check(int target){
+        int sum=0;
+        for(int budget : arr){
+            if(budget>target){
+                sum+=target;
+            }else{
+                sum+=budget;
+            }
+        }
+
+        return sum<=total;
     }
-    System.out.println(s);
-  }
-
-  public static boolean check(int target){
-    int budget=0;
-    for(int i=0; i<N; i++){
-      if(arr[i]>target){
-        budget+=target;
-      }else{
-        budget+=arr[i];
-      }
-    }
-    return M>=budget;
-  }
-
 }
