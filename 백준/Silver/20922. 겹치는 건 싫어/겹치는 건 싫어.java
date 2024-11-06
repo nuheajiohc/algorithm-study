@@ -4,28 +4,32 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
 
-        int[] sequence = new int[N+1];
+        int[] arr = new int[N];
         st = new StringTokenizer(br.readLine());
-        for(int i=1; i<=N; i++){
-            sequence[i] = Integer.parseInt(st.nextToken());
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        int maxLength=1;
-        int[] check = new int[100001];
-        int s=1;
-        for(int e=1; e<=N; e++){
-            check[sequence[e]]++;
-            while(check[sequence[e]]>K){
-                check[sequence[s]]--;
+        int[] count = new int[100001];
+        int result=0;
+        int max=1;
+        int s=0;
+        count[arr[s]]++;
+        for(int e=1; e<N; e++){
+            count[arr[e]]++;
+            max++;
+            while(count[arr[e]]>M){    
+                count[arr[s]]--;
+                max--;
                 s++;
             }
-            maxLength=Math.max(maxLength,e-s+1);
+            result = Math.max(result, max);
         }
-
-        System.out.println(maxLength);
-    }   
+        System.out.println(result);  
+    }
 }
