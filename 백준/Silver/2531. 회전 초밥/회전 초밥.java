@@ -3,44 +3,34 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br= new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int d = Integer.parseInt(st.nextToken());
         int k = Integer.parseInt(st.nextToken());
         int c = Integer.parseInt(st.nextToken());
-        int[] sushi = new int[N];
+
+        int[] arr = new int[N];
         for(int i=0; i<N; i++){
-            sushi[i] = Integer.parseInt(br.readLine());
+            arr[i] = Integer.parseInt(br.readLine());
         }
 
-        int[] sushiCount = new int[d+1];
-        int[] result = new int[N];
-        int maxCount=0;
-
-        int count=0;
-        for(int i=0; i<k; i++){
-            sushiCount[sushi[i]]++;
-            if(sushiCount[sushi[i]]==1) count++;
+        int result=1;
+        int max=1;
+        int[] kinds = new int[d+1];
+        kinds[c]=1;
+        for(int i=0;i<k; i++){
+            if(kinds[arr[i]]==0) max++;
+            kinds[arr[i]]++;
         }
-        result[0] = count;
-        if(sushiCount[c]==0) count++;
-        maxCount=count;
-        
-
-        for(int start=1; start<N; start++){
-            int temp = result[start-1];
-            sushiCount[sushi[start-1]]--;
-            if(sushiCount[sushi[start-1]]==0) temp--;
-
-            sushiCount[sushi[(start+k-1)%N]]++;
-            if(sushiCount[sushi[(start+k-1)%N]]==1)temp++;
-
-            result[start] = temp;
-            if(sushiCount[c]==0) temp++;
-            maxCount=Math.max(maxCount,temp);
-            
+        result = Math.max(result, max);
+        for(int s=1; s<N; s++){
+            kinds[arr[s-1]]--;
+            if(kinds[arr[s-1]]==0) max--;
+            if(kinds[arr[(s+k-1)%N]]==0)max++;
+            kinds[arr[(s+k-1)%N]]++;
+            result = Math.max(result, max);
         }
-        System.out.println(maxCount);
+        System.out.println(result);
     }
 }
