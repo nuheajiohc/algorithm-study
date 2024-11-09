@@ -2,26 +2,41 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int[] nums = new int[9];
-        int sum = 0;
-        for (int i = 0; i < 9; i++) {
-            nums[i] = Integer.parseInt(br.readLine());
-            sum += nums[i];
+
+        int sum=0;
+        int[] arr = new int[9];
+        for(int i=0; i<9; i++){
+            arr[i] = Integer.parseInt(br.readLine());
+            sum+=arr[i];
         }
-        Arrays.sort(nums);
-        for (int i = 0; i < 8; i++) {
-            for (int j = i + 1; j < 9; j++) {
-                if (sum - nums[i] - nums[j] == 100) {
-                    for (int k = 0; k < 9; k++) {
-                        if (k == i || k == j)
-                            continue;
-                        System.out.println(nums[k]);
-                    }
-                    return;
+        Arrays.sort(arr);
+        int target = sum-100;
+
+        boolean find = false;
+        int idx1=0;
+        int idx2=0;
+        for(int i=0; i<9; i++){
+            int temp=0;
+            for(int j=i+1; j<9; j++){
+                temp= arr[i]+arr[j];
+                if(temp==target) {
+                    find = true;
+                    idx1=i;
+                    idx2=j;
+                    break;
                 }
             }
+            if(find) break;
         }
+
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<9; i++){
+            if(i==idx1 || i==idx2) continue;
+            sb.append(arr[i]).append("\n");
+        }
+        System.out.println(sb);
+
     }
 }
