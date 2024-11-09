@@ -4,29 +4,25 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int P = Integer.parseInt(br.readLine());
+
+        int p = Integer.parseInt(br.readLine());
+
         StringBuilder sb = new StringBuilder();
-        while(P-->0){
+        for(int i=1; i<=p; i++){
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int T = Integer.parseInt(st.nextToken());
-            List<Integer> list = new LinkedList<>();
-            list.add(Integer.parseInt(st.nextToken()));
-            sb.append(T).append(" ");
+            int t = Integer.parseInt(st.nextToken());
+            
+            int[] arr = new int[20];
+            for(int j=0; j<20; j++){
+                arr[j] = Integer.parseInt(st.nextToken());
+            }
             int count=0;
-            for(int i=0; i<19; i++){
-                int num = Integer.parseInt(st.nextToken());
-                for(int j=0; j<list.size(); j++){
-                    if(num<list.get(j)){
-                        count+=list.size()-j;
-                        list.add(j,num);
-                        break;
-                    }
-                }
-                if(list.size()==i+1){
-                    list.add(num);
+            for(int j=0; j<20; j++){
+                for(int k=0; k<j; k++){
+                    if(arr[j]<arr[k]) count++;
                 }
             }
-            sb.append(count).append("\n");
+            sb.append(t).append(" ").append(count).append("\n");
         }
         System.out.println(sb);
     }
