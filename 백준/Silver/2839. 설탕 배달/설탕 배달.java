@@ -4,17 +4,17 @@ public class Main {
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        int count=0;
-        while(N>=0){
-            if(N%5==0){
-                count += N/5;
-                System.out.println(count);
-                return;
-            }else{
-                count++;
-                N-=3;
+
+        int max = N/3;
+
+        int count=-1;
+        for(int i=0; i<=max; i++){
+            int temp = N-(3*i);
+            if(temp%5==0){
+                count= i+(temp/5);
+                break;
             }
         }
-        System.out.println(-1);
+        System.out.println(count);
     }
 }
