@@ -1,28 +1,29 @@
 import java.io.*;
 import java.util.*;
 
-public class Main{
+public class Main {
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
-        int[][] board = new int[101][101];
-        int count=0;
-        for(int i=0; i<N; i++){
+
+        int[][] board= new int[101][101];
+
+        while(N-->0){
             StringTokenizer st = new StringTokenizer(br.readLine());
-            int y = Integer.parseInt(st.nextToken())-1;
-            int x = Integer.parseInt(st.nextToken())-1;
-            for(int j=x+1; j<=x+10;j++){
-                for(int k=y+1; k<=y+10; k++){
-                    board[j][k]=1;
+            int x = Integer.parseInt(st.nextToken());
+            int y = Integer.parseInt(st.nextToken());
+
+            for(int i=x; i<x+10; i++){
+                for(int j=y; j<y+10; j++){
+                    board[i][j]++;
                 }
             }
         }
-        
-        for(int i=1;i<101;i++){
-            for(int j=1;j<101;j++){
-                if(board[i][j]==1){
-                    count++;
-                }
+
+        int count=0;
+        for(int i=1;i<101; i++){
+            for(int j=1; j<101; j++){
+                if(board[i][j]>0) count++;
             }
         }
         System.out.println(count);
