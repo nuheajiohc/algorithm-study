@@ -31,6 +31,7 @@ public class Main {
                 if(vis[next]>-1) continue;
                 if(arr[next]>0){
                     if(vis[arr[next]]==-1){
+                        vis[next]=vis[cur]+1;
                         vis[arr[next]]=vis[cur]+1;
                         q.offer(arr[next]);
                     }
