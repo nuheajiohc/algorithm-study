@@ -1,40 +1,38 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public class Main {
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = Integer.parseInt(br.readLine());
 
         StringBuilder sb = new StringBuilder();
+
         while(T-->0){
-            int min=Integer.MAX_VALUE;
-            int max=-1;
             String W = br.readLine();
             int K = Integer.parseInt(br.readLine());
-            int[] alpha = new int[26];
-            for(int i=0; i<W.length(); i++){
-                alpha[W.charAt(i)-'a']++;
-            }
 
-            if(K==1){
-                sb.append("1 1").append("\n");
-                continue;
+            ArrayList<Integer>[] positions = new ArrayList[26];
+            for(int i=0; i<26; i++){
+                positions[i] = new ArrayList<>();
             }
 
             for(int i=0; i<W.length(); i++){
-                if(alpha[W.charAt(i)-'a']<K) continue;
-                int count=1;
-                for(int j=i+1; j<W.length(); j++){
-                    if(W.charAt(i)==W.charAt(j)){
-                        count++;
-                    }
-                    if(count==K){
-                        min = Math.min(min, j-i+1);
-                        max = Math.max(max, j-i+1);
-                        break;
-                    }
+                positions[W.charAt(i) - 'a'].add(i);
+            }
+
+            int min=Integer.MAX_VALUE;
+            int max = -1;
+            for(int i=0; i<26; i++){
+                ArrayList<Integer> position = positions[i];
+                if(position.size()<K) continue;
+                for(int j=0; j<=position.size()-K; j++){
+                    min = Math.min(min, position.get(j+K-1)-position.get(j)+1);
+                    max = Math.max(max, position.get(j+K-1)-position.get(j)+1);
                 }
             }
+
             if(max!=-1){
                 sb.append(min).append(" ");
             }
