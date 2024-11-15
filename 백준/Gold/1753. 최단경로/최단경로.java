@@ -35,15 +35,20 @@ public class Main {
             if(d[cur.vertex]!= cur.weight) continue;
 
             for(Node next : adj[cur.vertex]){
-                if(d[next.vertex]< d[cur.vertex]+next.weight) continue;
+                if(d[next.vertex] <= d[cur.vertex]+next.weight) continue;
                 d[next.vertex]=d[cur.vertex]+next.weight;
-                pq.add(new Node(next.vertex,d[next.vertex]));
+                pq.offer(new Node(next.vertex,d[next.vertex]));
             }
         }
 
         StringBuilder sb = new StringBuilder();
         for(int i=1; i<=V; i++){
-            sb.append(d[i]==Integer.MAX_VALUE?"INF":d[i]).append("\n");
+            if(d[i]==Integer.MAX_VALUE){
+                sb.append("INF");                
+            }else{
+                sb.append(d[i]);
+            }
+            sb.append("\n");
         }
         System.out.println(sb);
     }
