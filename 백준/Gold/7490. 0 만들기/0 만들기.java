@@ -42,13 +42,14 @@ public class Main {
 
     public static int calculateSum(String expression){
         int sum=0;
-        expression = expression.replaceAll(" ", "");
         int temp = 0;
         char sign = '+';
 
         for(int i=0; i<expression.length(); i++){
             char c = expression.charAt(i);
 
+            if(c==' ') continue;
+            
             if(Character.isDigit(c)){
                 temp = temp*10 + (c-'0');
             }
