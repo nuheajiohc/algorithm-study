@@ -6,30 +6,25 @@ public class Main {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     int N = Integer.parseInt(br.readLine());
-    int[] arr = new int[N];
+    int count=0;
+    Deque<Integer> stack = new ArrayDeque<>();
     for(int i=0; i<N; i++){
       StringTokenizer st = new StringTokenizer(br.readLine());
       int x = Integer.parseInt(st.nextToken());
       int y = Integer.parseInt(st.nextToken());
-      arr[i] = y;
-    }
-
-    int count=0;
-    Deque<Integer> stack = new ArrayDeque<>();
-    for(int i=0; i<N; i++){
-      if(arr[i]==0){
+      if(y==0){
         stack = new ArrayDeque<>();
         continue;
       }
       while(!stack.isEmpty()){
-        if(stack.peekLast()>arr[i]){
+        if(stack.peekLast()>y){
           stack.pollLast();
         }else break;
       }
 
-      if(stack.isEmpty() || stack.peekLast()<arr[i]){
+      if(stack.isEmpty() || stack.peekLast()<y){
         count++;
-        stack.offerLast(arr[i]);
+        stack.offerLast(y);
 
       }
     }
