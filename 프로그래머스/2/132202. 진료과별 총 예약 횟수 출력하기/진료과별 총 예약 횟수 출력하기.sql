@@ -1,6 +1,6 @@
 # 2024-11-28
-SELECT MCDP_CD AS "진료과코드", COUNT(*) AS "5월예약건수" 
+SELECT MCDP_CD AS 진료과코드, COUNT(*) AS 5월예약건수 
     FROM APPOINTMENT
     WHERE DATE_FORMAT(APNT_YMD, "%Y-%m") = "2022-05"
-    GROUP BY MCDP_CD
+    GROUP BY `진료과코드`
     ORDER BY 2 ASC, 1 ASC;
