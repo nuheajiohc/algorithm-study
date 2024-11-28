@@ -1,6 +1,6 @@
 # [level 2] 카테고리 별 상품 개수 구하기 - 131529 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/131529) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/131529?language=mysql) 
 
 ### 성능 요약
 
@@ -16,7 +16,7 @@ Empty
 
 ### 제출 일자
 
-2023년 12월 0일 16:1:42
+2024년 11월 28일 09:50:56
 
 ### 문제 설명
 
