@@ -6,7 +6,6 @@ public class Main {
   private static int R,C;
   private static char[][] board;
   private static boolean[] used;
-  private static boolean[][] vis;
   private static int[] dx = {0,0,1,-1};
   private static int[] dy = {1,-1,0,0};
   public static void main(String[] args) throws Exception{
@@ -20,7 +19,6 @@ public class Main {
       board[i] = br.readLine().toCharArray();
     }
 
-    vis = new boolean[R][C];
     used = new boolean[26];
     int count= btk(0,0,0);
     System.out.println(count);
@@ -28,10 +26,9 @@ public class Main {
   }
 
   public static int btk(int tempCount, int x, int y){
-    if(vis[x][y]||used[board[x][y]-'A']){
+    if(used[board[x][y]-'A']){
       return tempCount;
     }
-    vis[x][y]=true;
     used[board[x][y]-'A']=true;
     int count = tempCount+1;
     for(int dir=0; dir<4; dir++){
@@ -40,7 +37,6 @@ public class Main {
       if(isOutOfRange(nx,ny)) continue;
       count = Math.max(count, btk(tempCount+1, nx, ny));
     }
-    vis[x][y]=false;
     used[board[x][y]-'A']=false;
     return count;
   }
