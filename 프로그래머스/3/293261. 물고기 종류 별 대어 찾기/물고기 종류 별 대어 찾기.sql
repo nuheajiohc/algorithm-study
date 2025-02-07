@@ -1,0 +1,13 @@
+-- 2025.02.08
+
+SELECT f.ID, fni.FISH_NAME, f.LENGTH
+    FROM FISH_INFO f 
+    JOIN (
+        SELECT FISH_TYPE, MAX(LENGTH) max
+        FROM FISH_INFO
+        GROUP BY FISH_TYPE) AS a ON f.FISH_TYPE = a.FISH_TYPE AND f.LENGTH = a.max
+    JOIN FISH_NAME_INFO fni ON f.FISH_TYPE = fni.FISH_TYPE;
+        
+        
+
+
