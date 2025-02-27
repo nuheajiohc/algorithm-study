@@ -1,25 +1,29 @@
--- 코드를 입력하세요
-# SELECT ccc.CAR_ID, ccc.CAR_TYPE, FLOOR(ccc.DAILY_FEE*30* ((100-crcrp.DISCOUNT_RATE)/100)) as FEE
-#     FROM CAR_RENTAL_COMPANY_CAR as ccc 
-#         JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN AS crcrp ON ccc.CAR_TYPE = crcrp.CAR_TYPE
-#             and ccc.CAR_ID NOT IN (SELECT DISTINCT crcrh.CAR_ID  FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY AS crcrh
-#                                     WHERE crcrh.START_DATE <= "2022-11-30" AND crcrh.END_DATE >= "2022-11-01"
-#                                   )
-#             and ccc.CAR_TYPE IN ("SUV","세단")
-#             and crcrp.DURATION_TYPE="30일 이상"
-#             and ccc.DAILY_FEE*30* ((100-crcrp.DISCOUNT_RATE)/100) >= 500000 
-#             and ccc.DAILY_FEE*30* ((100-crcrp.DISCOUNT_RATE)/100) < 2000000
-#                 ORDER BY FEE DESC, ccc.CAR_TYPE ASC, ccc.CAR_ID desc;
+-- 2025.02.27
+# SELECT DISTINCT c.CAR_ID, c.CAR_TYPE, FLOOR((c.DAILY_FEE*30)*(1-(p.DISCOUNT_RATE/100))) FEE
+# FROM CAR_RENTAL_COMPANY_CAR c
+# JOIN CAR_RENTAL_COMPANY_RENTAL_HISTORY h ON c.CAR_ID = h.CAR_ID
+# JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN p ON c.CAR_TYPE = p.CAR_TYPE
+# WHERE c.CAR_TYPE IN ("세단", "SUV")
+#     AND (h.END_DATE < "2022-11-01" OR h.START_DATE > "2022-11-30")
+#     AND p.DURATION_TYPE = "30일 이상"
+#     AND FLOOR((c.DAILY_FEE*30)*(1-(p.DISCOUNT_RATE/100))) >=500000 
+#         AND FLOOR((c.DAILY_FEE*30)*(1-(p.DISCOUNT_RATE/100)))<2000000
+# ORDER BY 3 DESC, 2 ASC, 1 DESC;
 
-SELECT ccc.CAR_ID, ccc.CAR_TYPE, FLOOR(ccc.DAILY_FEE*30* ((100-crcrp.DISCOUNT_RATE)/100)) as FEE
-    FROM CAR_RENTAL_COMPANY_CAR as ccc 
-        JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN AS crcrp ON ccc.CAR_TYPE = crcrp.CAR_TYPE
-            and ccc.CAR_ID NOT IN (SELECT DISTINCT crcrh.CAR_ID  FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY AS crcrh
-                                    WHERE crcrh.START_DATE <= "2022-11-30" AND crcrh.END_DATE >= "2022-11-01"
-                                  )
-            and ccc.CAR_TYPE IN ("SUV","세단")
-            and crcrp.DURATION_TYPE="30일 이상"
-            GROUP BY ccc.CAR_ID
-            HAVING FEE >= 500000 
-                and FEE < 2000000
-                    ORDER BY FEE DESC, ccc.CAR_TYPE ASC, ccc.CAR_ID desc;
+SELECT c.CAR_ID, c.CAR_TYPE, 
+       FLOOR((c.DAILY_FEE * 30) * (1 - (p.DISCOUNT_RATE / 100.0))) AS FEE
+FROM CAR_RENTAL_COMPANY_CAR c
+JOIN CAR_RENTAL_COMPANY_DISCOUNT_PLAN p 
+    ON c.CAR_TYPE = p.CAR_TYPE
+WHERE c.CAR_TYPE IN ('세단', 'SUV')
+    AND p.DURATION_TYPE = '30일 이상'
+    AND NOT EXISTS (
+        SELECT 1 
+        FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY h
+        WHERE h.CAR_ID = c.CAR_ID
+          AND h.START_DATE <= '2022-11-30' 
+          AND h.END_DATE >= '2022-11-01'
+    )
+    AND FLOOR((c.DAILY_FEE * 30) * (1 - (p.DISCOUNT_RATE / 100.0))) >= 500000
+    AND FLOOR((c.DAILY_FEE * 30) * (1 - (p.DISCOUNT_RATE / 100.0))) < 2000000
+ORDER BY FEE DESC, CAR_TYPE ASC, CAR_ID DESC;
