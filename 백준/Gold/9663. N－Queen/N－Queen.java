@@ -2,35 +2,42 @@ import java.io.*;
 
 public class Main {
 
-    private static boolean[] visY,visXY,visYX;
     private static int N;
-    private static int answer;
-    
+    private static boolean[] visY;
+    private static boolean[] visXYU;
+    private static boolean[] visXYD;
+    private static int count;
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         N = Integer.parseInt(br.readLine());
+
         visY = new boolean[N];
-        visXY = new boolean[2*N-1];
-        visYX = new boolean[2*N-1];
+        visXYU = new boolean[2*N-1];
+        visXYD = new boolean[2*N-1];
+
         backtracking(0);
-        System.out.println(answer);
+        System.out.println(count);
     }
 
-    public static void backtracking(int x){
-        if(x==N){
-            answer++;
+    public static void backtracking(int row){
+        if(row==N){
+            count++;
             return;
         }
 
-        for(int j=0; j<N; j++){
-            if(visY[j] || visXY[x-j+N-1] || visYX[x+j]) continue;
-                visY[j] = true;
-                visXY[x-j+N-1] = true;
-                visYX[x+j] = true;
-                backtracking(x+1);
-                visY[j] = false;
-                visXY[x-j+N-1] = false;
-                visYX[x+j] = false;
+        for(int col = 0; col <N; col++){
+            if(!visY[col] && !visXYU[row+col] && !visXYD[row-col+N-1]){
+                visY[col] = true;
+                visXYU[row + col] = true;
+                visXYD[row - col + N - 1] = true;
+
+                backtracking(row + 1);
+
+                visY[col] = false;
+                visXYU[row + col] = false;
+                visXYD[row - col + N - 1] = false;
+            }
         }
     }
 }
