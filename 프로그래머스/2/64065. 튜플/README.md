@@ -1,10 +1,10 @@
 # [level 2] 튜플 - 64065 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/64065?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/64065) 
 
 ### 성능 요약
 
-메모리: 97.1 MB, 시간: 76.04 ms
+메모리: 94.8 MB, 시간: 93.10 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2025년 04월 30일 16:10:46
+2025년 04월 30일 16:29:28
 
 ### 문제 설명
 
