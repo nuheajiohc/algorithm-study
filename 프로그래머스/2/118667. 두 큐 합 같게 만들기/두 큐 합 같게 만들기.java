@@ -1,50 +1,38 @@
-import java.util.*;
-
 class Solution {
     public int solution(int[] queue1, int[] queue2) {
-        Queue<Long> q1 = new ArrayDeque<>();
-        Queue<Long> q2 = new ArrayDeque<>();
-        long sum1=0;
-        long sum2=0;
-        for(long v : queue1){
-            q1.offer(v);
-            sum1+=v;
-        }
-        for(long v :queue2){
-            q2.offer(v);
-            sum2+=v;
-        }
-        int limit = q1.size()*3 -1;
-        int count1=q1.size();
-        int count2=q2.size();
-        
         int answer = 0;
         
+        int size = queue1.length;
+        int[] merged = new int[2*size];
         
-        while(true){
-            if(sum1 < sum2){
-                count2-=1;
-                long tmp = q2.poll();
-                q1.offer(tmp);
-                sum2-=tmp;
-                sum1+=tmp;
-            }else if(sum1 > sum2){
-                count1-=1;
-                long tmp = q1.poll();
-                q2.offer(tmp);
-                sum2+=tmp;
-                sum1-=tmp;
+        long sum = 0;
+        for(int v : queue1) sum+=v;
+        long curSum = sum;
+        for(int v : queue2) sum+=v;
+        
+        if((sum&1) == 1) return -1;
+        
+        for(int i=0; i<size; i++){
+            merged[i] = queue1[i];
+            merged[size+i] = queue2[i];
+        }
+        long target = sum/2;
+        
+        int st=0;
+        int en=size;
+        while(st<2*size && en<2*size){
+            if(curSum<target){
+                curSum+=merged[en];
+                en++;
+            }else if(curSum>target){
+                curSum-=merged[st];
+                st++;
             }else{
-                break;
-            }
-            
-            if(answer>limit){
-                return -1;
+                return answer;
             }
             answer++;
         }
-         
         
-        return answer;
+        return -1;
     }
 }
