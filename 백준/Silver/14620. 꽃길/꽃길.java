@@ -1,67 +1,68 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+
+    private static int N;
     private static int[][] board;
     private static boolean[][] vis;
-    private static int price = Integer.MAX_VALUE;
-    private static int N;
-    private static int[][] dir = {{1, 0}, {0, 1}, {0, -1}, {-1, 0}};
+    private static int minimum = Integer.MAX_VALUE;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
-        board = new int[N][];
+
+        board = new int[N][N];
         vis = new boolean[N][N];
-        for (int i = 0; i < N; i++) {
-            board[i] = Arrays.stream(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray();
+        for(int i=0; i<N; i++){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for(int j=0; j<N; j++){
+                board[i][j] = Integer.parseInt(st.nextToken());
+            }
         }
-        dfs(0, 0);
-        System.out.println(price);
+
+        recur(0, 0);
+        System.out.println(minimum);
     }
 
-    public static void dfs(int count, int curPrice) {
-        if (count == 3) {
-            price = Math.min(price, curPrice);
+    public static void recur(int count, int sum){
+        if(count==3){
+            minimum = Math.min(minimum, sum);
             return;
         }
 
-        for (int i = 1; i < N - 1; i++) {
-            for (int j = 1; j < N - 1; j++) {
-                if (vis[i][j] || isVis(i, j)) {
-                    continue;
-                }
-                vis[i][j] = true;
-                checkVis(i, j);
-                dfs(count + 1, curPrice + add(i, j));
-                vis[i][j] = false;
-                checkVis(i, j);
+        for(int i=1; i<N-1; i++){
+            for(int j=1; j<N-1; j++){
+                if(impossible(i,j)) continue;
+                vis[i][j]=true;
+                vis[i+1][j]=true;
+                vis[i-1][j]=true;
+                vis[i][j+1]=true;
+                vis[i][j-1]=true;
+                recur(count+1, sum + check(i, j));
+                vis[i][j]=false;
+                vis[i+1][j]=false;
+                vis[i-1][j]=false;
+                vis[i][j+1]=false;
+                vis[i][j-1]=false;
             }
         }
     }
 
-    public static boolean isVis(int i, int j) {
-        for (int[] cur : dir) {
-            if (vis[i + cur[0]][j + cur[1]]) {
-                return true;
-            }
+    public static boolean impossible(int x, int y){
+        if(vis[x][y] || vis[x+1][y] || vis[x-1][y] || vis[x][y-1] || vis[x][y+1]){
+            return true;
         }
         return false;
     }
 
-    public static void checkVis(int i, int j) {
-        for (int[] cur : dir) {
-            vis[i + cur[0]][j + cur[1]] = !vis[i + cur[0]][j + cur[1]];
-        }
-    }
-
-    public static int add(int i, int j) {
-        int sum = board[i][j];
-        for (int[] cur : dir) {
-            sum += board[i + cur[0]][j + cur[1]];
-        }
+    public static int check(int x, int y){
+        int sum = 0;
+        sum = board[x][y];
+        sum += board[x+1][y];
+        sum += board[x-1][y];
+        sum += board[x][y-1];
+        sum += board[x][y+1];
         return sum;
     }
 }
