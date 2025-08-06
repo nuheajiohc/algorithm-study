@@ -8,17 +8,15 @@ public class Main {
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        
         K = Integer.parseInt(st.nextToken());
         N = Integer.parseInt(st.nextToken());
-
         arr = new int[K];
         for(int i=0; i<K; i++){
             arr[i] = Integer.parseInt(br.readLine());
         }
 
-        long s = 1;
-        long e = 1L<<31;
+        long s=1;
+        long e=(1L)<<31;
         while(s+1<e){
             long mid = (s+e)/2;
             if(check(mid)) s=mid;
