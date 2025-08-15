@@ -25,8 +25,10 @@ public class Main {
     }
 
     public static void btk(int k){
-        check();
-        if(k==N) return;
+        if(k==N){
+            check();
+            return;
+        }
 
         used[k] = true;
         btk(k+1);
