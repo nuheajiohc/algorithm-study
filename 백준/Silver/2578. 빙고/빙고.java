@@ -3,11 +3,11 @@ import java.util.*;
 
 public class Main {
 
-    private static int[][] board;
+    private static int[][] board = new int[5][5];
+    private static int[] numbers = new int[25];
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
-        board = new int[5][5];
+
         for(int i=0; i<5; i++){
             StringTokenizer st = new StringTokenizer(br.readLine());
             for(int j=0; j<5; j++){
@@ -15,58 +15,85 @@ public class Main {
             }
         }
 
-        Queue<Integer> q = new ArrayDeque<>();
         for(int i=0; i<5; i++){
             StringTokenizer st = new StringTokenizer(br.readLine());
-            while(st.hasMoreTokens()){
-                int n = Integer.parseInt(st.nextToken());
-                q.offer(n);
+            for(int j=0; j<5; j++){
+                numbers[i*5+j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        int count=1;
-        while(!q.isEmpty()){
-            int n = q.poll();
-            check(n);
+        int count=0;
+        for(int i=0; i<25; i++){
+            mark(numbers[i]);
+            count++;
             if(isBingo()){
-                System.out.println(count);
                 break;
             }
-            count++;
         }
+        System.out.println(count);
+        
     }
 
-    public static void check(int target){
+    public static void mark(int n){
         for(int i=0; i<5; i++){
             for(int j=0; j<5; j++){
-                if(board[i][j]==target){
-                    board[i][j]=0;
+                if(board[i][j]==n){
+                    board[i][j]=-1;
                     return;
-                } 
+                }
             }
         }
     }
 
     public static boolean isBingo(){
-        int bingo=0;
+        int total=0;
         for(int i=0; i<5; i++){
-            int count1=0;
-            int count2=0;
+            int count=0;
             for(int j=0; j<5; j++){
-                if(board[i][j]==0) count1++;
-                if(board[j][i]==0) count2++;
+                if(board[i][j]==-1){
+                    count++;
+                }
             }
-            if(count1==5) bingo++;
-            if(count2==5) bingo++;
+            if(count==5){
+                total++;
+            }
         }
-        int count3=0;
-        int count4=0;
+
         for(int i=0; i<5; i++){
-            if(board[i][i]==0) count3++;
-            if(board[i][4-i]==0) count4++;
+            int count=0;
+            for(int j=0; j<5; j++){
+                if(board[j][i]==-1){
+                    count++;
+                }
+            }
+            if(count==5){
+                total++;
+            }
         }
-        if(count3==5) bingo++;
-        if(count4==5) bingo++;
-        return bingo>=3;
+
+        int count=0;
+        for(int i=0; i<5; i++){
+            if(board[i][i]==-1){
+                count++;
+            }
+        }
+        if(count==5){
+            total++;
+        }
+
+        count=0;
+        for(int i=0; i<5; i++){
+            if(board[i][4-i]==-1){
+                count++;
+            }
+        }
+        if(count==5){
+            total++;
+        }
+
+        if(total>=3){
+            return true;
+        }
+        return false;
     }
 }
