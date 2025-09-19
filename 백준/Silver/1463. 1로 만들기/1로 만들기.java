@@ -1,22 +1,22 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+
+    private static int N;
+    private static int[] arr;
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int in = Integer.parseInt(br.readLine());
-        int[] dp = new int[1000001];
-        dp[2] = 1;
-        dp[3] = 1;
-        for (int i = 4; i <= in; i++) {
-            int minValue = dp[i - 1] + 1;
-            if (i % 2 == 0) {
-                minValue = Math.min(minValue, dp[i / 2] + 1);
-            }
-            if (i % 3 == 0) {
-                minValue = Math.min(minValue, dp[i / 3] + 1);
-            }
-            dp[i] = minValue;
+        N = Integer.parseInt(br.readLine());
+
+        arr = new int[N*3+1];
+        Arrays.fill(arr, Integer.MAX_VALUE);
+        arr[1] = 0;
+        for(int i=1; i<=N; i++){
+            arr[i*3] = Math.min(arr[i*3],arr[i]+1);
+            arr[i*2] = Math.min(arr[i*2], arr[i]+1);
+            arr[i+1] = Math.min(arr[i+1], arr[i]+1);
         }
-        System.out.println(dp[in]);
+        System.out.println(arr[N]);
     }
 }
