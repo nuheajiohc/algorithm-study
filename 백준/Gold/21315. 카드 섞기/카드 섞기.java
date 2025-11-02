@@ -4,61 +4,71 @@ import java.util.*;
 public class Main {
 
     private static int N;
-    private static int[] target;
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         N = Integer.parseInt(br.readLine());
-        target = new int[N];
         StringTokenizer st = new StringTokenizer(br.readLine());
+        int[] arr = new int[N];
         for(int i=0; i<N; i++){
-            target[i] = Integer.parseInt(st.nextToken());
+            arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        for(int k=1; Math.pow(2,k)<N; k++){
-            for(int kk=1; Math.pow(2,kk)<N; kk++){
-                int[] cards = new int[N];
-                for(int i=0; i<N; i++){
-                    cards[i] = i+1;
-                }
-                shuffle(k,cards);
-                shuffle(kk,cards);
+        for(int i=1; (1<<i)<N; i++){
+            for(int j=1; (1<<j)<N; j++){
+                LinkedList<Integer> cand = generateCard();
+                shuffle(cand, i);
+                shuffle(cand, j);
 
-                if(isAnswer(cards)){
-                    System.out.println(k+" "+kk);
+                if(isSame(arr, cand)){
+                    System.out.println(i+ " " +j);
                     return;
                 }
             }
         }
     }
 
-    public static boolean isAnswer(int[] cards){
-        for(int i=0; i<N; i++){
-            if(cards[i] != target[i]) return false;
+    public static void shuffle(LinkedList<Integer> cand, int k){
+        int target = 1<<k;
+
+        LinkedList<Integer> temp = new LinkedList<>();
+        for(int i=0; i<target; i++){
+            int value = cand.removeLast();
+            temp.addFirst(value);
         }
-        return true;
+
+        for(int i=2; i<=k+1; i++){
+            target = 1<<(k-i+1);
+            for(int j=0; j<target; j++){
+                int value = temp.removeLast();
+                temp.addFirst(value);
+            }
+
+            int size = temp.size();
+            for(int j=0; j<size-target; j++){
+                int value = temp.removeLast();
+                cand.addFirst(value);
+            }
+        }
+
+        while(!temp.isEmpty()){
+                cand.addFirst(temp.removeLast());
+        }
     }
 
-    public static void shuffle(int k, int[] cards){
-        int last = N;
-        int range;
-        for(int i=1; i<=k+1; i++){
-            range = (int)Math.pow(2, k-i+1);
-
-            List<Integer> tmp = new ArrayList<>();
-            for(int j = last-range; j< last; j++){
-                tmp.add(cards[j]);
-                cards[j] = 0;
-            }
-
-            for(int j=0; j<N; j++){
-                if(cards[j] != 0){
-                    tmp.add(cards[j]);
-                }
-                cards[j] = tmp.get(j);
-            }
-
-            last = range;
+    public static LinkedList<Integer> generateCard(){
+        LinkedList<Integer> cand = new LinkedList<>();
+        for(int i=0; i<N; i++){
+            cand.add(i+1);
         }
+        return cand;
+    }
+
+    public static boolean isSame(int[] target, List<Integer> cand){
+        for(int i=0; i<N; i++){
+            if(target[i] != cand.get(i)){
+                return false;
+            }
+        }
+        return true;
     }
 }
