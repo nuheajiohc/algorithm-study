@@ -4,10 +4,9 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(st.nextToken());
 
         int[] arr = new int[N];
         st = new StringTokenizer(br.readLine());
@@ -15,21 +14,18 @@ public class Main {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        int[] count = new int[100001];
-        int result=0;
-        int max=1;
-        int s=0;
-        count[arr[s]]++;
-        for(int e=1; e<N; e++){
-            count[arr[e]]++;
-            max++;
-            while(count[arr[e]]>M){    
-                count[arr[s]]--;
-                max--;
-                s++;
+        int[] used = new int[100001];
+        int max = 0;
+        int start = 0;
+        for(int end=0; end<N; end++){
+            used[arr[end]]++;
+            while(start<end && used[arr[end]]>K){
+                used[arr[start]]--;
+                start++;
             }
-            result = Math.max(result, max);
+            max = Math.max(max, end-start+1);
         }
-        System.out.println(result);  
+
+        System.out.println(max);
     }
 }
