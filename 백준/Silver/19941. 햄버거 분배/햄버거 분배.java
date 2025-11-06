@@ -8,20 +8,25 @@ public class Main {
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
 
-        int max=0;
-        String bench = br.readLine();
-        boolean[] vis = new boolean[N];
-        for(int i=0; i<N; i++){
-            if(bench.charAt(i)=='P'){
-                for(int j=i-K; j<=i+K; j++){
-                    if(j>=0 && j<N && !vis[j] && bench.charAt(j)=='H'){
-                        vis[j]= true;
-                        max++;
-                        break;
-                    }
+        String str = br.readLine();
+        boolean[] used = new boolean[N];
+
+        int ans = 0;
+        for(int i=0; i<str.length(); i++){
+            if(str.charAt(i)=='P'){
+                int start = Math.max(i-K, 0);
+                int end = Math.min(i+K, str.length()-1);
+                for(int j=start; j<=end; j++){
+                    if(j==i) continue;
+                    if(str.charAt(j) == 'P') continue;
+                    if(used[j]) continue;
+                    used[j]=true;
+                    ans++;
+                    break;
                 }
             }
         }
-        System.out.println(max);
+
+        System.out.println(ans);
     }
 }
