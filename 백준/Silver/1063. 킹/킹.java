@@ -2,141 +2,55 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-
-    private static final int KING=1;
-    private static final int STONE=2;
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         StringTokenizer st = new StringTokenizer(br.readLine());
-        String king_pos = st.nextToken();
-        String stone_pos = st.nextToken();
+        String king = st.nextToken();
+        String stone = st.nextToken();
         int N = Integer.parseInt(st.nextToken());
 
-        Point king = new Point(king_pos.charAt(1)-'1',king_pos.charAt(0)-'A');
-        Point stone = new Point(stone_pos.charAt(1)-'1', stone_pos.charAt(0)-'A');
+        int[] kingPos = new int[]{king.charAt(0)-'A'+1, king.charAt(1)-'0'};
+        int[] stonePos = new int[]{stone.charAt(0)-'A'+1, stone.charAt(1)-'0'};
+        
+        Map<String, int[]> map = new HashMap<>();
+        map.put("R",new int[]{1,0});
+        map.put("L",new int[]{-1,0});
+        map.put("B",new int[]{0,-1});
+        map.put("T",new int[]{0,1});
+        map.put("RT",new int[]{1,1});
+        map.put("LT",new int[]{-1,1});
+        map.put("RB",new int[]{1,-1});
+        map.put("LB",new int[]{-1,-1});
 
-        int[][] board = new int[8][8];
-        board[king.x][king.y] = KING;
-        board[stone.x][stone.y] = STONE;
+
         while(N-->0){
             String command = br.readLine();
-            if(command.equals("R")){
-                if(king.y==7) continue;
-                if(king.y+1 == stone.y && king.x==stone.x){
-                    if(stone.y==7) continue;
-                    stone.y+=1;
-                    board[stone.x][stone.y]=STONE;
+            int[] pos = map.get(command);
+
+            int kx = kingPos[0]+pos[0];
+            int ky = kingPos[1]+pos[1];
+
+            int sx = stonePos[0]+pos[0];
+            int sy = stonePos[1]+pos[1];
+
+            if(kx<=0|| kx>8 || ky<=0 || ky>8) continue;
+            
+            if(kx==stonePos[0] && ky==stonePos[1]){
+                if(sx<=0|| sx>8 || sy<=0 || sy>8) continue;
+                else{
+                    stonePos[0]+=pos[0];
+                    stonePos[1]+=pos[1];
                 }
-                board[king.x][king.y]=0;
-                king.y+=1;
-                board[king.x][king.y]=KING;
-            }else if(command.equals("L")){
-                if(king.y==0) continue;
-                if(king.y-1 == stone.y && king.x==stone.x){
-                    if(stone.y==0) continue;
-                    stone.y-=1;
-                    board[stone.x][stone.y]=STONE;
-                }
-                board[king.x][king.y]=0;
-                king.y-=1;
-                board[king.x][king.y]=KING;
-            }else if(command.equals("B")){
-                if(king.x==0) continue;
-                if(king.x-1 == stone.x && king.y==stone.y){
-                    if(stone.x==0)continue;
-                    stone.x-=1;
-                    board[stone.x][stone.y]=STONE;
-                }
-                board[king.x][king.y]=0;
-                king.x-=1;
-                board[king.x][king.y]=KING;
-            }else if(command.equals("T")){
-                if(king.x==7) continue;
-                if(king.x+1 == stone.x && king.y==stone.y){
-                    if(stone.x==7) continue;
-                    stone.x+=1;
-                    board[stone.x][stone.y]=STONE;
-                }
-                board[king.x][king.y]=0;
-                king.x+=1;
-                board[king.x][king.y]=KING;
-            }else if(command.equals("RT")){
-                if(king.x==7 || king.y ==7) continue;
-                if(king.x+1 == stone.x && king.y+1==stone.y){
-                    if(stone.x==7 || stone.y==7) continue;
-                    stone.x+=1;
-                    stone.y+=1;
-                    board[stone.x][stone.y]=STONE;
-                }
-                board[king.x][king.y]=0;
-                king.x+=1;
-                king.y+=1;
-                board[king.x][king.y]=KING;
-            }else if(command.equals("LT")){
-                if(king.x==7 || king.y==0) continue;
-                if(king.x+1 == stone.x && king.y-1==stone.y){
-                    if(stone.x==7 || stone.y==0) continue;
-                    stone.x+=1;
-                    stone.y-=1;
-                    board[stone.x][stone.y]=STONE;
-                }
-                board[king.x][king.y]=0;
-                king.x+=1;
-                king.y-=1;
-                board[king.x][king.y]=KING;
-            }else if(command.equals("RB")){
-                if(king.x==0 || king.y==7) continue;
-                if(king.x-1 == stone.x && king.y+1==stone.y){
-                    if(stone.x==0 || stone.y==7) continue;
-                    stone.x-=1;
-                    stone.y+=1;
-                    board[stone.x][stone.y]=STONE;
-                }
-                board[king.x][king.y]=0;
-                king.x-=1;
-                king.y+=1;
-                board[king.x][king.y]=KING;
-            }else{
-                if(king.x==0 || king.y==0) continue;
-                if(king.x-1 == stone.x && king.y-1 == stone.y){
-                    if(stone.x==0 || stone.y==0) continue;
-                    stone.x-=1;
-                    stone.y-=1;
-                    board[stone.x][stone.y]=STONE;
-                }
-                board[king.x][king.y]=0;
-                king.x-=1;
-                king.y-=1;
-                board[king.x][king.y]=KING;
             }
+            kingPos[0]+=pos[0];
+            kingPos[1]+=pos[1];
         }
 
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i<8; i++){
-            for(int j=0; j<8; j++){
-                if(board[i][j]==KING){
-                    sb.append((char)(j+'A')).append((char)(i+'1')).append("\n");
-                }
-            }
-        }
-
-        for(int i=0; i<8; i++){
-            for(int j=0; j<8; j++){
-                if(board[i][j]==STONE){
-                    sb.append((char)(j+'A')).append((char)(i+'1')).append("\n");               
-                }
-            }
-        }
-        System.out.println(sb);
+        System.out.print((char)(kingPos[0]+'A'-1));
+        System.out.println(kingPos[1]);
+        System.out.print((char)(stonePos[0]+'A'-1));
+        System.out.println(stonePos[1]);
     }
 
-    public static class Point{
-        int x;
-        int y;
-
-        Point(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-    }
 }
