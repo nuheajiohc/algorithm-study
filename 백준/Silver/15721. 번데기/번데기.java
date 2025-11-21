@@ -1,65 +1,58 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
-    public static void main(String[] args) throws Exception{
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int A = Integer.parseInt(br.readLine());
         int T = Integer.parseInt(br.readLine());
         int target = Integer.parseInt(br.readLine());
 
-        int round = 1;
-        int zero = 0;
-        int one = 0;
-        
-        int idx = -1;
-        boolean isEnd=false;
+        int person = 0;
+        int zeroCount = 0;
+        int oneCount = 0;
+        int round = 2;
+        boolean isAnswer = false;
         while(true){
-            idx = (idx+1)%A;
-            zero++;
-            if(target==0 && zero==T){
-                break;
-            }
-
-            idx = (idx+1)%A;
-            one++;
-            if(target==1 && one==T){
-                break;
-            }
-
-            idx = (idx+1)%A;
-            zero++;
-            if(target==0 && zero==T){
-                break;
-            }
-
-            idx = (idx+1)%A;
-            one++;
-            if(target==1 && one==T){
-                break;
-            }
-
-            for(int i=0; i<round+1; i++){
-                idx = (idx+1)%A;
-                zero++;
-                if(target==0 && zero==T){
-                    isEnd=true;
+            for(int i =0; i<2; i++){
+                zeroCount++;
+                if(target==0 && zeroCount==T){
+                    isAnswer = true;
                     break;
                 }
-            }
-            if(isEnd) break;
+                person++;
 
-            for(int i=0; i<round+1; i++){
-                idx = (idx+1)%A;
-                one++;
-                if(target==1 && one==T){
-                    isEnd=true;
+                oneCount++;
+                if(target==1 && oneCount==T){
+                    isAnswer = true;
                     break;
-                }                
+                }
+                person++;
             }
-            if(isEnd) break;
+            if(isAnswer) break;
+            for(int i=0; i<round; i++){
+                zeroCount++;
+                if(target==0 && zeroCount==T){
+                    isAnswer = true;
+                    break;
+                }
+                person++;
+            }
+            if(isAnswer) break;
+            for(int i=0; i<round; i++){
+                oneCount++;
+                if(target==1 && oneCount==T){
+                    isAnswer = true;
+                    break;
+                }
+                person++;
+            }
+            if(isAnswer) break;
             round++;
         }
-        System.out.println(idx);
+        System.out.println(person%A);
     }
 }
