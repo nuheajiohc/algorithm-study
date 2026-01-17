@@ -1,33 +1,37 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class Main {
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    String line = br.readLine().toUpperCase();
+        String word = br.readLine();
 
-    int[] alpha = new int[26];
-    for(int i=0; i<line.length(); i++){
-      alpha[line.charAt(i)-'A']++;
+        int[] alpha = new int[26];
+        for(int i=0; i<word.length(); i++){
+            char c = word.charAt(i);
+            if('a'<=c){
+                alpha[c-'a']++;
+            }else{
+                alpha[c-'A']++;
+            }
+        }
+
+        int maxIdx=0;
+        int count=1;
+        for(int i=1; i<26; i++){
+            if(alpha[maxIdx]<alpha[i]){
+                maxIdx = i;
+                count=1;
+            }else if(alpha[maxIdx]==alpha[i]){
+                count++;
+            }
+        }
+
+        if(count>1){
+            System.out.println("?");
+        }else{
+            System.out.println((char)(maxIdx+'A'));
+        }
+        
     }
-
-    int maxCount=0;
-    int maxIndex=0;
-    for(int i=0; i<26; i++){
-      if(alpha[i]>alpha[maxIndex]){
-        maxCount = 1;
-        maxIndex = i;
-      }else if(alpha[i]==alpha[maxIndex]){
-        maxCount++;
-      }
-    }
-
-    if(maxCount>1){
-      System.out.println("?");
-    }else{
-      System.out.println((char)('A'+maxIndex));
-    }
-  }
 }
