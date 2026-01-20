@@ -1,32 +1,33 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    String line = br.readLine();
+        String parentheses = br.readLine();
+        Deque<Character> stack = new ArrayDeque<>();
 
-    Deque<Character> stack = new ArrayDeque<>();
-    int count=0;
-    int idx=0;
-    while(idx<line.length()-1){
-      char c = line.charAt(idx);
-      if(c=='(' && line.charAt(idx+1)==')'){
-        count += stack.size();
-        idx+=2;
-      }else if(c=='(' && line.charAt(idx+1)=='('){
-        stack.offerLast(c);
-        idx++;
-      }else{
-        stack.pollLast();
-        count++;
-        idx++;
-      }
+        int sum = 0;
+        int idx = 0;
+
+        while(idx< parentheses.length()){
+            char cur = parentheses.charAt(idx);
+            if(cur == '('){
+                idx++;
+                char next = parentheses.charAt(idx);
+                if(next == ')'){
+                    sum += stack.size();
+                    idx++;
+                }else{
+                    stack.offerLast(cur);
+                }
+            }else{
+                stack.pollLast();
+                sum += 1;
+                idx++;
+            }
+        }
+        System.out.println(sum);
     }
-    System.out.println(count + stack.size());
-  }
 }
