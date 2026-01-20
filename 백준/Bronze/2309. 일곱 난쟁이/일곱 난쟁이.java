@@ -2,41 +2,43 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+
+    private static int[] arr = new int[9];
+    private static boolean[] used = new boolean[9];
+    private static boolean found = false;
+
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int sum=0;
-        int[] arr = new int[9];
         for(int i=0; i<9; i++){
             arr[i] = Integer.parseInt(br.readLine());
-            sum+=arr[i];
         }
+
         Arrays.sort(arr);
-        int target = sum-100;
 
-        boolean find = false;
-        int idx1=0;
-        int idx2=0;
-        for(int i=0; i<9; i++){
-            int temp=0;
-            for(int j=i+1; j<9; j++){
-                temp= arr[i]+arr[j];
-                if(temp==target) {
-                    find = true;
-                    idx1=i;
-                    idx2=j;
-                    break;
-                }
+        btk(0,0,0);
+
+    }
+
+    public static void btk(int k, int sum,  int count){
+        if(found) return;
+        if(sum>100) return;
+
+        if(count==7 && sum==100){
+            StringBuilder sb = new StringBuilder();
+            for(int i=0; i<9; i++){
+                if(!used[i]) continue;
+                sb.append(arr[i]).append("\n"); 
             }
-            if(find) break;
+            System.out.println(sb);
+            found=true;
+            return;
         }
 
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i<9; i++){
-            if(i==idx1 || i==idx2) continue;
-            sb.append(arr[i]).append("\n");
+        for(int i=k; i<9; i++){
+            used[i]=true;
+            btk(i+1, sum+arr[i], count+1);
+            used[i]=false;
         }
-        System.out.println(sb);
-
     }
 }
