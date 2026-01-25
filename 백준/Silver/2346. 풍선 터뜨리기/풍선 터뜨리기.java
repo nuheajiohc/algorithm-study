@@ -15,10 +15,11 @@ public class Main {
         }
 
         StringBuilder sb = new StringBuilder();
-        while(true){
-            Balloon balloon = deque.pollFirst();
-            sb.append(balloon.pos).append(" ");
-            if(deque.isEmpty()) break;
+
+
+        Balloon balloon = deque.pollFirst();
+        sb.append(balloon.pos).append(" ");
+        while(!deque.isEmpty()){
             if(balloon.value>0){
                 while(--balloon.value>0){
                     deque.offerLast(deque.pollFirst());
@@ -28,6 +29,8 @@ public class Main {
                     deque.offerFirst(deque.pollLast());
                 }
             }
+            balloon = deque.pollFirst();
+            sb.append(balloon.pos).append(" ");
         }
 
         System.out.println(sb);
