@@ -11,15 +11,16 @@ public class Solution {
             String memory = br.readLine();
 
             int count = 0;
-            int status = 0;
+            char status = '0';
             for(char c : memory.toCharArray()){
-                if(status != c-'0'){
-                    status = (status+1)%2;
+                if(status != c){
+                    status = c;
                     count++;
                 }
             }
             sb.append("#").append(t).append(" ").append(count).append("\n");
         }
+
         System.out.println(sb);
     }
 }
