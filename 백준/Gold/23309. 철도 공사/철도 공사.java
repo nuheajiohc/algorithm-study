@@ -1,88 +1,89 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
 
+	static int[] prev = new int[1000001];
+	static int[] next = new int[1000001];
+
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
+
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int N = Integer.parseInt(st.nextToken());
 		int M = Integer.parseInt(st.nextToken());
-		
+
 		st = new StringTokenizer(br.readLine());
-		
-		Node[] nodes = new Node[1000001];
-		
-		Node root = new Node(Integer.parseInt(st.nextToken()));
-		Node prev = root;
-		nodes[prev.value] = prev;
-		for(int i=1; i<N; i++) {
-			Node cur = new Node(Integer.parseInt(st.nextToken()));
-			nodes[cur.value] = cur;
-			cur.prev = prev;
-			prev.next = cur;
-			prev = cur;
-			
+
+		int first = Integer.parseInt(st.nextToken());
+		int current = first;
+
+		for (int i = 1; i < N; i++) {
+			int value = Integer.parseInt(st.nextToken());
+
+			next[current] = value;
+			prev[value] = current;
+
+			current = value;
 		}
-		prev.next = root;
-		root.prev = prev;
-		
+
+		next[current] = first;
+		prev[first] = current;
+
 		StringBuilder sb = new StringBuilder();
-		while(M-->0) {
+
+		while (M-- > 0) {
 			st = new StringTokenizer(br.readLine());
 			String command = st.nextToken();
-			int num = Integer.parseInt(st.nextToken());
-			Node station = nodes[num];
-			
-			if(command.equals("BN")) {
-				int cand = Integer.parseInt(st.nextToken());
-				Node newStation  = new Node(cand);
-				sb.append(station.next.value);
-				Node nextStation = station.next;
-				station.next = newStation;
-				nextStation.prev = newStation;
-				newStation.next = nextStation;
-				newStation.prev = station;
-				nodes[newStation.value]= newStation;
-			}else if(command.equals("BP")) {
-				int cand = Integer.parseInt(st.nextToken());
-				Node newStation  = new Node(cand);
-				sb.append(station.prev.value);
-				Node prevStation = station.prev;
-				station.prev = newStation;
-				prevStation.next = newStation;
-				newStation.prev = prevStation;
-				newStation.next = station;
-				nodes[newStation.value] = newStation;
-			}else if(command.equals("CN")) {
-				Node nextStation = station.next;
-				sb.append(nextStation.value);
-				Node nextNextStation = nextStation.next;
-				station.next = nextNextStation;
-				nextNextStation.prev = station;
-			}else {
-				Node prevStation = station.prev;
-				sb.append(prevStation.value);
-				Node prevPrevStation = prevStation.prev;
-				station.prev = prevPrevStation;
-				prevPrevStation.next = station;
+			int i = Integer.parseInt(st.nextToken());
+
+			if (command.equals("BN")) {
+				int j = Integer.parseInt(st.nextToken());
+
+				sb.append(next[i]).append("\n");
+
+				int originalNext = next[i];
+
+				prev[j] = i;
+				next[j] = originalNext;
+
+				next[i] = j;
+				prev[originalNext] = j;
+
+			} else if (command.equals("BP")) {
+				int j = Integer.parseInt(st.nextToken());
+
+				sb.append(prev[i]).append("\n");
+
+				int originalPrev = prev[i];
+
+				prev[j] = originalPrev;
+				next[j] = i;
+
+				next[originalPrev] = j;
+				prev[i] = j;
+
+			} else if (command.equals("CN")) {
+				int target = next[i];
+				sb.append(target).append("\n");
+
+				int newNext = next[target];
+
+				next[i] = newNext;
+				prev[newNext] = i;
+
+			} else if (command.equals("CP")) {
+				int target = prev[i];
+				sb.append(target).append("\n");
+
+				int newPrev = prev[target];
+
+				next[newPrev] = i;
+				prev[i] = newPrev;
 			}
-			sb.append("\n");
-			
 		}
-		
+
 		System.out.println(sb);
 	}
-	
-	public static class Node{
-		Node prev;
-		int value;
-		Node next;
-		
-		public Node(int value) {
-			this.value = value;
-		}
-	}
-
 }
