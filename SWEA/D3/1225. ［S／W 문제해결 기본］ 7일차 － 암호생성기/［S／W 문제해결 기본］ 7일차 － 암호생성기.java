@@ -20,6 +20,17 @@ public class Solution {
 				 deque.offerLast(value);
 				 min = Math.min(min, value);
 			 }
+			 
+		 
+			 if(min>15) {
+				 int a = (min/15)-1;
+				 int reduceVal = a*15;
+				 
+				 for(int i=0; i<8; i++) {
+					int value = deque.pollFirst()-reduceVal;
+					deque.offerLast(value);
+				 }	 
+			 }
 		 
 			 int count=1;
 			 while(deque.peekLast()!=0) {
