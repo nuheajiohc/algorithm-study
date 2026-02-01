@@ -57,8 +57,6 @@ public class Main {
             }
             board[nx][ny]=SNAIL;
 
-            if(isOver) break;
-
             if(!deque.isEmpty()){
                 Direction direction =  deque.peekFirst();
                 if(direction.X == result){
