@@ -32,11 +32,6 @@ public class Main {
 			}
 		}
 		
-		if(remainder==0) {
-			System.out.println(0);
-			return;
-		}
-		
 		int day = 0;
 		while(true) {
 			int size = queue.size();
