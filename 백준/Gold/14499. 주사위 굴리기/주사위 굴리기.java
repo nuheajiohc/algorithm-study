@@ -62,8 +62,8 @@ public class Main {
 		List<Integer> ns; //위 남 아래 북
 		
 		public Dice() {
-			we = new LinkedList<>();
-			ns = new LinkedList<>();
+			we = new ArrayList<>();
+			ns = new ArrayList<>();
 			for(int i=0; i<4; i++) {
 				we.add(0);
 				ns.add(0);
@@ -103,4 +103,5 @@ public class Main {
 			}
 		}
 	}
+
 }
