@@ -1,18 +1,18 @@
-# [Gold IV] 감시 - 15683 
+# [Gold III] 감시 - 15683 
 
 [문제 링크](https://www.acmicpc.net/problem/15683) 
 
 ### 성능 요약
 
-메모리: 26408 KB, 시간: 416 ms
+메모리: 42668 KB, 시간: 328 ms
 
 ### 분류
 
-백트래킹, 브루트포스 알고리즘, 구현, 시뮬레이션
+구현, 브루트포스 알고리즘, 시뮬레이션, 백트래킹
 
 ### 제출 일자
 
-2024년 5월 7일 11:31:06
+2026년 2월 6일 22:56:01
 
 ### 문제 설명
 
@@ -25,7 +25,7 @@
 			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15683/2.png" style="width: 156px; height: 70px;"></td>
 			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15683/3.png" style="width: 100px; height: 100px;"></td>
 			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15683/4.png" style="width: 138px; height: 100px;"></td>
-			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="https://onlinejudgeimages.s3-ap-northeast-1.amazonaws.com/problem/15683/5.png" style="width: 149px; height: 150px;"></td>
+			<td style="width: 20%; text-align: center;vertical-align: middle;"><img alt="" src="" style="width: 149px; height: 150px;"></td>
 		</tr>
 		<tr>
 			<td style="width: 20%; text-align: center;">1번</td>
