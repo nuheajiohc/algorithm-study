@@ -54,18 +54,15 @@ public class Main {
                 if(visited[status][nx][ny]>0) continue;
                 if(maze[nx][ny]=='#') continue;
                 if(maze[nx][ny]>='A'&& maze[nx][ny]<='F'){
-                    if((status & 1<<(maze[nx][ny]-'A'))!=0){
-                        visited[status][nx][ny] = visited[status][cur[1]][cur[2]]+1;
-                        queue.offer(new int[]{status, nx, ny});
+                    if((status & 1<<(maze[nx][ny]-'A'))==0){
+                        continue;
                     }
                 } else if(maze[nx][ny]>='a' && maze[nx][ny]<='f'){
-                    int nStatus = status | 1<<(maze[nx][ny]-'a');
-                    visited[nStatus][nx][ny] = visited[status][cur[1]][cur[2]] + 1;
-                    queue.offer(new int[]{nStatus, nx, ny});
-                } else{
-                    visited[status][nx][ny] = visited[status][cur[1]][cur[2]]+1;
-                    queue.offer(new int[]{status, nx, ny});
+                    status |= 1<<(maze[nx][ny]-'a');
                 }
+
+                visited[status][nx][ny] = visited[cur[0]][cur[1]][cur[2]]+1;
+                queue.offer(new int[]{status, nx, ny});
 
                 if(maze[nx][ny] =='1'){
                     arrived = new int[]{status, nx, ny};
