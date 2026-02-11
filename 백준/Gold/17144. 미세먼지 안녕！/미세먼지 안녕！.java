@@ -2,7 +2,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -81,44 +80,47 @@ public class Main {
 	}
 	
 	static void clean() {
-		int x = machine.get(0);
-		
-		for(int i=x-2; i>=0; i--) {
-			room[i+1][0] = room[i][0];
+		int top = machine.get(0);
+		int bottom = machine.get(1);
+
+		// 1. 위쪽 공기청정기 (반시계 방향 회전)
+    	// 당겨오는 방향: 위 -> 오른쪽 -> 아래 -> 왼쪽
+    	int[] dxTop = {-1, 0, 1, 0};
+    	int[] dyTop = {0, 1, 0, -1};
+    	rotate(top, 0, top, dxTop, dyTop);
+
+    	// 2. 아래쪽 공기청정기 (시계 방향 회전)
+    	// 당겨오는 방향: 아래 -> 오른쪽 -> 위 -> 왼쪽
+    	int[] dxBottom = {1, 0, -1, 0};
+    	int[] dyBottom = {0, 1, 0, -1};
+    	rotate(bottom, bottom, R-1, dxBottom, dyBottom);
+	}
+
+	static void rotate(int startX, int minRow, int maxRow, int[] dx, int[] dy){
+		int x = startX;
+		int y = 0;
+		int dir = 0;
+
+		while(dir<4){
+			int nx = x + dx[dir];
+			int ny = y + dy[dir];
+
+			if(nx<minRow || nx>maxRow || ny<0 || ny>=C){
+				dir++;
+				continue;
+			}
+
+			if(nx==startX && ny == 0){
+				room[x][y] = 0;
+				break;
+			}
+
+			if(room[x][y] != -1){
+				room[x][y] = room[nx][ny];
+			}
+
+			x = nx;
+			y = ny;
 		}
-		
-		for(int j=1; j<C; j++) {
-			room[0][j-1] = room[0][j];
-		}
-		
-		for(int i=1; i<=x; i++) {
-			room[i-1][C-1] = room[i][C-1];
-		}
-		
-		for(int j=C-1; j>1; j--) {
-			room[x][j] = room[x][j-1];
-		}
-		
-		room[x][1] = 0;
-		
-		
-		x = machine.get(1);
-		
-		for(int i=x+2; i<R; i++) {
-			room[i-1][0] = room[i][0];
-		}
-		
-		for(int j=1; j<C; j++) {
-			room[R-1][j-1] = room[R-1][j];
-		}
-		
-		for(int i=R-1; i>x; i--) {
-			room[i][C-1] = room[i-1][C-1];
-		}
-		
-		for(int j=C-1; j>1; j--) {
-			room[x][j] = room[x][j-1];
-		}
-		room[x][1] = 0;
 	}
 }
