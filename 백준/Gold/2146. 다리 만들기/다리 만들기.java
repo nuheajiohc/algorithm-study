@@ -7,7 +7,7 @@ public class Main {
 	static int[][] country;
 	static int[] dx = {0, 0, 1, -1}, dy = {1, -1, 0, 0};
 	static int minLen = 10000;
-	static int LAND = 1, WATER = 0;
+	static int WATER = 0;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -30,35 +30,35 @@ public class Main {
 	}
 	
 	static void connectBridge() {
+		Queue<int[]> queue = new ArrayDeque<>();
+		int[][] dist = new int[N][N];
+		
 		for(int i=0; i<N; i++) {
+			Arrays.fill(dist[i], -1);
 			for(int j=0; j<N; j++) {
 				if(country[i][j]==WATER) continue;
-				if(isInnerLand(i, j)) continue;
-				bfs(i,j);
+				if(!isInnerLand(i, j)) {
+					queue.offer(new int[] {i,j});					
+				}
+				dist[i][j] = 0;
 			}
 		}
-	}
-	
-	static void bfs(int x, int y) {
-		int[][] vis = new int[N][N];
-		
-		Queue<int[]> queue = new ArrayDeque<>();
-		int curLand = country[x][y];
-		queue.offer(new int[] {x,y});
 		
 		while(!queue.isEmpty()) {
 			int[] curPos = queue.poll();
+			int x = curPos[0];
+			int y = curPos[1];
 			for(int dir=0; dir<4; dir++) {
 				int nx = curPos[0] + dx[dir];
 				int ny = curPos[1] + dy[dir];
 				if(isOutRange(nx,ny)) continue;
-				if(vis[nx][ny]>0) continue;
-				if(country[nx][ny]==curLand) continue;
-				vis[nx][ny] = vis[curPos[0]][curPos[1]]+1;
-				queue.offer(new int[] {nx,ny});
-				if(country[nx][ny]<0 && country[nx][ny]!=curLand) {
-					minLen = Math.min(minLen, vis[curPos[0]][curPos[1]]);
-					return;
+				
+				if(dist[nx][ny]==-1) {
+					dist[nx][ny] = dist[x][y] + 1;
+					country[nx][ny] = country[x][y];
+					queue.offer(new int[] {nx,ny});
+				}else if(country[nx][ny]!= country[x][y]) {
+					minLen = Math.min(minLen, dist[x][y]+dist[nx][ny]);
 				}
 			}
 		}
