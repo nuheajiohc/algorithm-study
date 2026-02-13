@@ -1,39 +1,26 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 
 public class Solution {
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-
-		int[] dp = new int[1000001];
-		for(int i=3; i<=1000000; i++) {
-			int target = (int)Math.sqrt(i);
-			if(target*target == i) {
-				dp[i] = dp[target]+1;
-			}else {
-				int next = (target+1) * (target+1);
-				dp[i] = dp[target+1] + next-i + 1;
-			}
-		}
-		int TC = Integer.parseInt(br.readLine());
-		StringBuilder sb =new StringBuilder();
-		for(int tc=1; tc<=TC; tc++) {
-			long N = Long.parseLong(br.readLine());
-			long answer = 0;
-			if(N!=2) {
-				int target = (int)Math.sqrt(N);
-				if((long)target*target == N) {
-					answer = dp[target] + 1;
-				}else {
-					long next = (long)(target+1) * (target+1);
-					answer = dp[target+1] + next-N + 1;
-				}
-			}
-			sb.append("#").append(tc).append(" ").append(answer).append("\n");
-		}
-		System.out.println(sb);
-	}
+        int TC = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
+        for(int tc=1; tc<=TC; tc++){
+            long N = Long.parseLong(br.readLine());
+            int cnt = 0;
+            while(N!=2){
+                long target = (long)Math.sqrt(N);
+                if(target*target == N){
+                    N = target;
+                    cnt++;
+                }else{
+                    cnt += (target+1)*(target+1)-N;
+                    N = (target+1)*(target+1);
+                }
+            }
+            sb.append("#").append(tc).append(" ").append(cnt).append("\n");
+        }
+        System.out.println(sb);
+    }
 }
