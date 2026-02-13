@@ -1,46 +1,40 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    int N = Integer.parseInt(br.readLine());
-    int M = Integer.parseInt(br.readLine());
+    static int n, m;
+    static List<Integer>[] adj;
+    static boolean[] vis;
 
-    List<Integer>[] adj = new ArrayList[N+1];
-    for(int i=0; i<=N; i++){
-      adj[i] = new ArrayList<>();
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        n = Integer.parseInt(br.readLine());
+        m = Integer.parseInt(br.readLine());
+
+        adj = new ArrayList[n+1];
+        vis = new boolean[n+1];
+        for(int i=1; i<=n; i++) adj[i] = new ArrayList<>();
+
+        while(m-->0){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            adj[a].add(b);
+            adj[b].add(a);
+        }
+
+        System.out.println(dfs(1));
     }
 
-    for(int i=0; i<M; i++){
-      StringTokenizer st = new StringTokenizer(br.readLine());
-      int a = Integer.parseInt(st.nextToken());
-      int b = Integer.parseInt(st.nextToken());
-      adj[a].add(b);
-      adj[b].add(a);
+    static int dfs(int idx){
+        vis[idx] = true;
+        int cnt = 0;
+        for(int next : adj[idx]){
+            if(vis[next]) continue;
+            cnt += 1 + dfs(next);
+        }
+        return cnt;
     }
-
-    int count=0;
-    boolean[] vis = new boolean[N+1];
-    vis[1] = true;
-    Deque<Integer> queue = new ArrayDeque<>();
-    queue.offer(1);
-    while(!queue.isEmpty()){
-      int cur = queue.poll();
-      for(int next : adj[cur]){
-        if(vis[next]) continue;
-        vis[next] =true;
-        queue.offer(next);
-        count++;
-      }
-    }
-    System.out.println(count);
-  }
 }
