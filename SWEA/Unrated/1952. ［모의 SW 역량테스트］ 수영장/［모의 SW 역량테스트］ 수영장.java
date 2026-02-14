@@ -16,12 +16,13 @@ public class Solution {
             for(int i=0; i<4; i++){
                 price[i] = Integer.parseInt(st.nextToken());
             }
-            minSum = Integer.MAX_VALUE;
+            
             plan = new int[12];
             st = new StringTokenizer(br.readLine());
             for(int i=0; i<12; i++){
                 plan[i] = Integer.parseInt(st.nextToken());
             }
+            minSum = price[3];
 
             permutation(0, 0);
             sb.append("#").append(tc).append(" ").append(minSum).append("\n");
@@ -35,16 +36,8 @@ public class Solution {
             return;
         }
 
-        for(int i=0; i<4; i++){
-            if(i==0){
-                permutation(k+1, sum+plan[k]*price[i]);
-            }else if(i==1){
-                permutation(k+1, sum+price[i]);
-            }else if(i==2){
-                permutation(k+3, sum+price[i]);
-            }else{
-                permutation(k+12, sum+price[i]);
-            }
-        }
+        permutation(k+1, sum+plan[k]*price[0]);
+        permutation(k+1, sum+price[1]);
+        permutation(k+3, sum+price[2]);
     }
 }
