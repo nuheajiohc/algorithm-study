@@ -3,55 +3,44 @@ import java.util.*;
 
 public class Main {
 
-    private static int N,M;
-    private static int[] dx = {0,0,1,-1};
-    private static int[] dy = {1,-1,0,0};
+    static int N, M;
+    static int[][] maze;
+    static int[] dx = {0, 0, 1, -1}, dy = {1, -1, 0, 0};
+
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        int[][] maze = new int[N][M];
+        maze = new int[N][M];
         for(int i=0; i<N; i++){
             String line = br.readLine();
             for(int j=0; j<M; j++){
-                if(line.charAt(j)=='1'){
-                    maze[i][j] = 1;
-                }else{
-                    maze[i][j] = 0;
-                }
+                maze[i][j] = (line.charAt(j)-'0') -1;
             }
         }
 
-        int[][] vis = new int[N][M];
-        vis[0][0]=1;
-        Deque<Point> queue = new ArrayDeque<>();
-        queue.offer(new Point(0,0));
-        while(!queue.isEmpty()){
-            Point p = queue.poll();
+        Queue<int[]> q = new ArrayDeque<>();
+        q.offer(new int[]{0, 0});
+        maze[0][0] = 1;
+
+        while(!q.isEmpty()){
+            int[] cur = q.poll();
+            int x = cur[0];
+            int y = cur[1];
             for(int dir=0; dir<4; dir++){
-                int nx = p.x+dx[dir];
-                int ny = p.y+dy[dir];
-                if(isOutOfRange(nx,ny)) continue;
-                if(vis[nx][ny]>0 || maze[nx][ny]==0) continue;
-                vis[nx][ny]= vis[p.x][p.y]+1;
-                queue.offer(new Point(nx,ny));
+                int nx = x + dx[dir];
+                int ny = y + dy[dir];
+                if(nx<0 || nx>=N || ny<0 || ny>=M) continue;
+                if(maze[nx][ny]!=0) continue;
+                maze[nx][ny] = maze[x][y] + 1;
+                q.offer(new int[]{nx, ny});
             }
         }
-        System.out.println(vis[N-1][M-1]);
-    }
 
-    public static boolean isOutOfRange(int x, int y){
-        return x<0 || y<0 || x>=N || y>=M;
-    }
+        System.out.println(maze[N-1][M-1]);
 
-    public static class Point{
-        int x;
-        int y;
-        Point(int x, int y){
-            this.x =x;
-            this.y =y;
-        }
     }
 }
