@@ -5,7 +5,7 @@ public class Solution {
 
     static int N, K, maxH, maxLen;
     static int[][] hiking = new int[8][8];
-    static boolean[][] distance;
+    static boolean[][] visited;
     static int[] dx = {0, 0, 1, -1}, dy = {1, -1, 0, 0};
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,7 +17,7 @@ public class Solution {
             N = Integer.parseInt(st.nextToken());
             K = Integer.parseInt(st.nextToken());
 
-            distance = new boolean[N][N];
+            visited = new boolean[N][N];
             maxH = 0;
             for(int i=0; i<N; i++){
                 st = new StringTokenizer(br.readLine());
@@ -31,7 +31,7 @@ public class Solution {
             for(int i=0; i<N; i++){
                 for(int j=0; j<N; j++){
                     if(maxH == hiking[i][j]){
-                        btk(i, j, K, 1);
+                        btk(i, j, true, 1);
                     }
                 }
             }
@@ -40,27 +40,29 @@ public class Solution {
         System.out.println(sb);
     }
 
-    static void btk(int x, int y, int k, int cnt){
+    static void btk(int x, int y, boolean canCut, int cnt){
         maxLen = Math.max(maxLen, cnt);
-        distance[x][y] = true;
+        visited[x][y] = true;
         for(int dir=0; dir<4; dir++){
             int nx = x + dx[dir];
             int ny = y + dy[dir];
             if(nx<0 || nx>=N || ny<0 || ny>=N) continue;
-            if(distance[nx][ny]) continue;
+            if(visited[nx][ny]) continue;
             if(hiking[nx][ny]<hiking[x][y]){
-                distance[nx][ny] = true;
-                btk(nx, ny, k, cnt+1);
-                distance[nx][ny] = false;
-            }else if(k>0 && hiking[nx][ny]-K < hiking[x][y]){
-                distance[nx][ny] = true;
+                visited[nx][ny] = true;
+                btk(nx, ny, canCut, cnt+1);
+                visited[nx][ny] = false;
+            }else if(canCut && hiking[nx][ny]-K < hiking[x][y]){
+                visited[nx][ny] = true;
                 int tmp = hiking[nx][ny];
+
                 hiking[nx][ny] = hiking[x][y] - 1;
-                btk(nx, ny, 0, cnt+1);
+                btk(nx, ny, false, cnt+1);
                 hiking[nx][ny] = tmp;
-                distance[nx][ny] = false;
+
+                visited[nx][ny] = false;
             }
         }
-        distance[x][y] = false;
+        visited[x][y] = false;
     }
 }
