@@ -3,8 +3,7 @@ import java.util.*;
 
 public class Solution {
 
-    static int[] price, plan;
-    static int minSum;
+    static int[] price, plan, dp;
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -16,28 +15,25 @@ public class Solution {
             for(int i=0; i<4; i++){
                 price[i] = Integer.parseInt(st.nextToken());
             }
-            
-            plan = new int[12];
+
+            plan = new int[13];
             st = new StringTokenizer(br.readLine());
-            for(int i=0; i<12; i++){
+            for(int i=1; i<13; i++){
                 plan[i] = Integer.parseInt(st.nextToken());
             }
-            minSum = price[3];
 
-            permutation(0, 0);
+            dp = new int[13];
+            for(int i=1; i<=12; i++){
+                dp[i] = dp[i-1]+ Math.min(plan[i]*price[0], price[1]);
+
+                if(i>=3){
+                    dp[i] = Math.min(dp[i], dp[i-3]+price[2]);
+                }
+            }
+
+            int minSum = Math.min(dp[12], price[3]);
             sb.append("#").append(tc).append(" ").append(minSum).append("\n");
         }
         System.out.println(sb);
-    }
-
-    static void permutation(int k, int sum){
-        if(k>=12){
-            minSum = Math.min(minSum, sum);
-            return;
-        }
-
-        permutation(k+1, sum+plan[k]*price[0]);
-        permutation(k+1, sum+price[1]);
-        permutation(k+3, sum+price[2]);
     }
 }
