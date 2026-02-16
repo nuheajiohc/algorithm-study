@@ -3,73 +3,80 @@ import java.util.*;
 
 public class Main {
 
-    private static int[] mDx = {0,1,-1,0};
-    private static int[] mDy = {1,0,0,-1};
-    private static int[] hDx = {1,1,2,2,-1,-1,-2,-2};
-    private static int[] hDy = {2,-2,1,-1,2,-2,1,-1};
-    private static int[][] board;
-    private static int[][][] vis;
-    private static int H,W,K;
-
+    static int W, H, K;
+    static int[][] board;
+    static int[][][] visited;
+    static int[] dx = {1, -1, 0, 0, 1, 1, 2, 2, -1, -1, -2, -2};
+    static int[] dy = {0, 0, 1, -1, 2, -2, 1, -1, 2, -2, 1, -1};
+    static Queue<int[]> q = new ArrayDeque<>();
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         K = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine());
         W = Integer.parseInt(st.nextToken());
         H = Integer.parseInt(st.nextToken());
 
+        visited = new int[H][W][K+1];
         board = new int[H][W];
         for(int i=0; i<H; i++){
             st = new StringTokenizer(br.readLine());
             for(int j=0; j<W; j++){
                 board[i][j] = Integer.parseInt(st.nextToken());
+                Arrays.fill(visited[i][j], -1);
             }
         }
 
-        bfs();
-        int answer=Integer.MAX_VALUE;
-        for(int i=0; i<=K; i++){
-            if(vis[H-1][W-1][i]==0) continue;
-            if(answer>vis[H-1][W-1][i]){
-                answer = vis[H-1][W-1][i];
+        q.offer(new int[]{0, 0, K});
+        visited[0][0][K] = 0;
+
+        int idx = -1;
+        while(!q.isEmpty()){
+            int[] cur = q.poll();
+            int x = cur[0]; int y = cur[1];
+            int k = cur[2];
+
+            boolean end;
+            if(k>0){
+                end = iterate(x, y, k, 12);
+            }else{
+                end = iterate(x, y, k, 4);
             }
+            if(end) break;
+        }
+        
+        int answer = Integer.MAX_VALUE;
+        for(int k=0; k<=K; k++){
+            if(visited[H-1][W-1][k]==-1) continue;
+            answer = Math.min(answer, visited[H-1][W-1][k]);
         }
 
-        System.out.println(answer==Integer.MAX_VALUE?-1:answer-1);
-
-    }
-
-    public static void bfs(){
-        vis = new int[H][W][K+1];
-        Queue<int[]> queue = new ArrayDeque<>();
-        queue.offer(new int[]{0,0,0});
-        if(board[0][0]==1) return;
-        vis[0][0][0]=1;
-        while(!queue.isEmpty()){
-            int[] cur=queue.poll();
-            int nk = cur[2];
-            for(int dir=0; dir<4; dir++){
-                int nx = cur[0]+mDx[dir];
-                int ny = cur[1]+mDy[dir];
-                if(isOutOfRange(nx,ny)) continue;
-                if(vis[nx][ny][nk]>0 || board[nx][ny]==1) continue;
-                vis[nx][ny][nk] = vis[cur[0]][cur[1]][cur[2]]+1;
-                queue.offer(new int[]{nx,ny,nk});
-            }
-
-            if(nk>=K) continue;
-            for(int dir=0; dir<8; dir++){
-                int nx = cur[0]+hDx[dir];
-                int ny = cur[1]+hDy[dir];
-                if(isOutOfRange(nx,ny)) continue;
-                if(vis[nx][ny][nk+1]>0 || board[nx][ny]==1) continue;
-                vis[nx][ny][nk+1] = vis[cur[0]][cur[1]][cur[2]]+1;
-                queue.offer(new int[]{nx,ny,nk+1});
-            }
+        if(answer == Integer.MAX_VALUE){
+            System.out.println(-1);
+        }else{
+            System.out.println(answer);
         }
     }
 
-    public static boolean isOutOfRange(int x, int y){
-        return x<0 || x>=H || y<0 || y>=W;
+    static boolean iterate(int x, int y, int k, int limit){
+        for(int dir=0; dir<limit; dir++){
+            int nx = x + dx[dir];
+            int ny = y + dy[dir];
+            if(nx<0 || nx>=H || ny<0 || ny>=W) continue;
+            if(board[nx][ny]==1) continue;
+
+            if(dir<4){
+                if(visited[nx][ny][k]>=0) continue;
+                visited[nx][ny][k] = visited[x][y][k]+1;
+                q.offer(new int[]{nx, ny, k});
+            }else{
+                if(visited[nx][ny][k-1] >=0) continue;
+                visited[nx][ny][k-1] = visited[x][y][k] + 1;
+                q.offer(new int[]{nx, ny, k-1});
+                
+            }
+            if(nx==H-1 && ny==W-1) return true;
+        }
+        return false;
     }
 }
