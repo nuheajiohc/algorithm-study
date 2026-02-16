@@ -2,51 +2,66 @@ import java.io.*;
 import java.util.*;
 
 public class Solution {
-
     static int N;
-    static int[] arr = new int[9];
-    static boolean[] used = new boolean[9];
-
+    static int[] weights;
+    
     static int[] fact = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880};
-    static int[] pow = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512};
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static int[] pow2 = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512};
+    static int[] pow3 = {1, 3, 9, 27, 81, 243, 729, 2187, 6561, 19683};
+    
+    static int[] memo; 
 
-        int TC = Integer.parseInt(br.readLine());
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
         StringBuilder sb = new StringBuilder();
-        for(int tc=1; tc<=TC; tc++){
+
+        for (int tc = 1; tc <= T; tc++) {
             N = Integer.parseInt(br.readLine());
-            StringTokenizer st = new StringTokenizer(br.readLine());
+            weights = new int[N];
+            
             int totalWeight = 0;
-            for(int i=0; i<N; i++){
-                arr[i] = Integer.parseInt(st.nextToken());
-                totalWeight += arr[i];
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for (int i = 0; i < N; i++) {
+                weights[i] = Integer.parseInt(st.nextToken());
+                totalWeight += weights[i];
             }
-            int cnt = recursion(0, 0 ,0, totalWeight);
-            sb.append("#").append(tc).append(" ").append(cnt).append("\n");
+
+            memo = new int[pow3[N]];
+            Arrays.fill(memo, -1);
+
+            int answer = solve(0, 0, 0, 0, 0, totalWeight);
+            sb.append("#").append(tc).append(" ").append(answer).append("\n");
         }
         System.out.println(sb);
     }
-    
-    static int recursion(int depth, int leftSum,  int rightSum, int remain){
-        if(leftSum<rightSum) return 0;
 
-        if(leftSum>=rightSum+remain){
-            return fact[N-depth] * pow[N-depth];
+    static int solve(int nth, int usedBit, int state3, int sumL, int sumR, int remain) {
+        if (sumR > sumL) return 0;
+        
+        if (sumL >= sumR + remain) {
+            return fact[N - nth] * pow2[N - nth]; 
         }
 
-        if(depth==N){
-            return 1;
+        if (nth == N) return 1;
+
+        if (memo[state3] != -1) {
+            return memo[state3];
         }
 
-        int cnt = 0;
-        for(int i=0; i<N; i++){
-            if(used[i]) continue;
-            used[i] = true;
-            cnt += recursion(depth+1, leftSum+arr[i], rightSum, remain-arr[i]);
-            cnt += recursion(depth+1, leftSum, rightSum+arr[i], remain-arr[i]);
-            used[i] = false;
+        int count = 0;
+        
+        for (int i = 0; i < N; i++) {
+            if ((usedBit & (1 << i)) == 0) {
+                
+                count += solve(nth + 1, usedBit | (1 << i), state3 + pow3[i], 
+                            sumL + weights[i], sumR, remain - weights[i]);
+                
+                count += solve(nth + 1, usedBit | (1 << i), state3 + (2 * pow3[i]), 
+                            sumL, sumR + weights[i], remain - weights[i]);
+            }
         }
-        return cnt;
+        
+        return memo[state3] = count; 
     }
 }
