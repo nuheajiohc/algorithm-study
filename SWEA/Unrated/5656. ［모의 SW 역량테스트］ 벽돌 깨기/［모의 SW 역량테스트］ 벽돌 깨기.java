@@ -50,6 +50,8 @@ public class Solution {
             int broken = breakBrick(nextMap, r, w);
             applyGravity(nextMap);
             minCnt = Math.min(minCnt, btk(depth+1, nextMap, remain-broken));
+
+            if(minCnt == 0) return 0;
         }
         return minCnt;
     }
