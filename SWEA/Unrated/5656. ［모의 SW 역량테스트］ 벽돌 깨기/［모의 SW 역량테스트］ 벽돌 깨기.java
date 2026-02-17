@@ -70,11 +70,12 @@ public class Solution {
         Queue<int[]> q = new ArrayDeque<>();
         q.offer(new int[]{r, c, map[r][c]});
         map[r][c] = 0;  
-        int cnt = 1;
+        int cnt = 0;
         while(!q.isEmpty()){
             int[] cur = q.poll();
             int x = cur[0]; int y = cur[1];
             int dist = cur[2];
+            cnt++;
             for(int d=1; d<dist; d++){
                 for(int dir=0; dir<4; dir++){
                     int nx = x + dx[dir]*d;
@@ -83,7 +84,6 @@ public class Solution {
                     if(map[nx][ny]==0) continue;
                     q.offer(new int[]{nx, ny, map[nx][ny]});
                     map[nx][ny]=0;
-                    cnt++;
                 }
             }
         }
