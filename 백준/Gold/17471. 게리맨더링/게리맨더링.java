@@ -3,39 +3,38 @@ import java.util.*;
 
 public class Main {
 	
-	static int N;
+	static int N, minDiff;
+	static int[] population;
 	static List<Integer>[] adj;
-	static int[] person;
 	static boolean[] used;
-	static int minDiff = Integer.MAX_VALUE;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		N = Integer.parseInt(br.readLine());
-		
-		person = new int[N+1];
 		StringTokenizer st = new StringTokenizer(br.readLine());
+		population = new int[N+1];
 		for(int i=1; i<=N; i++) {
-			person[i] = Integer.parseInt(st.nextToken());
+			population[i] = Integer.parseInt(st.nextToken());
 		}
 		
+		
+		used = new boolean[N+1];
 		adj = new ArrayList[N+1];
 		for(int i=1; i<=N; i++) adj[i] = new ArrayList<>();
 		
-		used = new boolean[N+1];
-		
-		for(int i=1; i<=N; i++) {
+		for(int u=1; u<=N; u++) {
 			st = new StringTokenizer(br.readLine());
-			Integer.parseInt(st.nextToken());
+			st.nextToken();
 			while(st.hasMoreTokens()) {
 				int v = Integer.parseInt(st.nextToken());
-				adj[i].add(v);
-				adj[v].add(i);
+				adj[u].add(v);
+				adj[v].add(u);
 			}
 		}
 		
-		combination(1);
+		minDiff = Integer.MAX_VALUE;
+		combination(0);
 		
 		if(minDiff == Integer.MAX_VALUE) {
 			System.out.println(-1);
@@ -45,9 +44,10 @@ public class Main {
 	}
 	
 	static void combination(int depth) {
-		if(depth == N+1) {
-			if(divideable()) {
-				minDiff = Math.min(minDiff, findDiff());
+		if(depth==N) {
+			if(canDivide()) {
+				int diffValue = calDiff();
+				minDiff = Math.min(minDiff, diffValue);
 			}
 			return;
 		}
@@ -57,40 +57,43 @@ public class Main {
 		used[depth] = false;
 		combination(depth+1);
 	}
-	
-	static boolean divideable() {
+
+	static boolean canDivide() {
 		boolean[] vis = new boolean[N+1];
-		int cnt=0;
+		
+		int cnt = 0;
 		for(int i=1; i<=N; i++) {
 			if(vis[i]) continue;
+			vis[i] = true;
 			cnt++;
-			boolean flag = used[i];
-			Queue<Integer> queue = new ArrayDeque<>();
-			queue.offer(i);
-			while(!queue.isEmpty()) {
-				int cur = queue.poll();
+			
+			if(cnt>2) return false;
+			
+			boolean target = used[i];
+			
+			Queue<Integer> q = new ArrayDeque<>();
+			q.offer(i);
+			while(!q.isEmpty()) {
+				int cur = q.poll();
 				for(int next : adj[cur]) {
 					if(vis[next]) continue;
-					if(flag != used[next]) continue;
+					if(used[next]!=target)continue;
 					vis[next] = true;
-					queue.offer(next);	
+					q.offer(next);
 				}
 			}
 		}
-		return cnt == 2;
+		return cnt==2;
 	}
 	
-	static int findDiff() {
-		int area1 = 0;
-		int area2 = 0;
+	static int calDiff() {
+		int part1 = 0;
+		int part2 = 0;
 		for(int i=1; i<=N; i++) {
-			if(used[i]) {
-				area1 += person[i];
-			}else {
-				area2 += person[i];	
-			}
+			if(used[i]) part1+=population[i];
+			else part2+=population[i];
 		}
-		return Math.abs(area1-area2);
+		
+		return Math.abs(part1-part2);
 	}
-
 }
