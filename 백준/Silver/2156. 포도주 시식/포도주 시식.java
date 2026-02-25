@@ -1,22 +1,28 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        int[] wines = new int[N+1];
-        for(int i=1; i<=N; i++){
-            wines[i] = Integer.parseInt(br.readLine());
-        }
 
-        int[] dp = new int[N+1];
-        dp[1] = wines[1];
-        if(N>1) dp[2] = wines[1] + wines[2];
-        for(int i=3; i<=N; i++){
-            dp[i] = Math.max(dp[i-2],dp[i-3]+wines[i-1]) + wines[i];
-            dp[i] = Math.max(dp[i], dp[i-1]);
-        }
-        System.out.println(Math.max(dp[N],dp[N-1]));
-    }
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int n = Integer.parseInt(br.readLine());
+		
+		int[][] dp = new int[n+1][3];
+		int[] arr = new int[n+1];
+		for(int i=1; i<=n; i++) {
+			arr[i] = Integer.parseInt(br.readLine());
+		}
+		
+		dp[1][1] = arr[1];
+		
+		for(int i=2; i<=n; i++) {
+			dp[i][0] = Math.max(dp[i-1][0], Math.max(dp[i-1][1], dp[i-1][2]));
+			dp[i][1] = arr[i] + dp[i-1][0];
+			dp[i][2] = arr[i] + dp[i-1][1];
+		}
+		
+		int max = Math.max(dp[n][0], dp[n][1]);
+		max = Math.max(max, dp[n][2]);
+		System.out.println(max);
+	}
 }
