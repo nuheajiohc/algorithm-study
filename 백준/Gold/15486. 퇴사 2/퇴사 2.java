@@ -32,12 +32,7 @@ public class Main {
 
 		}
 		
-		int max = 0;
-		for(int i=1; i<=N+1; i++) {
-			max = Math.max(max, dp[i]);
-		}
-		
-		System.out.println(max);
+		System.out.println(Math.max(dp[N], dp[N+1]));
 	}
 
 }
