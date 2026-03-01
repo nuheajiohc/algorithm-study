@@ -1,62 +1,61 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Solution {
 
     static int N;
-    static int[][] board;
-    static int[][] mark;
-    static int[] arr = new int[1000001];
-    static int[] dx = {0,0,1,-1}, dy = {1,-1,0,0};
-
-    public static void main(String[] args) throws NumberFormatException, IOException {
+    static int[][] board = new int[1000][1000];
+    static int[][] memo;
+    static int[] dx = {0, 0, 1, -1}, dy = {1, -1, 0, 0};
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
+
         StringBuilder sb = new StringBuilder();
         int TC = Integer.parseInt(br.readLine());
-        for(int tc=1; tc<=TC; tc++) {
+        for(int tc=1; tc<=TC; tc++){
             N = Integer.parseInt(br.readLine());
-            board = new int[N][N];
-            mark = new int[N][N];
-            
-            for(int i=0; i<N; i++) {
+
+            memo = new int[N][N];
+
+            for(int i=0; i<N; i++){
                 StringTokenizer st = new StringTokenizer(br.readLine());
-                for(int j=0; j<N; j++) {
+                for(int j=0; j<N; j++){
                     board[i][j] = Integer.parseInt(st.nextToken());
-                    arr[board[i][j]] = i*N+j;
                 }
             }
-            
-            int value = N*N;
-            int len = 0;
-            for(int i=N*N; i>0; i--) {
-                int x = arr[i]/N;
-                int y = arr[i]%N;
-                boolean possible=false;
-                for(int dir=0; dir<4; dir++) {
-                    int nx = x+dx[dir];
-                    int ny = y+dy[dir];
-                    if(nx<0 || nx>=N || ny<0 || ny>=N) continue;
-                    if(board[x][y]+1 == board[nx][ny]) {
-                        mark[x][y] = mark[nx][ny]+1;
-                        possible = true;
-                        if(len <= mark[x][y]){
-                            value = board[x][y];
-                            len = mark[x][y];
-                        }
-                        break;
+
+            int maxLen = 0;
+            int num = 0;
+            for(int i=0; i<N; i++){
+                for(int j=0; j<N; j++){
+                    int len = recursion(i, j);
+                    if(maxLen < len){
+                        maxLen = len;
+                        num = board[i][j];
+                    }else if(maxLen == len){
+                        num = Math.min(num, board[i][j]);
                     }
                 }
-                if(!possible) {
-                    mark[x][y]=1;
-                }
             }
-
-            sb.append("#").append(tc).append(" ").append(value).append(" ").append(len).append("\n");
+            sb.append("#").append(tc).append(" ").append(num).append(" ").append(maxLen).append("\n");
         }
+
         System.out.println(sb);
     }
-}
 
+    static int recursion(int x, int y){
+        if(memo[x][y]>0) return memo[x][y];
+
+        memo[x][y] = 1;
+        for(int dir=0; dir<4; dir++){
+            int nx = x + dx[dir];
+            int ny = y + dy[dir];
+            if(nx<0 || nx>=N || ny<0 || ny>=N) continue;
+            if(board[x][y]+1==board[nx][ny]) {
+                memo[x][y] += recursion(nx ,ny);
+            }
+        }
+
+        return memo[x][y];
+    }
+}
