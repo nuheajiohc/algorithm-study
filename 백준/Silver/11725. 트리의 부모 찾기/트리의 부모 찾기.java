@@ -1,52 +1,48 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.Buffer;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-  public static void main(String[] args) throws Exception {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    int N =Integer.parseInt(br.readLine());
+    static List<Integer>[] adj;
+    static int[] parent;
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    List<Integer>[] adj = new ArrayList[N+1];
-    for(int i=1; i<=N; i++){
-      adj[i] = new ArrayList<>();
+        int N = Integer.parseInt(br.readLine());
+
+        parent = new int[N+1];
+        adj = new ArrayList[N+1];
+
+        for(int i=1; i<=N; i++) adj[i] = new ArrayList<>();
+
+        for(int i=0; i<N-1; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            adj[a].add(b);
+            adj[b].add(a);
+        }
+
+        bfs(1);
+
+        StringBuilder sb = new StringBuilder();
+        for(int node=2; node<=N; node++){
+            sb.append(parent[node]).append("\n");
+        }
+
+        System.out.println(sb);
     }
 
-    int[] family = new int[N+1];
-
-    for(int i=1; i<N; i++){
-      StringTokenizer st = new StringTokenizer(br.readLine());
-      int a = Integer.parseInt(st.nextToken());
-      int b = Integer.parseInt(st.nextToken());
-      adj[a].add(b);
-      adj[b].add(a);
+    static void bfs(int root){
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.offer(root);
+        while(!queue.isEmpty()){
+            int cur = queue.poll();
+            for(int next : adj[cur]){
+                if(parent[cur] == next) continue;
+                queue.offer(next);
+                parent[next] = cur;
+            }
+        }
     }
-
-    Queue<Integer> q = new ArrayDeque<>();
-    q.offer(1);
-    boolean[] vis = new boolean[N+1];
-    vis[1]= true;
-
-    while(!q.isEmpty()){
-      int cur = q.poll();
-      for(int next: adj[cur]){
-        if(vis[next]) continue;
-        vis[next] = true;
-        q.offer(next);
-        family[next]= cur;
-      }
-    }
-
-    StringBuilder sb = new StringBuilder();
-    for(int i=2; i<=N; i++){
-      sb.append(family[i]).append("\n");
-    }
-    System.out.println(sb);
-  }
 }
