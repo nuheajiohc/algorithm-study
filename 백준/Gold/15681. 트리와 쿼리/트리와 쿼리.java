@@ -2,55 +2,70 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	
-	static int N, R, Q;
-	static List<Integer>[] adj;
-	static boolean[] visited;
-	static int[] size;
+    static int[] dp;
+    static int[] parent;
+    static ArrayList<ArrayList<Integer>> list;
+    static List<Integer> order; 
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		R = Integer.parseInt(st.nextToken());
-		Q = Integer.parseInt(st.nextToken());
-		
-		visited = new boolean[N+1];
-		size = new int[N+1];
-		adj = new ArrayList[N+1];
-		for(int i=1; i<=N; i++) adj[i] = new ArrayList<>();
-		
-		for(int i=1; i<N; i++) {
-			st = new StringTokenizer(br.readLine());
-			int u = Integer.parseInt(st.nextToken());
-			int v = Integer.parseInt(st.nextToken());
-			
-			adj[u].add(v);
-			adj[v].add(u);
-		}
-		
-		calculateSubTreeCount(R);
-		
-		StringBuilder sb = new StringBuilder();
-		while(Q-->0) {
-			int U = Integer.parseInt(br.readLine());
-			sb.append(size[U]).append("\n");
-		}
-		
-		System.out.println(sb);
-	}
+    public static void main(String[] args) throws IOException {
+        StreamTokenizer st = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
+        st.nextToken(); int n = (int)st.nval;
+        st.nextToken(); int r = (int)st.nval;
+        st.nextToken(); int q = (int)st.nval;
 
-	static int calculateSubTreeCount(int node) {
-		if(size[node]>0) return size[node];
-		
-		visited[node] = true;
-		int cnt = 1;
-		for(int next : adj[node]) {
-			if(visited[next]) continue;
-			cnt += calculateSubTreeCount(next);
-		}
-		
-		return size[node] = cnt;
-	}
+        list = new ArrayList<>();
+        for (int i = 0; i <= n; i++) list.add(new ArrayList<>());
+
+        for (int i = 0; i < n - 1; i++) {
+            st.nextToken(); int u = (int)st.nval;
+            st.nextToken(); int v = (int)st.nval;
+            list.get(u).add(v);
+            list.get(v).add(u);
+        }
+
+        dp = new int[n + 1];
+        parent = new int[n + 1];
+        order = new ArrayList<>();
+        
+        bfs(r, n);
+
+        Arrays.fill(dp, 1);
+        
+        for (int i = order.size() - 1; i >= 0; i--) {
+            int cur = order.get(i);
+            int p = parent[cur];
+            if (p != 0) {
+                dp[p] += dp[cur];
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < q; i++) {
+            st.nextToken();
+            int num = (int)st.nval;
+            sb.append(dp[num]).append("\n");
+        }
+        System.out.print(sb);
+    }
+
+    static void bfs(int start, int n) {
+        Queue<Integer> queue = new ArrayDeque<>();
+        boolean[] visited = new boolean[n + 1];
+
+        queue.offer(start);
+        visited[start] = true;
+
+        while (!queue.isEmpty()) {
+            int cur = queue.poll();
+            order.add(cur); 
+
+            for (int next : list.get(cur)) {
+                if (!visited[next]) {
+                    visited[next] = true;
+                    parent[next] = cur;
+                    queue.offer(next);
+                }
+            }
+        }
+    }
 }
