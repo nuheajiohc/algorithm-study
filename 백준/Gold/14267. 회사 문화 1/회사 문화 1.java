@@ -4,8 +4,7 @@ import java.util.*;
 public class Main {
 
 	static int N, M;
-	static List<Integer>[] adj;
-	static int[] good;
+	static int[] parent, good;
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -16,14 +15,12 @@ public class Main {
 		M = Integer.parseInt(st.nextToken());
 		
 		good = new int[N+1];
-		adj = new ArrayList[N+1];
-		for(int i=1; i<=N; i++) adj[i] = new ArrayList<>();
+		parent = new int[N+1];
 		
 		st = new StringTokenizer(br.readLine());
-		for(int i=1; i<=N; i++) {
-			int v = Integer.parseInt(st.nextToken());
-			if(v==-1) continue;
-			adj[v].add(i);
+		st.nextToken();
+		for(int i=2; i<=N; i++) {
+			parent[i] = Integer.parseInt(st.nextToken());
 		}
 		
 		while(M-->0) {
@@ -32,20 +29,16 @@ public class Main {
 			int w = Integer.parseInt(st.nextToken());
 			good[i] += w;
 		}
-		
-		calculateGood(1);
+
+		for(int i=2; i<=N; i++) {
+			int p = parent[i];
+			good[i] += good[p];
+		}
 		
 		StringBuilder sb = new StringBuilder();
 		for(int i=1; i<=N; i++) {
 			sb.append(good[i]).append(" ");
 		}
 		System.out.println(sb);
-	}
-	
-	static void calculateGood(int node) {
-		for(int next : adj[node]) {
-			good[next] += good[node];
-			calculateGood(next);
-		}
 	}
 }
