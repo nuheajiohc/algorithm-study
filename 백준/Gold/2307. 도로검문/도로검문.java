@@ -49,6 +49,7 @@ public class Main {
     }
 
     static int dijkstra(int idx){
+        pq.clear();
         Arrays.fill(time, Integer.MAX_VALUE);
 
         time[1] = 0;
@@ -57,6 +58,7 @@ public class Main {
             int[] cur = pq.poll();
             int u = cur[0];
             int e = cur[1];
+            if(u==N) return time[N];
             if(time[u] != e) continue;
             
             for(int[] next : adj[u]){
