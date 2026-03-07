@@ -6,7 +6,7 @@ public class Main {
     static int N, M, minTime;
     static List<int[]>[] adj;
     static int[] time;
-    static int[][] road;
+    static int[] parent;
     static PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[1]-b[1]);
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,7 +15,7 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        road = new int[M+1][2];
+        parent = new int[N+1];
         adj = new ArrayList[N+1];
         time = new int[N+1];
         minTime = Integer.MAX_VALUE;
@@ -29,13 +29,21 @@ public class Main {
 
             adj[u].add(new int[]{v, e});
             adj[v].add(new int[]{u, e});
-            road[i] = new int[]{u, v};
         }
 
-        minTime = dijkstra(0);
+        minTime = dijkstra(-1, -1);
+
+        List<int[]> shortestPath = new ArrayList<>();
+        int cur = N;
+        while(cur != 1){
+            int p = parent[cur];
+            shortestPath.add(new int[]{p, cur});
+            cur = p;
+        }
+        
         int delay = 0;
-        for(int i=1; i<=M; i++){
-            int tmp = dijkstra(i);
+        for(int[] edge : shortestPath){
+            int tmp = dijkstra(edge[0], edge[1]);
             if(tmp == Integer.MAX_VALUE) {
                 delay = -1;
                 break;
@@ -48,7 +56,7 @@ public class Main {
         System.out.println(delay);
     }
 
-    static int dijkstra(int idx){
+    static int dijkstra(int blockU, int blockV){
         pq.clear();
         Arrays.fill(time, Integer.MAX_VALUE);
 
@@ -64,25 +72,18 @@ public class Main {
             for(int[] next : adj[u]){
                 int nu = next[0];
                 int ne = next[1];
-                if(stop(idx, u, nu)) continue;
+                if ((u == blockU && nu == blockV) || (u == blockV && nu == blockU)) continue;
                 if(time[nu] <= time[u] + ne) continue;
                 
+                if(blockU==-1){
+                    parent[nu] = u;
+                }
+
                 time[nu] = time[u] + ne;
                 pq.offer(new int[]{nu, time[nu]});
             }
         }
 
         return time[N];
-    }
-
-    static boolean stop(int idx, int u, int v){
-        if(road[idx][0]==u && road[idx][1]==v){
-            return true;
-        }
-
-        if(road[idx][0]==v && road[idx][1]==u) {
-            return true;
-        }
-        return false;
     }
 }
