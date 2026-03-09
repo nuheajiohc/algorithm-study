@@ -4,9 +4,9 @@ import java.util.*;
 public class Solution {
 
 	static int N;
-	static char[][] board;
-	static int[][] trace;
+	static int[][] board;
 	static boolean[][] visited;
+	static int BOMB = -1, BLANK = 0, RISK = 1;
 	static int[] dx = { 0, 0, 1, -1, 1, 1, -1, -1 };
 	static int[] dy = { 1, -1, 0, 0, 1, -1, -1, 1 };
 
@@ -18,58 +18,56 @@ public class Solution {
 		for (int tc = 1; tc <= TC; tc++) {
 			N = Integer.parseInt(br.readLine());
 
-			board = new char[N][];
-
-			for (int i = 0; i < N; i++) {
-				board[i] = br.readLine().toCharArray();
-			}
-			
-			trace = new int[N][N];
 			visited = new boolean[N][N];
-			
+			board = new int[N][N];
 			for (int i = 0; i < N; i++) {
+				String line = br.readLine();
 				for (int j = 0; j < N; j++) {
-					int cnt = countBomb(i, j);
-					trace[i][j] = cnt;
+					char c = line.charAt(j);
+					if (c == '*')
+						board[i][j] = BOMB;
 				}
 			}
 
+			for(int i=0; i<N; i++) {
+				for(int j=0; j<N; j++) {
+					if(board[i][j]==BOMB) continue;
+					if(hasBomb(i ,j)) board[i][j] = RISK;
+				}
+			}
+			
+			Queue<int[]> q = new ArrayDeque<>();
+
 			int click = 0;
-			Queue<int[]> queue = new ArrayDeque<>();
 			for (int i = 0; i < N; i++) {
 				for (int j = 0; j < N; j++) {
-					if (!(trace[i][j] == 0 && board[i][j] != '*')) continue;
-					if (visited[i][j]) continue;
-					
-					queue.offer(new int[] { i, j });
+					if (board[i][j] != BLANK || visited[i][j])
+						continue;
 					visited[i][j] = true;
 					click++;
-					while (!queue.isEmpty()) {
-						int[] cur = queue.poll();
+
+					q.offer(new int[] { i, j });
+					while (!q.isEmpty()) {
+						int[] cur = q.poll();
 						int x = cur[0];
 						int y = cur[1];
-						if (countBomb(x, y) == 0) {
-							for (int dir = 0; dir < 8; dir++) {
-								int nx = x + dx[dir];
-								int ny = y + dy[dir];
-								if (nx < 0 || nx >= N || ny < 0 || ny >= N)
-									continue;
-								if(visited[nx][ny]) continue;
-								visited[nx][ny] = true;
 
-								if (trace[nx][ny] == 0 && board[nx][ny] != '*') {
-									queue.offer(new int[] { nx, ny });
-								}
-							}
+						for (int dir = 0; dir < 8; dir++) {
+							int nx = x + dx[dir];
+							int ny = y + dy[dir];
+							if(nx<0 || nx>=N || ny<0 || ny>=N) continue;
+							if(visited[nx][ny]) continue;
+							if(board[nx][ny]==BOMB) continue;
+							visited[nx][ny] = true;
+							if(board[nx][ny]==0) q.offer(new int[] {nx, ny});
 						}
 					}
 				}
 			}
-
-			for (int i = 0; i < N; i++) {
-				for (int j = 0; j < N; j++) {
-					if (!visited[i][j] && trace[i][j] > 0 && board[i][j]!='*')
-						click++;
+			
+			for(int i=0; i<N; i++) {
+				for(int j=0; j<N; j++) {
+					if(!visited[i][j] && (board[i][j] == RISK)) click++;
 				}
 			}
 
@@ -78,16 +76,15 @@ public class Solution {
 		System.out.println(sb);
 	}
 
-	static int countBomb(int x, int y) {
-		int cnt = 0;
+	static boolean hasBomb(int x, int y) {
 		for (int dir = 0; dir < 8; dir++) {
 			int nx = x + dx[dir];
 			int ny = y + dy[dir];
 			if (nx < 0 || nx >= N || ny < 0 || ny >= N)
 				continue;
-			if (board[nx][ny] == '*')
-				cnt++;
+			if (board[nx][ny] == BOMB)
+				return true;
 		}
-		return cnt;
+		return false;
 	}
 }
