@@ -33,8 +33,7 @@ public class Solution {
 			double E = Double.parseDouble(br.readLine());
 			
 			for(int i=0; i<N; i++) {
-				for(int j=0; j<N; j++) {
-					if(i==j) continue;
+				for(int j=i+1; j<N; j++) {
 					long dist = (xs[i]-xs[j])*(xs[i]-xs[j]) + (xy[i]-xy[j])*(xy[i]-xy[j]);
 					edges.add(new Edge(i, j, dist));
 				}
