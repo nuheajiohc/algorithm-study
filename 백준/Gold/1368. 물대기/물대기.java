@@ -27,6 +27,7 @@ public class Main {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			for(int j=0; j<N; j++) {
 				int w = Integer.parseInt(st.nextToken());
+				if(i==j) continue;
 				adj[i].add(new Edge(j, w));
 				adj[j].add(new Edge(i, w));
 			}
