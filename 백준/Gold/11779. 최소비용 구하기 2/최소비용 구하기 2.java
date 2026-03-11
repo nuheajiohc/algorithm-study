@@ -6,7 +6,7 @@ public class Main {
 	static int N, M;
 	static List<int[]>[] adj;
 	static int[] dist;
-	static List<Integer>[] parent;
+	static int[] parent;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -14,8 +14,7 @@ public class Main {
 		N = Integer.parseInt(br.readLine());
 		M = Integer.parseInt(br.readLine());
 
-		parent = new ArrayList[N + 1];
-		for(int i = 1; i<=N; i++) parent[i] = new ArrayList<>();
+		parent = new int[N + 1];
 		
 		adj = new ArrayList[N + 1];
 		for (int i = 1; i <= N; i++) adj[i] = new ArrayList<>();
@@ -42,7 +41,7 @@ public class Main {
 		Deque<Integer> stack = new ArrayDeque<>();
 		stack.offer(city);
 		while(city!=start) {
-			city = parent[city].get(0);
+			city = parent[city];
 			cnt++;
 			stack.offerLast(city);
 		}
@@ -61,18 +60,15 @@ public class Main {
 		Arrays.fill(dist, Integer.MAX_VALUE);
 
 		PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[1] - b[1]);
-		pq.offer(new int[] { start, 0, -1});
+		pq.offer(new int[] { start, 0});
 		dist[start] = 0;
 		
 		while (!pq.isEmpty()) {
 			int[] cur = pq.poll();
 			int u = cur[0];
 			int w = cur[1];
-			
-			if(dist[u] != w) continue;
-			parent[u].add(cur[2]);
-			
 			if(u == end) return;
+			if(dist[u] != w) continue;
 			
 			for(int[] next : adj[u]) {
 				int nu = next[0];
@@ -80,7 +76,8 @@ public class Main {
 				
 				if(dist[nu] <= dist[u] + nw) continue;
 				dist[nu] = dist[u] + nw;
-				pq.offer(new int[] { nu, dist[nu], u});
+				parent[nu] = u;
+				pq.offer(new int[] { nu, dist[nu]});
 			}
 		}
 	}
