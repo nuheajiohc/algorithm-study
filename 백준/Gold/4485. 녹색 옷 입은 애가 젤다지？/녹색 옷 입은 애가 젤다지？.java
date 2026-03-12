@@ -38,7 +38,7 @@ public class Main {
 			Arrays.fill(dist[i], Integer.MAX_VALUE);
 		}
 		
-		PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a->a[1]));
+		PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a->a[2]));
 		dist[0][0] = map[0][0];
 		pq.offer(new int[] {0, 0, dist[0][0]});
 		
@@ -48,8 +48,9 @@ public class Main {
 			int y = now[1];
 			int w = now[2];
 			
+			if(x==N-1 & y==N-1) return;
+			
 			if(dist[x][y] != w) continue;
-		
 			
 			for(int dir=0; dir<4; dir++) {
 				int nx = x + dx[dir];
