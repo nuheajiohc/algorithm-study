@@ -4,8 +4,7 @@ import java.util.*;
 public class Main {
 	
 	static int N, M, X;
-	static List<Edge>[] adj;
-	static int[][] dist;
+	static List<Edge>[] adj, reverse;
 	static int INF = Integer.MAX_VALUE;
 
 	public static void main(String[] args) throws Exception {
@@ -19,6 +18,9 @@ public class Main {
 		adj = new ArrayList[N+1];
 		for(int i=0; i<=N; i++) adj[i] = new ArrayList<>();
 		
+		reverse = new ArrayList[N+1];
+		for(int i=0; i<=N; i++) reverse[i] = new ArrayList<>();
+		
 		while(M-->0) {
 			st = new StringTokenizer(br.readLine());
 			
@@ -27,41 +29,41 @@ public class Main {
 			int w = Integer.parseInt(st.nextToken());
 			
 			adj[u].add(new Edge(v, w));
+			reverse[v].add(new Edge(u, w));
 		}
 		
-		dist = new int[N+1][N+1];
-		for(int i=1; i<=N; i++) {
-			Arrays.fill(dist[i], INF);
-		}
 		
-		for(int i=1; i<=N; i++) dijkstra(i);
+		int[] fromX = dijkstra(X, adj);
+		int[] toX = dijkstra(X, reverse);
 		
 		int time = 0;
 		for(int i=1; i<=N; i++) {
-			if(dist[i][X]== INF || dist[X][i]==INF) continue;
-			time = Integer.max(time, dist[i][X] + dist[X][i]);
+			time = Math.max(time, fromX[i] + toX[i]);
 		}
 		
 		System.out.println(time);
 	}
 	
-	static void dijkstra(int start) {
+	static int[] dijkstra(int start, List<Edge>[] graph) {
 		PriorityQueue<Edge> pq = new PriorityQueue<>();
 		pq.offer(new Edge(start, 0));
-		dist[start][start] = 0;
+		int[] dist = new int[N+1];
+		Arrays.fill(dist, INF);
+		dist[start] = 0;
 		
 		while(!pq.isEmpty()) {
 			Edge now = pq.poll();
 			
-			if(start!=X && now.to==X) return;
-			if(now.weight != dist[start][now.to]) continue;
-
-			for(Edge next : adj[now.to]) {
-				if(dist[start][next.to] <= dist[start][now.to] + next.weight) continue;
-				dist[start][next.to] = dist[start][now.to] + next.weight;
-				pq.offer(new Edge(next.to, dist[start][next.to]));
+			if(now.weight != dist[now.to]) continue;
+			
+			for(Edge next : graph[now.to]) {
+				if(dist[next.to] <= dist[now.to] + next.weight) continue;
+				dist[next.to] = dist[now.to] + next.weight;
+				pq.offer(new Edge(next.to, dist[next.to]));
 			}
 		}
+		
+		return dist;
 	}
 	
 	static class Edge implements Comparable<Edge> {
