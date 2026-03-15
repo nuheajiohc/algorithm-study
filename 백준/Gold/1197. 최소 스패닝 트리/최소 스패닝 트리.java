@@ -3,84 +3,71 @@ import java.util.*;
 
 public class Main {
 
-    static int[] parent;
+    static List<Edge>[] adj;
+    static int V, E;
 
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int V = Integer.parseInt(st.nextToken());
-        int E = Integer.parseInt(st.nextToken());
+        V = Integer.parseInt(st.nextToken());
+        E = Integer.parseInt(st.nextToken());
 
-        parent = new int[V+1];
-        Arrays.fill(parent, -1);
+        adj = new ArrayList[V+1];
+        for(int i=1; i<=V; i++) adj[i] = new ArrayList<>();
 
-        List<Edge> edges = new ArrayList<>();
         while(E-->0){
             st = new StringTokenizer(br.readLine());
             int u = Integer.parseInt(st.nextToken());
             int v = Integer.parseInt(st.nextToken());
             int w = Integer.parseInt(st.nextToken());
 
-            edges.add(new Edge(u, v, w));
+            adj[u].add(new Edge(v, w));
+            adj[v].add(new Edge(u, w));
         }
 
-        int minWeight = kruskal(V, edges);
-        System.out.println(minWeight);
+        int mstWeight = prim(1);
+        System.out.println(mstWeight);
     }
 
-    static int kruskal(int V, List<Edge> edges){
-        Collections.sort(edges);
+    static int prim(int start){
+        PriorityQueue<Edge> pq = new PriorityQueue<>();
+        boolean[] visited = new boolean[V+1];
 
+        pq.offer(new Edge(start, 0));
+        
         int mstWeight = 0;
         int connected = 0;
 
-        for(Edge edge : edges) {
-            if(!union(edge.v, edge.u)) continue;
+        while(!pq.isEmpty()) {
+            Edge now = pq.poll();
 
-            mstWeight += edge.w;
+            if(visited[now.to]) continue;
+            visited[now.to] = true;
+            mstWeight += now.weight;
             connected++;
 
-            if(connected == V-1) break;
-        }
+            if(connected == V) break;
 
+            for(Edge next : adj[now.to]){
+                if(visited[next.to]) continue;
+                pq.offer(next);
+            }
+        }
         return mstWeight;
     }
 
-    static int find(int u){
-        if(parent[u] < 0) return u;
+    static class Edge implements Comparable<Edge> {
 
-        return parent[u] = find(parent[u]);
-    }
+        int to, weight;
 
-    static boolean union(int u, int v){
-        u = find(u);
-        v = find(v);
-
-        if(u == v) return false;
-
-        if(parent[u] > parent[v]){
-            parent[v] += parent[u];
-            parent[u] = v;
-        }else{
-            parent[u] += parent[v];
-            parent[v] = u;
-        }
-        return true;
-    }
-
-    static class Edge implements Comparable<Edge>{
-
-        int v, u, w;
-
-        Edge(int v, int u, int w){
-            this.v = v;
-            this.u = u;
-            this.w = w;
+        Edge(int to, int weight){
+            this.to = to;
+            this.weight = weight;
         }
 
-        public int compareTo(Edge o){
-            return Integer.compare(w, o.w);
+        public int compareTo(Edge o) {
+            return Integer.compare(this.weight, o.weight);
         }
     }
 }
