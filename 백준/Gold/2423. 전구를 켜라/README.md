@@ -20,7 +20,7 @@
 
 <p>전원은 왼쪽 위 모서리에 연결되어 있고, 전구는 오른쪽 아래 모서리에 연결되어 있다. 전구는  전원에서 전구로 가는 경로가 있을 때만 불이 켜진다. 전구에 불을 켜기 위해서, 선영이는 몇개의 타일을 90도 회전 시킬 수 있다.</p>
 
-<p style="text-align: center;"><img alt="" src="https://upload.acmicpc.net/46c9ed9e-27e3-4e32-a144-0962b813347e/-/preview/" style="width: 289px; height: 195px;"></p>
+<p style="text-align: center;"><img alt="" src="" style="width: 289px; height: 195px;"></p>
 
 <p>위의 그림에서 전구는 꺼져있다. 만약 오른쪽에서 2번째 열 중 아무 칸이나 90도 회전시킨다면, 전원과 전구는 연결되어 전구가 켜지게 된다. 전구에 불을 켜기 위해 돌려야 하는 칸의 개수의 최솟값을 구하는 프로그램을 작성하시오.</p>
 
