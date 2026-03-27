@@ -1,45 +1,45 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+	
+	static int N;
+	static String[] arr;
+	
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-  private static StringBuilder sb = new StringBuilder();
+		int TC = Integer.parseInt(br.readLine());
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    int t = Integer.parseInt(br.readLine());
+		StringBuilder sb = new StringBuilder();
+		for (int tc = 1; tc <= TC; tc++) {
+			N = Integer.parseInt(br.readLine());
+			
+			arr = new String[N];
+			for(int i=0; i<N; i++) {
+				arr[i] = br.readLine();
+			}
+			
+			Arrays.sort(arr);
+			boolean canCall = true;
+			for(int i=1; i<N; i++) {
+				if(contains(arr[i-1], arr[i])) {
+					canCall = false;
+					break;
+				}
+			}
+			
+			if(canCall) {
+				sb.append("YES").append("\n");
+			}else {
+				sb.append("NO").append("\n");
+			}
+		}
+		System.out.println(sb);
+	}
+	
+	static boolean contains(String prev, String next) {
+		return next.startsWith(prev);
+	}
 
-    while (t-- > 0) {
-      int n = Integer.parseInt(br.readLine());
-      String[] phone = new String[n];
-      for (int i = 0; i < n; i++) {
-        String s = br.readLine();
-        phone[i] = s;
-      }
-      Arrays.sort(phone);
-      check(n, phone);
-
-    }
-    System.out.println(sb);
-  }
-
-  public static void check(int n, String[] phone) {
-    for (int i = 0; i < n - 1; i++) {
-      int minLength = Math.min(phone[i].length(), phone[i + 1].length());
-      int count=0;
-      for (int j = 0; j < minLength; j++) {
-        if(phone[i].charAt(j) != phone[i + 1].charAt(j)) {
-          break;
-        }
-        count++;
-      }
-      if(count == minLength){
-        sb.append("NO").append("\n");
-        return;
-      }
-    }
-    sb.append("YES").append("\n");
-  }
 }
