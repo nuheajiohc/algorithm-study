@@ -29,7 +29,7 @@ public class Main {
         for(int i=0; i<N; i++){
             for(int j=i+1; j<N; j++){
                 int target = K-arr[i]-arr[j];
-                if(target<arr[i] || target<arr[j]) continue;
+                if(target<arr[j]) continue;
                 if(!map.containsKey(target)) continue;
                 
                 int size = map.get(target);
@@ -40,14 +40,14 @@ public class Main {
                         j+=size-2;
                     }
                 }else if(target==arr[i] && target!=arr[j]){
-                    if(size>1){
+                    if(size>=2){
                         count += size-1;
-                        j+=1;
+                        j+=size-1;
                     }
                 }else if(target==arr[j] && target!=arr[i]){
                     if(size>1){
                         count += size-1;
-                        j+=1;
+                        j+=size-1;
                     }
                 }else if(target!=arr[i] && arr[i]==arr[j]){
                     count++;
