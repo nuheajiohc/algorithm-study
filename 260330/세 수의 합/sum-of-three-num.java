@@ -16,47 +16,19 @@ public class Main {
         for(int i=0; i<N; i++){
             arr[i] = Integer.parseInt(st.nextToken());
             
-            if(map.containsKey(arr[i])){
-                map.put(arr[i], map.get(arr[i])+1);
-            }else{
-                map.put(arr[i], 1);
-            }
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
         }
-
-        Arrays.sort(arr);        
 
         int count = 0;
-        for(int i=0; i<N; i++){
-            for(int j=i+1; j<N; j++){
-                int target = K-arr[i]-arr[j];
-                if(target<arr[j]) continue;
-                if(!map.containsKey(target)) continue;
-                
-                int size = map.get(target);
+        for(int mid=0; mid<N; mid++){
+            map.put(arr[mid], map.get(arr[mid]) - 1);
 
-                if(target==arr[i] && target==arr[j]){
-                    if(size>=3){
-                        count += size-2;
-                        j+=size-2;
-                    }
-                }else if(target==arr[i] && target!=arr[j]){
-                    if(size>=2){
-                        count += size-1;
-                        j+=size-1;
-                    }
-                }else if(target==arr[j] && target!=arr[i]){
-                    if(size>1){
-                        count += size-1;
-                        j+=size-1;
-                    }
-                }else if(target!=arr[i] && arr[i]==arr[j]){
-                    count++;
-                }else if(target!=arr[i] && target!=arr[j] && arr[i]!=arr[j]){
-                    count++;
-                }
+            for(int left=0; left<mid; left++){
+                int target = K - arr[mid] - arr[left];
+
+                count += map.getOrDefault(target, 0);
             }
         }
-
         System.out.println(count);
     }
 }
