@@ -37,7 +37,7 @@ public class Main {
                 if(target==arr[i] && target==arr[j]){
                     if(size>=3){
                         count += size-2;
-                        j+=size-1;
+                        j+=size-2;
                     }
                 }else if(target==arr[i] && target!=arr[j]){
                     if(size>1){
