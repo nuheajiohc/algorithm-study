@@ -3,17 +3,26 @@ name: Organize CodeTree Folders
 on:
   push:
     branches: [ "main" ]
-    paths-ignore:        
+    paths-ignore:        # 백준 등 다른 플랫폼 푸시 때는 액션 무시
       - '백준/**'
       - '프로그래머스/**'
       - 'SWEA/**'
       - '소프티어/**'
-  workflow_dispatch:      # 수동으로 실행할 수 있는 버튼 생성
+  workflow_dispatch:      # 수동 실행 버튼
+
+# 동시에 여러 푸시가 발생하면 가장 마지막 푸시만 남기고 이전 액션은 강제 종료
+concurrency:
+  group: "codetree-organizer"
+  cancel-in-progress: true
 
 jobs:
   organize:
     runs-on: ubuntu-latest
     steps:
+      # 익스텐션이 README와 코드를 분할해서 올릴 시간을 충분히 기다려줌
+      - name: Wait for all commits (Debounce)
+        run: sleep 10
+
       - name: 저장소 체크아웃
         uses: actions/checkout@v4
 
@@ -22,25 +31,23 @@ jobs:
           # '코드트리' 폴더가 없으면 생성
           mkdir -p "코드트리"
           
-          # 최상위 경로에 있는 6자리 숫자(날짜) 폴더 찾기
+          # 최상위 경로의 6자리 숫자(날짜) 폴더 탐색
           for date_dir in [0-9][0-9][0-9][0-9][0-9][0-9]; do
             if [ -d "$date_dir" ]; then
               echo "Processing $date_dir..."
               
               # 1. 일일 현황 README.md가 있다면 마스터 리드미에 내용 누적하기
               if [ -f "$date_dir/README.md" ]; then
-                # 폴더명(예: 260330)을 년/월/일로 분리해서 제목 생성
                 YEAR="20${date_dir:0:2}"
                 MONTH="${date_dir:2:2}"
                 DAY="${date_dir:4:2}"
                 
-                # 마스터 리드미에 날짜 제목과 기존 리드미 내용 추가
                 echo "### 📅 ${YEAR}년 ${MONTH}월 ${DAY}일" >> "코드트리/README.md"
                 cat "$date_dir/README.md" >> "코드트리/README.md"
                 echo -e "\n---\n" >> "코드트리/README.md"
               fi
 
-              # 2. 날짜 폴더 안의 내용물(문제 폴더들)을 '코드트리' 폴더로 복사
+              # 2. 날짜 폴더 안의 내용물(문제 폴더)을 '코드트리' 폴더로 복사 (플랫 구조)
               for prob_dir in "$date_dir"/*; do
                 if [ -d "$prob_dir" ]; then
                   cp -r "$prob_dir" "코드트리/"
@@ -57,11 +64,14 @@ jobs:
 
       - name: 커밋 및 푸시
         run: |
-          # 변경사항이 있는지 검사 후 커밋 진행
           if [[ -n $(git status --porcelain) ]]; then
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
             git commit -m "chore: 🤖 코드트리 문제 정리 및 현황 갱신"
+            
+            # 커밋하기 직전에 깃허브에 새로 올라온 코드가 있다면 먼저 합치기 (충돌 방지)
+            git pull --rebase origin main
+            
             git push
           else
             echo "이동할 폴더가 없습니다."
