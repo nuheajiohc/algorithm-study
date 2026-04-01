@@ -18,7 +18,7 @@ public class Main {
 
         int max = -1;
         for(int i=1; i<=1000; i++){
-            if(arr[i]==0 && max < arr[i]){
+            if(arr[i]==1 && max < arr[i]){
                 max = i;
             }
         }
