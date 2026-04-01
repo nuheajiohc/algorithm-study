@@ -21,7 +21,7 @@ public class Main {
         }
 
         StringBuilder sb = new StringBuilder();
-        int right = N;
+        int right = N+1;
         for(int i=1000; i>=0; i--){
             if(arr[i]==0) continue;
             if(right>arr[i]){
