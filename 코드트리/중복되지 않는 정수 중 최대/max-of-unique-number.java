@@ -9,22 +9,19 @@ public class Main {
 
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int max = 0;
-        int count = 0;
+        int[] arr = new int[1001];
+
         while(st.hasMoreTokens()){
             int value = Integer.parseInt(st.nextToken());
-            if(max < value){
-                max = value;
-                count = 1;
-            }else if(max == value){
-                count++;
-            }
+            arr[value]++;
         }
 
-        if(count==1){
-            System.out.println(max);
-        }else{
-            System.out.println(-1);
+        int max = -1;
+        for(int i=1; i<=1000; i++){
+            if(arr[i]==0 && max < arr[i]){
+                max = i;
+            }
         }
+        System.out.println(max);
     }
 }
