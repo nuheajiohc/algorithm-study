@@ -2,29 +2,37 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
-
-        int[] arr = new int[K+1];
-        while(N-->0){
-            st = new StringTokenizer(br.readLine());
-            int W = Integer.parseInt(st.nextToken());
-            int V = Integer.parseInt(st.nextToken());
-
-            if(W>K) continue;
-            for(int i=K; i>=W; i--){
-                arr[i] = Math.max(arr[i], V + arr[i-W]);
-            }
-        }
-        
-        int max = 0;
-        for(int i=0; i<=K; i++){
-            max = Math.max(max, arr[i]);
-        }
-        System.out.println(max);
-    }
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
+		
+		int[] weight = new int[N+1];
+		int[] value = new int[N+1];
+		
+		int[][] dp = new int[N+1][K+1];
+		
+		for(int i=1; i<=N; i++) {
+			st = new StringTokenizer(br.readLine());
+			weight[i] = Integer.parseInt(st.nextToken());
+			value[i] = Integer.parseInt(st.nextToken());
+		}
+		
+		for(int i=1; i<=N; i++) {
+			for(int j=1; j<=K; j++) {
+				if(j>=weight[i]) {
+					dp[i][j] = Math.max(
+							dp[i-1][j], 
+							dp[i-1][j-weight[i]]+value[i]
+					);	
+				}else {
+					dp[i][j] = dp[i-1][j];
+				}
+			}
+		}
+		System.out.println(dp[N][K]);
+	}
 }
