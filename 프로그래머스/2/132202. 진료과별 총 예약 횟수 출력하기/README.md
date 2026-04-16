@@ -1,6 +1,6 @@
 # [level 2] 진료과별 총 예약 횟수 출력하기 - 132202 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/132202?language=mysql) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/132202) 
 
 ### 성능 요약
 
@@ -12,11 +12,11 @@
 
 ### 채점결과
 
-Empty
+합계: 100.0 / 100.0
 
 ### 제출 일자
 
-2024년 11월 28일 10:30:18
+2026년 04월 16일 16:07:10
 
 ### 문제 설명
 
