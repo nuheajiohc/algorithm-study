@@ -2,98 +2,100 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-	
-	static int N, minDiff;
-	static int[] population;
-	static List<Integer>[] adj;
-	static boolean[] used;
 
+	static int N;
+	static List<Integer>[] adj;
+	static int[] person;
+	static boolean[] used;
+	static int minDiff;
+	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		N = Integer.parseInt(br.readLine());
+		
+		minDiff = Integer.MAX_VALUE;
+		used= new boolean[N+1];
+		person = new int[N+1];
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		population = new int[N+1];
 		for(int i=1; i<=N; i++) {
-			population[i] = Integer.parseInt(st.nextToken());
+			person[i] = Integer.parseInt(st.nextToken());
 		}
 		
-		
-		used = new boolean[N+1];
 		adj = new ArrayList[N+1];
 		for(int i=1; i<=N; i++) adj[i] = new ArrayList<>();
 		
-		for(int u=1; u<=N; u++) {
+		for(int i=1; i<=N; i++) {
 			st = new StringTokenizer(br.readLine());
 			st.nextToken();
 			while(st.hasMoreTokens()) {
-				int v = Integer.parseInt(st.nextToken());
-				adj[u].add(v);
-				adj[v].add(u);
+				int conn = Integer.parseInt(st.nextToken());
+				adj[i].add(conn);
+				adj[conn].add(i);
 			}
 		}
 		
-		minDiff = Integer.MAX_VALUE;
-		combination(0);
+		subset(1);
 		
-		if(minDiff == Integer.MAX_VALUE) {
-			System.out.println(-1);
-		}else {
-			System.out.println(minDiff);
-		}
+		System.out.println(minDiff==Integer.MAX_VALUE ? -1 : minDiff);
 	}
 	
-	static void combination(int depth) {
-		if(depth==N) {
-			if(canDivide()) {
-				int diffValue = calDiff();
-				minDiff = Math.min(minDiff, diffValue);
+	static int bfs(boolean area) {
+		boolean[] visited = new boolean[N+1];
+		Queue<Integer> q = new ArrayDeque<>();
+		for(int i=1; i<=N; i++) {
+			if(used[i]==area) {
+				q.offer(i);
+				visited[i] = true;
+				break;
+			}
+		}
+		
+		while(!q.isEmpty()) {
+			int cur = q.poll();
+			
+			for(int next : adj[cur]) {
+				if(visited[next]) continue;
+				if(used[next]!=area) continue;
+				visited[next] = true;
+				q.offer(next);
+			}
+		}
+		
+		int cnt = 0;
+		for(int i=1; i<=N; i++) {
+			if(visited[i]) cnt++; 
+		}
+		return cnt;
+	}
+	
+	static int calDiff() {
+		int diff = 0;
+		for(int i=1; i<=N; i++) {
+			if(used[i]) {
+				diff+=person[i];
+			}else {
+				diff-=person[i];
+			}
+		}
+		return Math.abs(diff);
+	}
+	
+	static void subset(int depth) {
+		if(depth==N+1) {
+			int A = bfs(true);
+			int B = bfs(false);
+			if(A+B == N) {
+				minDiff = Math.min(minDiff, calDiff());
 			}
 			return;
 		}
 		
 		used[depth] = true;
-		combination(depth+1);
+		subset(depth+1);
+		
 		used[depth] = false;
-		combination(depth+1);
+		subset(depth+1);
 	}
 
-	static boolean canDivide() {
-		boolean[] vis = new boolean[N+1];
-		
-		int cnt = 0;
-		for(int i=1; i<=N; i++) {
-			if(vis[i]) continue;
-			vis[i] = true;
-			cnt++;
-			
-			if(cnt>2) return false;
-			
-			boolean target = used[i];
-			
-			Queue<Integer> q = new ArrayDeque<>();
-			q.offer(i);
-			while(!q.isEmpty()) {
-				int cur = q.poll();
-				for(int next : adj[cur]) {
-					if(vis[next]) continue;
-					if(used[next]!=target)continue;
-					vis[next] = true;
-					q.offer(next);
-				}
-			}
-		}
-		return cnt==2;
-	}
-	
-	static int calDiff() {
-		int part1 = 0;
-		int part2 = 0;
-		for(int i=1; i<=N; i++) {
-			if(used[i]) part1+=population[i];
-			else part2+=population[i];
-		}
-		
-		return Math.abs(part1-part2);
-	}
 }
