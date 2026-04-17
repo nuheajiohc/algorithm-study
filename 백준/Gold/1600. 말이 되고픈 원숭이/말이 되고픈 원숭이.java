@@ -3,80 +3,86 @@ import java.util.*;
 
 public class Main {
 
-    static int W, H, K;
-    static int[][] board;
-    static int[][][] visited;
-    static int[] dx = {1, -1, 0, 0, 1, 1, 2, 2, -1, -1, -2, -2};
-    static int[] dy = {0, 0, 1, -1, 2, -2, 1, -1, 2, -2, 1, -1};
-    static Queue<int[]> q = new ArrayDeque<>();
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static int K, W, H;
 
-        K = Integer.parseInt(br.readLine());
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        W = Integer.parseInt(st.nextToken());
-        H = Integer.parseInt(st.nextToken());
+	static int[] mdx = { 0, 0, 1, -1 };
+	static int[] mdy = { 1, -1, 0, 0 };
+	static int[] hdx = { 1, 1, 2, 2, -1, -1, -2, -2 };
+	static int[] hdy = { 2, -2, 1, -1, 2, -2, 1, -1 };
+	static int[][] board;
+	static int[][][] visited;
 
-        visited = new int[H][W][K+1];
-        board = new int[H][W];
-        for(int i=0; i<H; i++){
-            st = new StringTokenizer(br.readLine());
-            for(int j=0; j<W; j++){
-                board[i][j] = Integer.parseInt(st.nextToken());
-                Arrays.fill(visited[i][j], -1);
-            }
-        }
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        q.offer(new int[]{0, 0, K});
-        visited[0][0][K] = 0;
+		K = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		W = Integer.parseInt(st.nextToken());
+		H = Integer.parseInt(st.nextToken());
 
-        int idx = -1;
-        while(!q.isEmpty()){
-            int[] cur = q.poll();
-            int x = cur[0]; int y = cur[1];
-            int k = cur[2];
+		board = new int[H][W];
+		for (int i = 0; i < H; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < W; j++) {
+				board[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
 
-            boolean end;
-            if(k>0){
-                end = iterate(x, y, k, 12);
-            }else{
-                end = iterate(x, y, k, 4);
-            }
-            if(end) break;
-        }
-        
-        int answer = Integer.MAX_VALUE;
-        for(int k=0; k<=K; k++){
-            if(visited[H-1][W-1][k]==-1) continue;
-            answer = Math.min(answer, visited[H-1][W-1][k]);
-        }
+		visited = new int[K + 1][H][W];
 
-        if(answer == Integer.MAX_VALUE){
-            System.out.println(-1);
-        }else{
-            System.out.println(answer);
-        }
-    }
+		System.out.println(bfs());
+	}
 
-    static boolean iterate(int x, int y, int k, int limit){
-        for(int dir=0; dir<limit; dir++){
-            int nx = x + dx[dir];
-            int ny = y + dy[dir];
-            if(nx<0 || nx>=H || ny<0 || ny>=W) continue;
-            if(board[nx][ny]==1) continue;
+	static int bfs() {
+		Queue<int[]> q = new ArrayDeque<>();
+		q.offer(new int[] { 0, 0, 0 });
+		visited[0][0][0] = 1;
 
-            if(dir<4){
-                if(visited[nx][ny][k]>=0) continue;
-                visited[nx][ny][k] = visited[x][y][k]+1;
-                q.offer(new int[]{nx, ny, k});
-            }else{
-                if(visited[nx][ny][k-1] >=0) continue;
-                visited[nx][ny][k-1] = visited[x][y][k] + 1;
-                q.offer(new int[]{nx, ny, k-1});
-                
-            }
-            if(nx==H-1 && ny==W-1) return true;
-        }
-        return false;
-    }
+		while (!q.isEmpty()) {
+			int[] cur = q.poll();
+			int x = cur[0];
+			int y = cur[1];
+			int k = cur[2];
+			
+			if(x==H-1 && y==W-1) {
+				return visited[k][x][y] - 1;
+			}
+
+			for (int dir = 0; dir < 4; dir++) {
+				int nx = x + mdx[dir];
+				int ny = y + mdy[dir];
+
+				if (isOutOfRange(nx, ny))
+					continue;
+				if (board[nx][ny] == 1)
+					continue;
+				if (visited[k][nx][ny] > 0)
+					continue;
+				visited[k][nx][ny] = visited[k][x][y] + 1;
+				q.offer(new int[] { nx, ny, k });
+			}
+
+			if (k < K) {
+				for (int dir = 0; dir < 8; dir++) {
+					int nx = x + hdx[dir];
+					int ny = y + hdy[dir];
+
+					if (isOutOfRange(nx, ny))
+						continue;
+					if (board[nx][ny] == 1)
+						continue;
+					if (visited[k + 1][nx][ny] > 0)
+						continue;
+					visited[k + 1][nx][ny] = visited[k][x][y] + 1;
+					q.offer(new int[] { nx, ny, k + 1 });
+				}
+			}
+		}
+		return -1;
+	}
+
+	static boolean isOutOfRange(int x, int y) {
+		return x < 0 || x >= H || y < 0 || y >= W;
+	}
+
 }
